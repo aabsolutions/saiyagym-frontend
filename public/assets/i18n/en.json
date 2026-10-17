@@ -1,0 +1,215 @@
+{
+  "app": {
+    "name": "SaiyaGym",
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "title": "Navigation",
+    "dashboard": "Home",
+    "exercises": "Exercises",
+    "routines": "Routines",
+    "programs": "Programs",
+    "history": "History",
+    "stats": "Stats",
+    "body": "Body",
+    "nutrition": "Nutrition",
+    "profile": "Profile",
+    "admin": "Admin"
+  },
+  "toolbar": {
+    "toggleMenu": "Toggle menu",
+    "language": "Language",
+    "toLight": "Switch to light theme",
+    "toDark": "Switch to dark theme",
+    "account": "My account",
+    "profile": "Profile",
+    "logout": "Sign out",
+    "logoutAll": "Sign out of all devices"
+  },
+  "coldStart": {
+    "waking": "Waking up the server…",
+    "hint": "The free server sleeps when idle; it can take up to a minute.",
+    "failed": "We couldn't reach the server.",
+    "retry": "Retry"
+  },
+  "auth": {
+    "hero": {
+      "badge": "Plan · Analyze · Break your limits",
+      "title": "Train like a Saiyan",
+      "text": "Design your routines and programs, track your records and watch your power level rise week after week."
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue",
+      "submit": "Sign in",
+      "forgot": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "toRegister": "Sign up"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Free. No card required.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "toLogin": "Sign in",
+      "verifySent": "We sent you an email to verify your account."
+    },
+    "forgot": {
+      "title": "Reset password",
+      "subtitle": "We'll send you a link to reset it.",
+      "submit": "Send link",
+      "sent": "If that email is registered, you'll get a link in a few minutes.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "New password",
+      "submit": "Save password",
+      "done": "Password updated. You can sign in now.",
+      "missingToken": "This link is invalid. Request a new one."
+    },
+    "verify": {
+      "title": "Email verification",
+      "verifying": "Verifying your email…",
+      "success": "Email verified!",
+      "failed": "We couldn't verify your email. The link may have expired.",
+      "missingToken": "This link is invalid.",
+      "continue": "Continue",
+      "resend": "Resend verification email",
+      "resent": "We sent you a new verification email."
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid email.",
+    "minlength": "At least {{min}} characters.",
+    "maxlength": "At most {{max}} characters."
+  },
+  "common": {
+    "close": "Close",
+    "save": "Save",
+    "saved": "Changes saved.",
+    "comingSoon": "This section is under construction.",
+    "loading": "Loading…"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Home",
+      "welcome": "Hi, {{name}}",
+      "welcomeAnonymous": "Hi",
+      "plan": "Your plan: {{plan}}"
+    },
+    "exercises": {
+      "title": "Exercises"
+    },
+    "routines": {
+      "title": "Routines"
+    },
+    "programs": {
+      "title": "Programs"
+    },
+    "history": {
+      "title": "History"
+    },
+    "stats": {
+      "title": "Stats"
+    },
+    "body": {
+      "title": "Body measurements"
+    },
+    "nutrition": {
+      "title": "Nutrition"
+    },
+    "admin": {
+      "title": "Admin"
+    },
+    "profile": {
+      "title": "Profile",
+      "profileSection": "Personal details",
+      "preferencesSection": "Preferences",
+      "language": "Language",
+      "theme": "Theme",
+      "units": "Units"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "text": "The page you're looking for doesn't exist.",
+      "home": "Go home"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "system": "Match system",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "units": {
+      "metric": "Metric (kg, cm)",
+      "imperial": "Imperial (lb, in)"
+    }
+  },
+  "units": {
+    "kg": "kg",
+    "lb": "lb",
+    "cm": "cm",
+    "in": "in"
+  },
+  "errors": {
+    "BAD_REQUEST": "The request is not valid.",
+    "VALIDATION_ERROR": "The submitted data is not valid.",
+    "UNAUTHORIZED": "You need to sign in.",
+    "FORBIDDEN": "You are not allowed to perform this action.",
+    "NOT_FOUND": "The requested resource does not exist.",
+    "CONFLICT": "The resource conflicts with an existing one.",
+    "PAYLOAD_TOO_LARGE": "The request is too large.",
+    "TOO_MANY_REQUESTS": "Too many requests. Please try again shortly.",
+    "SERVICE_UNAVAILABLE": "The service is temporarily unavailable.",
+    "INTERNAL_ERROR": "An unexpected error occurred.",
+    "EMAIL_ALREADY_REGISTERED": "An account with that email already exists.",
+    "INVALID_CREDENTIALS": "Incorrect email or password.",
+    "INVALID_REFRESH_TOKEN": "Your session is invalid or has expired. Please sign in again.",
+    "REFRESH_TOKEN_REUSED": "We detected suspicious use of your session and signed you out for safety. Please sign in again.",
+    "INVALID_OR_EXPIRED_TOKEN": "The link is invalid or has expired.",
+    "EMAIL_ALREADY_VERIFIED": "Your email is already verified.",
+    "INVALID_CURRENT_PASSWORD": "The current password is incorrect.",
+    "USER_NOT_FOUND": "The user does not exist.",
+    "CANNOT_CHANGE_OWN_ROLE": "You cannot change your own role.",
+    "PLAN_NOT_FOUND": "The plan does not exist.",
+    "PLAN_CODE_TAKEN": "A plan with that code already exists.",
+    "PLAN_IS_DEFAULT": "You cannot delete or deactivate the default plan.",
+    "PLAN_FEATURE_REQUIRED": "This feature requires a higher plan.",
+    "PLAN_LIMIT_REACHED": "You have reached your plan limit ({{limit}}).",
+    "EXERCISE_NOT_FOUND": "The exercise does not exist.",
+    "EXERCISE_SLUG_TAKEN": "An exercise with that identifier exists (or existed).",
+    "TAG_NOT_FOUND": "One or more tags do not exist.",
+    "TAG_SLUG_TAKEN": "A tag with that identifier exists (or existed).",
+    "ROUTINE_NOT_FOUND": "The routine does not exist.",
+    "ROUTINE_IN_USE": "The routine is used by an active or draft program. Remove it from the program first.",
+    "PROGRAM_NOT_FOUND": "The program does not exist.",
+    "PROGRAM_INVALID_STATE": "The program does not allow this action in its current state.",
+    "NO_ACTIVE_PROGRAM": "You have no active program.",
+    "PROGRAM_TEMPLATE_NOT_FOUND": "The program template does not exist.",
+    "PROGRAM_TEMPLATE_SLUG_TAKEN": "A template with that identifier exists (or existed).",
+    "WORKOUT_NOT_FOUND": "The workout does not exist.",
+    "CLOCK_SKEW": "Your device clock is ahead. Fix it and sync again.",
+    "MEDIA_NOT_CONFIGURED": "Image uploads are not available right now.",
+    "INVALID_IMAGE_URL": "The image is not valid. Please upload it from the app.",
+    "MEDIA_DELETE_FAILED": "The image could not be deleted. Please try again.",
+    "FOOD_NOT_FOUND": "The food does not exist.",
+    "FOOD_IN_USE": "The food is used by meal suggestions. Remove it from them first.",
+    "MEAL_SUGGESTION_NOT_FOUND": "The meal suggestion does not exist.",
+    "NUTRITION_GUIDELINE_NOT_FOUND": "The nutrition guideline does not exist.",
+    "NUTRITION_SLUG_TAKEN": "An item with that identifier exists (or existed).",
+    "NUTRITION_PROFILE_INCOMPLETE": "Some data for the calculation is missing or out of range. Complete your profile or send it in the request.",
+    "NETWORK_ERROR": "Can't reach the server. Check your internet connection.",
+    "SESSION_EXPIRED": "Your session has expired. Please sign in again.",
+    "UNKNOWN_ERROR": "An unexpected error occurred."
+  }
+}

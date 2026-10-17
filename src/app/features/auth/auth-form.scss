@@ -1,0 +1,59 @@
+// Shared by every auth page.
+h1 {
+  margin: 0 0 4px;
+  font: var(--mat-sys-headline-medium);
+}
+
+.subtitle {
+  margin: 0 0 24px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: -8px 0 8px;
+}
+
+button[type='submit'] {
+  height: 48px;
+}
+
+.alt {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+a {
+  color: var(--mat-sys-primary);
+}
+
+.notice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+
+  &.error {
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+  }
+
+  p {
+    margin: 0;
+  }
+}

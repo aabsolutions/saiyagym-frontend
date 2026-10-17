@@ -1,0 +1,9 @@
+dist
+coverage
+.angular
+node_modules
+package-lock.json
+src/app/api
+openapi/openapi.json
+# SPEC.md must stay byte-identical across the three repos.
+docs/SPEC.md

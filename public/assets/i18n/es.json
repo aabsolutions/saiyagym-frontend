@@ -1,0 +1,215 @@
+{
+  "app": {
+    "name": "SaiyaGym",
+    "skipToContent": "Saltar al contenido"
+  },
+  "nav": {
+    "title": "Navegación",
+    "dashboard": "Inicio",
+    "exercises": "Ejercicios",
+    "routines": "Rutinas",
+    "programs": "Programas",
+    "history": "Historial",
+    "stats": "Estadísticas",
+    "body": "Medidas",
+    "nutrition": "Nutrición",
+    "profile": "Perfil",
+    "admin": "Administración"
+  },
+  "toolbar": {
+    "toggleMenu": "Abrir o cerrar el menú",
+    "language": "Idioma",
+    "toLight": "Cambiar a tema claro",
+    "toDark": "Cambiar a tema oscuro",
+    "account": "Mi cuenta",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "logoutAll": "Cerrar sesión en todos los dispositivos"
+  },
+  "coldStart": {
+    "waking": "Despertando el servidor…",
+    "hint": "El servidor gratuito se duerme tras un rato sin uso; puede tardar hasta un minuto.",
+    "failed": "No pudimos contactar con el servidor.",
+    "retry": "Reintentar"
+  },
+  "auth": {
+    "hero": {
+      "badge": "Planifica · Analiza · Supera tus límites",
+      "title": "Entrena como un saiyajin",
+      "text": "Diseña tus rutinas y programas, sigue tus récords y mira cómo sube tu poder semana a semana."
+    },
+    "fields": {
+      "name": "Nombre",
+      "email": "Email",
+      "password": "Contraseña",
+      "newPassword": "Nueva contraseña",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña"
+    },
+    "login": {
+      "title": "Bienvenido de vuelta",
+      "subtitle": "Inicia sesión para continuar",
+      "submit": "Iniciar sesión",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes cuenta?",
+      "toRegister": "Regístrate"
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Gratis. Sin tarjeta.",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "toLogin": "Inicia sesión",
+      "verifySent": "Te enviamos un email para verificar tu cuenta."
+    },
+    "forgot": {
+      "title": "Recuperar contraseña",
+      "subtitle": "Te enviaremos un enlace para restablecerla.",
+      "submit": "Enviar enlace",
+      "sent": "Si el email está registrado, recibirás un enlace en unos minutos.",
+      "back": "Volver a iniciar sesión"
+    },
+    "reset": {
+      "title": "Nueva contraseña",
+      "submit": "Guardar contraseña",
+      "done": "Contraseña actualizada. Ya puedes iniciar sesión.",
+      "missingToken": "El enlace no es válido. Solicita uno nuevo."
+    },
+    "verify": {
+      "title": "Verificación de email",
+      "verifying": "Verificando tu email…",
+      "success": "¡Email verificado!",
+      "failed": "No pudimos verificar tu email. El enlace puede haber caducado.",
+      "missingToken": "El enlace no es válido.",
+      "continue": "Continuar",
+      "resend": "Reenviar email de verificación",
+      "resent": "Te enviamos un nuevo email de verificación."
+    }
+  },
+  "validation": {
+    "required": "Campo obligatorio.",
+    "email": "Introduce un email válido.",
+    "minlength": "Mínimo {{min}} caracteres.",
+    "maxlength": "Máximo {{max}} caracteres."
+  },
+  "common": {
+    "close": "Cerrar",
+    "save": "Guardar",
+    "saved": "Cambios guardados.",
+    "comingSoon": "Esta sección está en construcción.",
+    "loading": "Cargando…"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Inicio",
+      "welcome": "Hola, {{name}}",
+      "welcomeAnonymous": "Hola",
+      "plan": "Tu plan: {{plan}}"
+    },
+    "exercises": {
+      "title": "Ejercicios"
+    },
+    "routines": {
+      "title": "Rutinas"
+    },
+    "programs": {
+      "title": "Programas"
+    },
+    "history": {
+      "title": "Historial"
+    },
+    "stats": {
+      "title": "Estadísticas"
+    },
+    "body": {
+      "title": "Medidas corporales"
+    },
+    "nutrition": {
+      "title": "Nutrición"
+    },
+    "admin": {
+      "title": "Administración"
+    },
+    "profile": {
+      "title": "Perfil",
+      "profileSection": "Datos personales",
+      "preferencesSection": "Preferencias",
+      "language": "Idioma",
+      "theme": "Tema",
+      "units": "Unidades"
+    },
+    "notFound": {
+      "title": "Página no encontrada",
+      "text": "La página que buscas no existe.",
+      "home": "Ir al inicio"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "system": "Según el sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "units": {
+      "metric": "Métrico (kg, cm)",
+      "imperial": "Imperial (lb, in)"
+    }
+  },
+  "units": {
+    "kg": "kg",
+    "lb": "lb",
+    "cm": "cm",
+    "in": "in"
+  },
+  "errors": {
+    "BAD_REQUEST": "La solicitud no es válida.",
+    "VALIDATION_ERROR": "Los datos enviados no son válidos.",
+    "UNAUTHORIZED": "Necesitas iniciar sesión.",
+    "FORBIDDEN": "No tienes permiso para realizar esta acción.",
+    "NOT_FOUND": "El recurso solicitado no existe.",
+    "CONFLICT": "El recurso entra en conflicto con uno existente.",
+    "PAYLOAD_TOO_LARGE": "La solicitud es demasiado grande.",
+    "TOO_MANY_REQUESTS": "Demasiadas solicitudes. Inténtalo de nuevo en unos momentos.",
+    "SERVICE_UNAVAILABLE": "El servicio no está disponible temporalmente.",
+    "INTERNAL_ERROR": "Se produjo un error inesperado.",
+    "EMAIL_ALREADY_REGISTERED": "Ya existe una cuenta con ese email.",
+    "INVALID_CREDENTIALS": "Email o contraseña incorrectos.",
+    "INVALID_REFRESH_TOKEN": "Tu sesión no es válida o ha caducado. Inicia sesión de nuevo.",
+    "REFRESH_TOKEN_REUSED": "Detectamos un uso sospechoso de tu sesión y la cerramos por seguridad. Inicia sesión de nuevo.",
+    "INVALID_OR_EXPIRED_TOKEN": "El enlace no es válido o ha caducado.",
+    "EMAIL_ALREADY_VERIFIED": "Tu email ya está verificado.",
+    "INVALID_CURRENT_PASSWORD": "La contraseña actual no es correcta.",
+    "USER_NOT_FOUND": "El usuario no existe.",
+    "CANNOT_CHANGE_OWN_ROLE": "No puedes cambiar tu propio rol.",
+    "PLAN_NOT_FOUND": "El plan no existe.",
+    "PLAN_CODE_TAKEN": "Ya existe un plan con ese código.",
+    "PLAN_IS_DEFAULT": "No puedes eliminar ni desactivar el plan por defecto.",
+    "PLAN_FEATURE_REQUIRED": "Esta función requiere un plan superior.",
+    "PLAN_LIMIT_REACHED": "Has alcanzado el límite de tu plan ({{limit}}).",
+    "EXERCISE_NOT_FOUND": "El ejercicio no existe.",
+    "EXERCISE_SLUG_TAKEN": "Ya existe (o existió) un ejercicio con ese identificador.",
+    "TAG_NOT_FOUND": "Alguna de las etiquetas no existe.",
+    "TAG_SLUG_TAKEN": "Ya existe (o existió) una etiqueta con ese identificador.",
+    "ROUTINE_NOT_FOUND": "La rutina no existe.",
+    "ROUTINE_IN_USE": "La rutina se usa en un programa activo o en borrador. Quítala del programa primero.",
+    "PROGRAM_NOT_FOUND": "El programa no existe.",
+    "PROGRAM_INVALID_STATE": "El programa no permite esta acción en su estado actual.",
+    "NO_ACTIVE_PROGRAM": "No tienes ningún programa activo.",
+    "PROGRAM_TEMPLATE_NOT_FOUND": "La plantilla de programa no existe.",
+    "PROGRAM_TEMPLATE_SLUG_TAKEN": "Ya existe (o existió) una plantilla con ese identificador.",
+    "WORKOUT_NOT_FOUND": "La sesión no existe.",
+    "CLOCK_SKEW": "La hora de tu dispositivo está adelantada. Corrígela y vuelve a sincronizar.",
+    "MEDIA_NOT_CONFIGURED": "La subida de imágenes no está disponible en este momento.",
+    "INVALID_IMAGE_URL": "La imagen no es válida. Súbela desde la aplicación.",
+    "MEDIA_DELETE_FAILED": "No se pudo eliminar la imagen. Inténtalo de nuevo.",
+    "FOOD_NOT_FOUND": "El alimento no existe.",
+    "FOOD_IN_USE": "El alimento se usa en sugerencias de comidas. Quítalo de ellas primero.",
+    "MEAL_SUGGESTION_NOT_FOUND": "La sugerencia de comida no existe.",
+    "NUTRITION_GUIDELINE_NOT_FOUND": "La guía de nutrición no existe.",
+    "NUTRITION_SLUG_TAKEN": "Ya existe (o existió) un elemento con ese identificador.",
+    "NUTRITION_PROFILE_INCOMPLETE": "Faltan datos para el cálculo o no son válidos. Complétalos en tu perfil o envíalos en la solicitud.",
+    "NETWORK_ERROR": "No hay conexión con el servidor. Revisa tu conexión a internet.",
+    "SESSION_EXPIRED": "Tu sesión ha caducado. Inicia sesión de nuevo.",
+    "UNKNOWN_ERROR": "Se produjo un error inesperado."
+  }
+}

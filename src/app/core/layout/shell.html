@@ -1,0 +1,67 @@
+<a class="skip-link" href="#main">{{ 'app.skipToContent' | transloco }}</a>
+
+<mat-sidenav-container class="container">
+  <mat-sidenav
+    class="sidenav"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="opened()"
+    (openedChange)="opened.set($event)"
+    [attr.aria-label]="'nav.title' | transloco"
+  >
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <mat-icon>bolt</mat-icon>
+      </span>
+      <span class="brand-name">{{ 'app.name' | transloco }}</span>
+    </div>
+
+    <div class="user-panel">
+      <strong>{{ displayName() }}</strong>
+      @if (planName()) {
+        <span class="plan">{{ planName() }}</span>
+      }
+    </div>
+
+    <mat-nav-list>
+      @for (item of navItems(); track item.path) {
+        <a
+          mat-list-item
+          [routerLink]="item.path"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [activated]="rla.isActive"
+          [attr.aria-current]="rla.isActive ? 'page' : null"
+          (click)="closeOnHandset()"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.labelKey | transloco }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <mat-toolbar class="toolbar">
+      <button
+        mat-icon-button
+        type="button"
+        [attr.aria-label]="'toolbar.toggleMenu' | transloco"
+        [attr.aria-expanded]="opened()"
+        (click)="opened.set(!opened())"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      @if (isHandset()) {
+        <span class="toolbar-brand">{{ 'app.name' | transloco }}</span>
+      }
+      <span class="spacer"></span>
+      <app-language-menu />
+      <app-theme-toggle />
+      <app-user-menu />
+    </mat-toolbar>
+
+    <main id="main" tabindex="-1">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

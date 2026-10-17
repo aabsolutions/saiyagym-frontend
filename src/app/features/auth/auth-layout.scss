@@ -1,0 +1,135 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.auth {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  min-height: 100vh;
+
+  @media (max-width: 959.98px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Vegeta's suit (deep royal blue) with a golden Saiyan aura.
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 48px;
+  background:
+    radial-gradient(circle at 20% 15%, #264191 0%, transparent 55%),
+    linear-gradient(160deg, #05297a 0%, #00164e 70%, #0b0d17 100%);
+  color: #fff;
+
+  @media (max-width: 959.98px) {
+    display: none;
+  }
+}
+
+.aura {
+  position: absolute;
+  inset: auto -10% -35% -10%;
+  height: 70%;
+  background: radial-gradient(ellipse at center, rgba(245, 180, 0, 0.55) 0%, transparent 65%);
+  filter: blur(24px);
+  animation: aura 4s ease-in-out infinite alternate;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes aura {
+  from {
+    opacity: 0.6;
+    transform: scaleY(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1.05);
+  }
+}
+
+.hero-card {
+  position: relative;
+  max-width: 480px;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 4px solid #f5b400;
+  backdrop-filter: blur(8px);
+
+  h2 {
+    margin: 16px 0 8px;
+    font: var(--mat-sys-display-small);
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font: var(--mat-sys-body-large);
+    opacity: 0.88;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #f5b400;
+  color: #261a00;
+  font: var(--mat-sys-label-large);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: var(--mat-sys-surface);
+}
+
+.panel-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.panel-body {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: 24px 0 48px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  font: var(--mat-sys-headline-small);
+  font-weight: 700;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--mat-sys-primary);
+  color: var(--sg-gold);
+  box-shadow: inset 0 -3px 0 var(--sg-gold);
+}

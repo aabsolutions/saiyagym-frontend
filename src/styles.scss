@@ -1,0 +1,82 @@
+@use '@angular/material' as mat;
+@use './styles/theme-colors' as saiyan;
+
+// Palette: Vegeta's battle armor. Royal-blue bodysuit (primary) + Saiyan gold
+// shoulder pads/gloves (tertiary). Regenerate with:
+// ng g @angular/material:theme-color --primary-color=#1E3A8A --tertiary-color=#F5B400 --neutral-color=#5F6170
+html {
+  // `light dark` + light-dark() tokens: the OS decides until ThemeService pins a mode.
+  color-scheme: light dark;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: saiyan.$primary-palette,
+        tertiary: saiyan.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  // Brand accent tokens for non-Material elements (logo, highlights).
+  --sg-gold: light-dark(#7a5900, #f5b400);
+  --sg-armor: light-dark(#ffffff, #1b1d27);
+}
+
+html.theme-light {
+  color-scheme: light;
+}
+
+html.theme-dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 599.98px) {
+    padding: 16px;
+  }
+}
+
+.page-title {
+  font: var(--mat-sys-headline-small);
+  margin: 0 0 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.sg-snack-error {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--mat-sys-error-container),
+      supporting-text-color: var(--mat-sys-on-error-container),
+      button-color: var(--mat-sys-on-error-container),
+    )
+  );
+}
