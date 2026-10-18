@@ -388,7 +388,8 @@
       "tag": "Tag",
       "favorites": "Favorites only",
       "custom": "Custom only",
-      "clear": "Clear filters"
+      "clear": "Clear filters",
+      "exercise": "Exercise"
     },
     "tier": {
       "global": "Global tier",
@@ -711,6 +712,76 @@
       "WEEK_PERCENT": "{{percent}}% of max",
       "DELOAD_WEIGHT": "Deload: −{{percent}}% weight",
       "DELOAD_SETS": "Deload: −{{percent}}% sets"
+    }
+  },
+  "format": {
+    "minutes": "{{minutes}} min",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "history": {
+    "mobileOnly": "Sessions are logged from the mobile app; here you can review and correct them.",
+    "untitled": "Untitled session",
+    "inProgress": "In progress",
+    "exercisesCount": "{{count}} exercises",
+    "setsCount": "{{count}} sets",
+    "volume": "Volume {{volume}}",
+    "empty": "No sessions logged yet.",
+    "emptyFiltered": "No sessions match these filters.",
+    "rating": "Rating",
+    "ratingN": "{{n}} of 5",
+    "filters": {
+      "from": "From",
+      "to": "To",
+      "routine": "Routine"
+    },
+    "calendar": {
+      "previous": "Previous month",
+      "next": "Next month",
+      "legend": "Routines",
+      "dayLabel": "Day {{day}}: {{count}} sessions"
+    },
+    "pr": {
+      "maxWeight": "Heaviest weight: {{value}}",
+      "bestE1RM": "Best estimated 1RM: {{value}}",
+      "maxVolume": "Highest volume: {{value}}",
+      "repsAtWeight": "{{reps}} reps at {{weight}}"
+    },
+    "detail": {
+      "notFound": "This session doesn't exist or you can't access it.",
+      "edit": "Correct",
+      "editTitle": "Correct session",
+      "editHint": "Fix weights, reps or notes. Records are recalculated when you save.",
+      "delete": "Delete",
+      "deleteTitle": "Delete this session?",
+      "deleteMessage": "It will also be removed from your stats and records. This can't be undone.",
+      "deleted": "Session deleted.",
+      "discard": "Discard changes",
+      "liveReadOnly": "This session is still in progress on the phone. You can correct it once it ends.",
+      "duration": "Duration",
+      "noDuration": "Not recorded",
+      "volume": "Volume",
+      "liveVolume": "Volume: {{volume}}",
+      "workingSets": "Working sets",
+      "exercises": "Exercises",
+      "records": "Records from this session",
+      "recordsHint": "Records set in this session that still stand.",
+      "savedWithRecords": "Session saved: {{count}} new records!",
+      "e1rm": "Est. 1RM {{value}}",
+      "allSets": "See all sets",
+      "bodyweight": "Bodyweight",
+      "noReps": "—",
+      "completed": "Done",
+      "noSets": "No sets.",
+      "name": "Name",
+      "notes": "Notes"
+    },
+    "sets": {
+      "title": "{{name}} sets",
+      "hint": "Every logged set of this exercise, newest first.",
+      "exerciseLink": "Exercise page",
+      "date": "Date",
+      "e1rm": "Est. 1RM",
+      "volume": "Volume"
     }
   }
 }

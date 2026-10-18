@@ -1,0 +1,76 @@
+<section class="page">
+  <div class="links">
+    <a mat-button routerLink="/history">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'pages.history.title' | transloco }}
+    </a>
+    <a mat-button [routerLink]="['/exercises', id()]">
+      <mat-icon>fitness_center</mat-icon>
+      {{ 'history.sets.exerciseLink' | transloco }}
+    </a>
+  </div>
+  <h1 class="page-title">
+    {{ 'history.sets.title' | transloco: { name: name() ?? '' } }}
+  </h1>
+  <p class="hint">{{ 'history.sets.hint' | transloco }}</p>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  @if (rows().length) {
+    <div class="table-wrap">
+      <table class="sets">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'history.sets.date' | transloco }}</th>
+            <th scope="col">{{ 'routines.builder.setNumber' | transloco }}</th>
+            <th scope="col">{{ 'routines.builder.setType' | transloco }}</th>
+            <th scope="col">{{ 'routines.builder.weight' | transloco }}</th>
+            <th scope="col">{{ 'routines.builder.reps' | transloco }}</th>
+            <th scope="col">{{ 'history.sets.e1rm' | transloco }}</th>
+            <th scope="col">{{ 'history.sets.volume' | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.workoutId + row.n) {
+            <tr
+              [class.first]="row.firstOfSession"
+              [class.skipped]="!row.completed"
+              [class]="'type-' + row.type"
+            >
+              @if (row.firstOfSession) {
+                <th scope="row" [attr.rowspan]="row.sessionSets" class="date">
+                  <a [routerLink]="['/history', row.workoutId]">{{ row.startedAt | localDate }}</a>
+                </th>
+              }
+              <td>{{ row.n }}</td>
+              <td>{{ 'routines.setType.' + row.type | transloco }}</td>
+              <td>
+                {{
+                  row.weightKg === null
+                    ? ('history.detail.bodyweight' | transloco)
+                    : (row.weightKg | weight)
+                }}
+              </td>
+              <td>{{ row.reps ?? ('history.detail.noReps' | transloco) }}</td>
+              <td>{{ row.e1rm === null ? '' : (row.e1rm | weight) }}</td>
+              <td>{{ row.volumeKg === null ? '' : (row.volumeKg | weight: { digits: 0 }) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (total() > pageSize) {
+      <mat-paginator
+        [length]="total()"
+        [pageIndex]="page() - 1"
+        [pageSize]="pageSize"
+        [hidePageSize]="true"
+        (page)="onPage($event)"
+      />
+    }
+  } @else if (!loading()) {
+    <p class="empty">{{ 'exercises.history.empty' | transloco }}</p>
+  }
+</section>

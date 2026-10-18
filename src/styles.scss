@@ -22,6 +22,17 @@ html {
   // Brand accent tokens for non-Material elements (logo, highlights).
   --sg-gold: light-dark(#7a5900, #f5b400);
   --sg-armor: light-dark(#ffffff, #1b1d27);
+
+  // Routine palette (history calendar/list): one slot per routine, readable in both themes.
+  --sg-routine-0: light-dark(#1e3a8a, #b6c4ff);
+  --sg-routine-1: light-dark(#b07d00, #f5b400);
+  --sg-routine-2: light-dark(#2e7d32, #81c784);
+  --sg-routine-3: light-dark(#c62828, #ef9a9a);
+  --sg-routine-4: light-dark(#6a1b9a, #ce93d8);
+  --sg-routine-5: light-dark(#00838f, #80deea);
+  --sg-routine-6: light-dark(#ef6c00, #ffb74d);
+  --sg-routine-7: light-dark(#4e342e, #bcaaa4);
+  --sg-routine-none: var(--mat-sys-outline);
 }
 
 html.theme-light {

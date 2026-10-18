@@ -388,7 +388,8 @@
       "tag": "Etiqueta",
       "favorites": "Solo favoritos",
       "custom": "Solo personalizados",
-      "clear": "Quitar filtros"
+      "clear": "Quitar filtros",
+      "exercise": "Ejercicio"
     },
     "tier": {
       "global": "Tier global",
@@ -711,6 +712,76 @@
       "WEEK_PERCENT": "{{percent}} % del máximo",
       "DELOAD_WEIGHT": "Descarga: −{{percent}} % de peso",
       "DELOAD_SETS": "Descarga: −{{percent}} % de series"
+    }
+  },
+  "format": {
+    "minutes": "{{minutes}} min",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "history": {
+    "mobileOnly": "Las sesiones se registran desde la app móvil; aquí puedes consultarlas y corregirlas.",
+    "untitled": "Sesión sin nombre",
+    "inProgress": "En curso",
+    "exercisesCount": "{{count}} ejercicios",
+    "setsCount": "{{count}} series",
+    "volume": "Volumen {{volume}}",
+    "empty": "Todavía no hay sesiones registradas.",
+    "emptyFiltered": "No hay sesiones con estos filtros.",
+    "rating": "Valoración",
+    "ratingN": "{{n}} de 5",
+    "filters": {
+      "from": "Desde",
+      "to": "Hasta",
+      "routine": "Rutina"
+    },
+    "calendar": {
+      "previous": "Mes anterior",
+      "next": "Mes siguiente",
+      "legend": "Rutinas",
+      "dayLabel": "Día {{day}}: {{count}} sesiones"
+    },
+    "pr": {
+      "maxWeight": "Mayor peso: {{value}}",
+      "bestE1RM": "Mejor 1RM estimado: {{value}}",
+      "maxVolume": "Mayor volumen: {{value}}",
+      "repsAtWeight": "{{reps}} reps con {{weight}}"
+    },
+    "detail": {
+      "notFound": "Esta sesión no existe o no tienes acceso.",
+      "edit": "Corregir",
+      "editTitle": "Corregir sesión",
+      "editHint": "Corrige pesos, repeticiones o notas. Los récords se recalculan al guardar.",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar esta sesión?",
+      "deleteMessage": "Se eliminará también de tus estadísticas y récords. No se puede deshacer.",
+      "deleted": "Sesión eliminada.",
+      "discard": "Descartar cambios",
+      "liveReadOnly": "Esta sesión sigue en curso en el móvil. Podrás corregirla cuando termine.",
+      "duration": "Duración",
+      "noDuration": "Sin registrar",
+      "volume": "Volumen",
+      "liveVolume": "Volumen: {{volume}}",
+      "workingSets": "Series efectivas",
+      "exercises": "Ejercicios",
+      "records": "Récords de esta sesión",
+      "recordsHint": "Récords que logras en esta sesión y que siguen vigentes.",
+      "savedWithRecords": "Sesión guardada: ¡{{count}} récords nuevos!",
+      "e1rm": "1RM est. {{value}}",
+      "allSets": "Ver todas las series",
+      "bodyweight": "Peso corporal",
+      "noReps": "—",
+      "completed": "Hecha",
+      "noSets": "Sin series.",
+      "name": "Nombre",
+      "notes": "Notas"
+    },
+    "sets": {
+      "title": "Series de {{name}}",
+      "hint": "Todas las series registradas de este ejercicio, de la más reciente a la más antigua.",
+      "exerciseLink": "Ficha del ejercicio",
+      "date": "Fecha",
+      "e1rm": "1RM est.",
+      "volume": "Volumen"
     }
   }
 }

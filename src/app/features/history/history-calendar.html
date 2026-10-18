@@ -1,0 +1,75 @@
+<div class="calendar">
+  <header>
+    <button
+      mat-icon-button
+      type="button"
+      [attr.aria-label]="'history.calendar.previous' | transloco"
+      (click)="monthShifted.emit(-1)"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <h2 class="title">{{ title() }}</h2>
+    <button
+      mat-icon-button
+      type="button"
+      [attr.aria-label]="'history.calendar.next' | transloco"
+      (click)="monthShifted.emit(1)"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </header>
+
+  <table class="grid" [attr.aria-label]="title()">
+    <thead>
+      <tr>
+        @for (day of weekdays(); track day) {
+          <th scope="col">
+            <abbr [title]="'profile.weekdays.' + day | transloco">{{
+              'profile.weekdaysShort.' + day | transloco
+            }}</abbr>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (week of weeks(); track week[0]) {
+        <tr>
+          @for (date of week; track date) {
+            @let sessions = byDay().get(date) ?? [];
+            <td>
+              <button
+                type="button"
+                class="day"
+                [class.other]="date.slice(0, 7) !== month()"
+                [class.today]="date === today()"
+                [class.selected]="date === selectedDay()"
+                [class.trained]="sessions.length > 0"
+                [attr.aria-pressed]="date === selectedDay()"
+                [attr.aria-label]="
+                  'history.calendar.dayLabel'
+                    | transloco: { day: dayNumber(date), count: sessions.length }
+                "
+                (click)="daySelected.emit(date)"
+              >
+                <span class="n">{{ dayNumber(date) }}</span>
+                <span class="dots" aria-hidden="true">
+                  @for (w of sessions; track w.id) {
+                    <span class="dot" [class]="'c' + (color(w) ?? 'x')"></span>
+                  }
+                </span>
+              </button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (legend().length) {
+    <ul class="legend" [attr.aria-label]="'history.calendar.legend' | transloco">
+      @for (item of legend(); track item.id) {
+        <li><span class="dot" [class]="'c' + item.color"></span>{{ item.name }}</li>
+      }
+    </ul>
+  }
+</div>

@@ -221,6 +221,10 @@
         </mat-card-header>
         <mat-card-content>
           @if (store.history().length) {
+            <a mat-stroked-button class="all-sets" [routerLink]="['/history/exercise', ex.id]">
+              <mat-icon>table_rows</mat-icon>
+              {{ 'history.detail.allSets' | transloco }}
+            </a>
             <ol class="history">
               @for (entry of store.history(); track entry.workoutId) {
                 <li>

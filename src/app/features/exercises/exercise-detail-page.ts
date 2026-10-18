@@ -16,7 +16,7 @@ import { LocalDatePipe } from '../../shared/format/local-date.pipe';
 import { ConfirmDialog, ConfirmDialogData } from '../../shared/ui/confirm-dialog';
 import { WeightPipe } from '../../shared/units/weight.pipe';
 import { ExerciseDetailStore, HISTORY_PAGE_SIZE } from './exercise-detail.store';
-import { hasRecords } from './exercise-records';
+import { hasRecords } from '../../shared/records/exercise-records';
 import { ExercisesStore } from './exercises.store';
 
 @Component({

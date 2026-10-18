@@ -1,0 +1,129 @@
+@let f = store.filters();
+<section class="page">
+  <h1 class="page-title">{{ 'pages.history.title' | transloco }}</h1>
+  <p class="hint">{{ 'history.mobileOnly' | transloco }}</p>
+
+  <div class="layout">
+    <app-history-calendar
+      [month]="store.month()"
+      [weeks]="weeks()"
+      [weekdays]="weekdays"
+      [byDay]="store.byDay()"
+      [routineOrder]="store.routineOrder()"
+      [routineName]="store.routineName()"
+      [today]="today"
+      [selectedDay]="selectedDay()"
+      [lang]="lang()"
+      (monthShifted)="shiftMonth($event)"
+      (daySelected)="store.selectDay($event)"
+    />
+
+    <div class="results">
+      <section class="filters" [attr.aria-label]="'exercises.filters.title' | transloco">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ 'history.filters.from' | transloco }}</mat-label>
+          <input
+            matInput
+            type="date"
+            [value]="f.from ?? ''"
+            [max]="f.to ?? today"
+            (change)="setDate('from', $any($event.target).value)"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ 'history.filters.to' | transloco }}</mat-label>
+          <input
+            matInput
+            type="date"
+            [value]="f.to ?? ''"
+            [min]="f.from ?? ''"
+            (change)="setDate('to', $any($event.target).value)"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ 'history.filters.routine' | transloco }}</mat-label>
+          <mat-select
+            [value]="f.routineId"
+            (selectionChange)="store.setFilters({ routineId: $event.value })"
+          >
+            <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+            @for (r of store.routines(); track r.id) {
+              <mat-option [value]="r.id">{{ r.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <app-exercise-autocomplete
+          class="exercise"
+          [selected]="selectedExercise()"
+          (picked)="setExercise($event)"
+        />
+        @if (filtered()) {
+          <button mat-button type="button" (click)="store.clearFilters()">
+            {{ 'exercises.filters.clear' | transloco }}
+          </button>
+        }
+      </section>
+
+      @if (store.isPending()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <ul class="list" [attr.aria-busy]="store.isPending()">
+        @for (w of store.items(); track w.id) {
+          <li>
+            <a class="card" [routerLink]="['/history', w.id]">
+              <span
+                class="bar"
+                [class]="'bar c' + (color(w.routineId) ?? 'x')"
+                aria-hidden="true"
+              ></span>
+              <span class="body">
+                <span class="title">
+                  <span class="name">{{ w.name || ('history.untitled' | transloco) }}</span>
+                  @if (!w.finishedAt) {
+                    <span class="live">{{ 'history.inProgress' | transloco }}</span>
+                  }
+                </span>
+                <span class="meta">
+                  <span>{{ w.startedAt | localDate: 'long' }}</span>
+                  @if (w.durationSeconds !== null) {
+                    <span>{{ w.durationSeconds | duration }}</span>
+                  }
+                  @if (store.routineName()(w.routineId); as routine) {
+                    <span>{{ routine }}</span>
+                  }
+                </span>
+                <span class="stats">
+                  <span>{{
+                    'history.exercisesCount' | transloco: { count: w.exerciseCount }
+                  }}</span>
+                  <span>{{ 'history.setsCount' | transloco: { count: w.workingSets } }}</span>
+                  <span>{{
+                    'history.volume' | transloco: { volume: (w.volumeKg | weight: { digits: 0 }) }
+                  }}</span>
+                </span>
+              </span>
+              <app-rating-stars [value]="w.rating" />
+            </a>
+          </li>
+        } @empty {
+          @if (store.isFulfilled()) {
+            <li class="empty">
+              {{ (filtered() ? 'history.emptyFiltered' : 'history.empty') | transloco }}
+            </li>
+          }
+        }
+      </ul>
+
+      @if (store.total() > pageSize) {
+        <mat-paginator
+          [length]="store.total()"
+          [pageIndex]="store.page() - 1"
+          [pageSize]="pageSize"
+          [hidePageSize]="true"
+          (page)="onPage($event)"
+        />
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,273 @@
+<section class="page">
+  <a mat-button routerLink="/history" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'pages.history.title' | transloco }}
+  </a>
+
+  @if (store.isPending()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (store.error()) {
+    <p class="center">{{ 'history.detail.notFound' | transloco }}</p>
+  } @else if (store.workout(); as w) {
+    @if (!editing()) {
+      <!-- ===== Read mode ===== -->
+      <header class="head">
+        <div>
+          <h1 class="page-title">{{ w.name || ('history.untitled' | transloco) }}</h1>
+          <p class="when">
+            {{ w.startedAt | localDate: 'long' }}
+            @if (!w.finishedAt) {
+              <span class="live">{{ 'history.inProgress' | transloco }}</span>
+            }
+          </p>
+          <app-rating-stars [value]="w.rating" />
+        </div>
+        <div class="actions">
+          @if (editable()) {
+            <button mat-stroked-button type="button" (click)="startEditing()">
+              <mat-icon>edit</mat-icon>
+              {{ 'history.detail.edit' | transloco }}
+            </button>
+          }
+          <button mat-button type="button" class="delete" (click)="remove()">
+            <mat-icon>delete</mat-icon>
+            {{ 'history.detail.delete' | transloco }}
+          </button>
+        </div>
+      </header>
+
+      @if (!editable()) {
+        <p class="notice">
+          <mat-icon aria-hidden="true">smartphone</mat-icon>
+          {{ 'history.detail.liveReadOnly' | transloco }}
+        </p>
+      }
+
+      <dl class="summary">
+        <div>
+          <dt>{{ 'history.detail.duration' | transloco }}</dt>
+          <dd>
+            {{
+              w.durationSeconds === null
+                ? ('history.detail.noDuration' | transloco)
+                : (w.durationSeconds | duration)
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>{{ 'history.detail.volume' | transloco }}</dt>
+          <dd>{{ w.volumeKg | weight: { digits: 0 } }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'history.detail.workingSets' | transloco }}</dt>
+          <dd>{{ w.workingSets }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'history.detail.exercises' | transloco }}</dt>
+          <dd>{{ w.exerciseCount }}</dd>
+        </div>
+      </dl>
+
+      @if (store.records().length) {
+        <section class="records" [attr.aria-label]="'history.detail.records' | transloco">
+          <h2>
+            <mat-icon aria-hidden="true">emoji_events</mat-icon>
+            {{ 'history.detail.records' | transloco }}
+          </h2>
+          <p class="hint">{{ 'history.detail.recordsHint' | transloco }}</p>
+        </section>
+      }
+
+      @if (w.notes) {
+        <p class="notes">{{ w.notes }}</p>
+      }
+
+      <ol class="exercises">
+        @for (ex of w.exercises; track ex.id) {
+          <li class="exercise" [class.superset]="!!ex.groupId">
+            <header>
+              <h3>{{ ex.name ?? ('routines.builder.missingExercise' | transloco) }}</h3>
+              <span class="ex-meta">
+                <span>{{
+                  'history.volume' | transloco: { volume: (ex.volumeKg | weight: { digits: 0 }) }
+                }}</span>
+                @if (bestE1RM(ex); as e1rm) {
+                  <span>{{ 'history.detail.e1rm' | transloco: { value: (e1rm | weight) } }}</span>
+                }
+              </span>
+              <a mat-button [routerLink]="['/history/exercise', ex.exerciseId]">
+                {{ 'history.detail.allSets' | transloco }}
+              </a>
+            </header>
+            @if (recordsByExercise().get(ex.exerciseId); as recs) {
+              <ul class="prs">
+                @for (r of recs; track r.type + r.entry.weightKg) {
+                  <li>
+                    <mat-icon aria-hidden="true">emoji_events</mat-icon>
+                    @switch (r.type) {
+                      @case ('repsAtWeight') {
+                        {{
+                          'history.pr.repsAtWeight'
+                            | transloco
+                              : { reps: r.entry.value, weight: (r.entry.weightKg | weight) }
+                        }}
+                      }
+                      @case ('maxVolume') {
+                        {{
+                          'history.pr.maxVolume'
+                            | transloco: { value: (r.entry.value | weight: { digits: 0 }) }
+                        }}
+                      }
+                      @default {
+                        {{
+                          'history.pr.' + r.type | transloco: { value: (r.entry.value | weight) }
+                        }}
+                      }
+                    }
+                  </li>
+                }
+              </ul>
+            }
+            <table class="sets">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'routines.builder.setNumber' | transloco }}</th>
+                  <th scope="col">{{ 'routines.builder.setType' | transloco }}</th>
+                  <th scope="col">{{ 'routines.builder.weight' | transloco }}</th>
+                  <th scope="col">{{ 'routines.builder.reps' | transloco }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of ex.sets; track s.id; let i = $index) {
+                  <tr [class.skipped]="!s.completed" [class]="'type-' + s.type">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ 'routines.setType.' + s.type | transloco }}</td>
+                    <td>
+                      {{
+                        s.weightKg === null
+                          ? ('history.detail.bodyweight' | transloco)
+                          : (s.weightKg | weight)
+                      }}
+                    </td>
+                    <td>{{ s.reps ?? ('history.detail.noReps' | transloco) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            @if (ex.notes) {
+              <p class="notes small">{{ ex.notes }}</p>
+            }
+          </li>
+        }
+      </ol>
+    } @else {
+      <!-- ===== Edit mode ===== -->
+      <form [formRoot]="editForm" class="edit">
+        <header class="head">
+          <h1 class="page-title">{{ 'history.detail.editTitle' | transloco }}</h1>
+          <div class="actions">
+            <button mat-button type="button" (click)="cancelEditing()">
+              {{ 'common.cancel' | transloco }}
+            </button>
+            <button mat-flat-button type="submit" [disabled]="store.saving() || !dirty()">
+              {{ 'common.save' | transloco }}
+            </button>
+          </div>
+        </header>
+        <p class="hint">{{ 'history.detail.editHint' | transloco }}</p>
+
+        <div class="row">
+          <mat-form-field class="grow">
+            <mat-label>{{ 'history.detail.name' | transloco }}</mat-label>
+            <input matInput [formField]="editForm.name" />
+            <mat-error>{{ editForm.name().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <div class="rating">
+            <span class="label">{{ 'history.rating' | transloco }}</span>
+            <app-rating-stars
+              [editable]="true"
+              [value]="draft().rating"
+              (valueChange)="setRating($event)"
+            />
+          </div>
+        </div>
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'history.detail.notes' | transloco }}</mat-label>
+          <textarea matInput rows="2" [formField]="editForm.notes"></textarea>
+          <mat-error>{{ editForm.notes().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+        <p class="live-volume">
+          {{
+            'history.detail.liveVolume'
+              | transloco: { volume: (liveVolume() | weight: { digits: 0 }) }
+          }}
+        </p>
+
+        <ol class="exercises">
+          @for (ex of editForm.exercises; track ex().value().id; let e = $index) {
+            <li class="exercise">
+              <h3>{{ ex().value().name ?? ('routines.builder.missingExercise' | transloco) }}</h3>
+              <div class="edit-sets">
+                @for (s of ex.sets; track s().value().id; let i = $index) {
+                  <div class="edit-set">
+                    <span class="n">{{ i + 1 }}</span>
+                    <mat-form-field subscriptSizing="dynamic" class="type">
+                      <mat-label>{{ 'routines.builder.setType' | transloco }}</mat-label>
+                      <mat-select [formField]="s.type">
+                        @for (t of setTypes; track t) {
+                          <mat-option [value]="t">{{
+                            'routines.setType.' + t | transloco
+                          }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field subscriptSizing="dynamic">
+                      <mat-label>{{ 'routines.builder.weight' | transloco }}</mat-label>
+                      <input
+                        matInput
+                        type="number"
+                        step="0.5"
+                        inputmode="decimal"
+                        [formField]="s.weight"
+                      />
+                      <span matTextSuffix>{{
+                        (units() === 'imperial' ? 'units.lb' : 'units.kg') | transloco
+                      }}</span>
+                      <mat-error>{{ s.weight().errors() | validationMessage }}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field subscriptSizing="dynamic">
+                      <mat-label>{{ 'routines.builder.reps' | transloco }}</mat-label>
+                      <input matInput type="number" inputmode="numeric" [formField]="s.reps" />
+                      <mat-error>{{ s.reps().errors() | validationMessage }}</mat-error>
+                    </mat-form-field>
+                    <mat-checkbox
+                      [checked]="s.completed().value()"
+                      (change)="s.completed().value.set($event.checked)"
+                      >{{ 'history.detail.completed' | transloco }}</mat-checkbox
+                    >
+                    <button
+                      mat-icon-button
+                      type="button"
+                      [attr.aria-label]="'routines.builder.removeSet' | transloco: { n: i + 1 }"
+                      (click)="removeSet(e, i)"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                } @empty {
+                  <p class="hint">{{ 'history.detail.noSets' | transloco }}</p>
+                }
+              </div>
+              <mat-form-field class="full-width" subscriptSizing="dynamic">
+                <mat-label>{{ 'routines.builder.exerciseNotes' | transloco }}</mat-label>
+                <textarea matInput rows="1" [formField]="ex.notes"></textarea>
+              </mat-form-field>
+            </li>
+          }
+        </ol>
+      </form>
+    }
+  }
+</section>

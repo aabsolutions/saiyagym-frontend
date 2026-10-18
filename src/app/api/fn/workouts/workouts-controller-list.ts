@@ -21,6 +21,16 @@ export interface WorkoutsControllerList$Params {
  */
   to?: string;
   status: 'finished' | 'in_progress' | 'all';
+
+/**
+ * Only sessions started from this routine.
+ */
+  routineId?: string;
+
+/**
+ * Only sessions that include this exercise (index workouts(userId, exercises.exerciseId, startedAt)).
+ */
+  exerciseId?: string;
   page: number;
   limit: number;
 }
@@ -31,6 +41,8 @@ export function workoutsControllerList(http: HttpClient, rootUrl: string, params
     rb.query('from', params.from, {});
     rb.query('to', params.to, {});
     rb.query('status', params.status, {});
+    rb.query('routineId', params.routineId, {});
+    rb.query('exerciseId', params.exerciseId, {});
     rb.query('page', params.page, {});
     rb.query('limit', params.limit, {});
   }

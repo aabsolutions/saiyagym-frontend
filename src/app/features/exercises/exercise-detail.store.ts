@@ -1,8 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
-import { firstValueFrom } from 'rxjs';
-import { recordsControllerForExercise } from '../../api/fn/stats/records-controller-for-exercise';
 import { ExerciseDetailDto } from '../../api/models/exercise-detail-dto';
 import { ExercisePerformanceDto } from '../../api/models/exercise-performance-dto';
 import { UpdateExercisePrefsDto } from '../../api/models/update-exercise-prefs-dto';
@@ -14,7 +11,7 @@ import {
   setPending,
   withRequestStatus,
 } from '../../shared/store/with-request-status';
-import { ExerciseRecords } from './exercise-records';
+import { ExerciseRecords, ExerciseRecordsApi } from '../../shared/records/exercise-records';
 
 export const HISTORY_PAGE_SIZE = 10;
 
@@ -37,14 +34,11 @@ export const ExerciseDetailStore = signalStore(
     historyLoading: false,
   }),
   withRequestStatus(),
-  withProps(() => ({ _api: inject(ExercisesService), _http: inject(HttpClient) })),
+  withProps(() => ({ _api: inject(ExercisesService), _records: inject(ExerciseRecordsApi) })),
   withMethods((store) => {
     const loadRecords = async (id: string) => {
       try {
-        // See exercise-records.ts: the generated function drops this (untyped) body, so
-        // call it directly. The path still comes from the generated client.
-        const url = recordsControllerForExercise.PATH.replace('{id}', encodeURIComponent(id));
-        patchState(store, { records: await firstValueFrom(store._http.get<ExerciseRecords>(url)) });
+        patchState(store, { records: await store._records.get(id) });
       } catch {
         patchState(store, { records: null });
       }

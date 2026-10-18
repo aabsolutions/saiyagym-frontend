@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { ExerciseDetailStore } from './exercise-detail.store';
 import { exerciseDetail } from './exercise-fixtures.spec-helpers';
-import { ExerciseRecords } from './exercise-records';
+import { ExerciseRecords } from '../../shared/records/exercise-records';
 
 const settle = () => new Promise((resolve) => setTimeout(resolve));
 

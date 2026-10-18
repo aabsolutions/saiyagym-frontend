@@ -1,5 +1,34 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Historial de sesiones
+
+### Hecho
+
+- **Historial** (`/history`): calendario mensual (semana según `firstDayOfWeek`, un punto por sesión con el color de su rutina, leyenda, hoy resaltado; tocar un día filtra la lista) + lista paginada con filtros desde/hasta (días LOCALES), rutina y ejercicio (autocompletado). Filtros, mes y página en la URL. Las sesiones en curso se marcan.
+- **Backend** (mismo día): `GET /workouts` acepta `routineId` y `exerciseId` → filtros y paginación correctos en el servidor.
+- **Detalle** (`/history/:id`): resumen (duración, volumen, series efectivas, ejercicios), valoración, notas, ejercicios con series (calentamientos y series no hechas diferenciadas), 1RM estimado por ejercicio y **récords de esta sesión** (los récords vigentes cuyo `workoutId` es esta sesión; una llamada por ejercicio).
+- **Corrección posterior**: modo edición (nombre, notas, valoración, tipo/peso/reps/hecha por serie, quitar series) con volumen en vivo; guarda con `PATCH` (la lista completa, conservando ids) y avisa cuántos récords nuevos devolvió la API. Las sesiones aún en curso en el móvil son de solo lectura. Eliminar con confirmación. Cambios sin guardar protegidos (guard + `beforeunload`).
+- **Series por ejercicio** (`/history/exercise/:id`, enlazada desde el detalle de sesión y de ejercicio): tabla de todas las series (fecha por sesión, tipo, peso, reps, e1RM, volumen), paginada por sesiones.
+- Compartido: `set-math.ts` (Epley 1–12 reps, volumen sin calentamientos), `DurationPipe`, `<app-rating-stars>`, `<app-exercise-autocomplete>`, `ExerciseRecordsApi` (`shared/records/`), paleta de rutinas `--sg-routine-*` en `styles.scss`.
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 159/159 ✅ · `npm run build:gh` ✅ (inicial 544 kB; historial lazy 105 kB).
+- Tests: filtros ↔ URL ↔ API (días locales → `[from, to)` en instantes UTC), grilla del mes según primer día, agrupación por día LOCAL, colores por rutina, store (no carga sin la URL, mes + lista, día del calendario → página 1), borrador de sesión (kg exactos sin deriva lb, conversión al editar, ids conservados, volumen sin calentamientos), schema, e1RM/volumen, tabla de series, récords de la sesión y PATCH con `newRecords`, detalle (en curso = solo lectura; corregir reps → PATCH con los kg guardados).
+- **No verificado en navegador** contra datos reales (no hay sesiones hasta que exista la app móvil o se carguen por API).
+
+### Decisiones y gotchas
+
+- **PRs de la sesión = récords vigentes**: la API solo guarda el récord actual por tipo (con su `workoutId`) y lo recalcula al editar; un PR que después fue superado ya no aparece. Decisión del usuario frente a persistir `newRecords` por sesión en el backend.
+- La web **corrige** sesiones pero no las inicia ni cronometra (SPEC). Editar una sesión en curso pelearía con la sincronización del móvil (last-write-wins): solo lectura hasta que termine.
+- Pesos editados en la unidad del usuario, fijada al entrar en edición; los no tocados se reenvían con los kg exactos.
+- `mat-checkbox` no integra Signal Forms (`FORM_FIELD`): se bindea con `[checked]`/`(change)`.
+- Un fixture exportado desde un `*.spec.ts` hace que Vitest ejecute ese spec otra vez en cada importador: los fixtures van en `*.spec-helpers.ts`.
+
+### Pendiente / próximo
+
+- Estadísticas (stats) — requiere arreglar en el backend el schema de `stats/*` y `records` (controllers en `*.module.ts`).
+
 ## 2026-10-18 — Rutinas y programas
 
 ### Hecho
