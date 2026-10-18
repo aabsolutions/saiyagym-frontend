@@ -15,7 +15,7 @@
   } @else {
     <form [formRoot]="exerciseForm" class="form">
       <section class="image-field">
-        @if (store.imageUrl(); as url) {
+        @if (store.shownImage(); as url) {
           <img [src]="url" alt="" width="120" height="120" />
         } @else {
           <span class="placeholder" aria-hidden="true"
@@ -34,8 +34,13 @@
             <mat-icon>upload</mat-icon>
             <span>{{ 'exercises.form.image.upload' | transloco }}</span>
           </label>
-          @if (store.imageUrl()) {
-            <button mat-button type="button" (click)="store.removeImage()">
+          @if (store.shownImage()) {
+            <button
+              mat-button
+              type="button"
+              [disabled]="store.uploadProgress() !== null"
+              (click)="store.removeImage()"
+            >
               {{ 'exercises.form.image.remove' | transloco }}
             </button>
           }

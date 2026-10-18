@@ -95,6 +95,6 @@ export class ExerciseFormPage implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     input.value = ''; // let the same file be picked again after removing it
-    if (file) this.store.uploadImage(file);
+    if (file) this.store.selectImage(file);
   }
 }

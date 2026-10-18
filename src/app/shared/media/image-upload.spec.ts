@@ -13,6 +13,7 @@ const signature: UploadSignatureDto = {
   params: {
     timestamp: 123,
     public_id: 'users/u1/exercises/abc',
+    asset_folder: 'users/u1/exercises',
     allowed_formats: 'jpg,png,webp',
     transformation: 'c_limit,w_1600',
   },
@@ -68,6 +69,8 @@ describe('ImageUpload', () => {
     expect(body.get('signature')).toBe('sig');
     expect(body.get('timestamp')).toBe('123');
     expect(body.get('public_id')).toBe('users/u1/exercises/abc');
+    // Signed: it must reach Cloudinary unchanged, or the signature breaks.
+    expect(body.get('asset_folder')).toBe('users/u1/exercises');
     expect(body.get('transformation')).toBe('c_limit,w_1600');
     expect(body.get('file')).toBeInstanceOf(File);
     expect(upload.request.headers.has('Authorization')).toBe(false);

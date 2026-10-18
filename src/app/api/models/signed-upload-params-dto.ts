@@ -3,6 +3,11 @@
 
 export interface SignedUploadParamsDto {
   allowed_formats: string;
+
+  /**
+   * Media Library folder (dynamic folder mode). Same path as `public_id`, minus the id.
+   */
+  asset_folder: string;
   public_id: string;
   timestamp: number;
 

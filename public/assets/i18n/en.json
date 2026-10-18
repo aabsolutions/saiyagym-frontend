@@ -462,9 +462,9 @@
       "description": "Description",
       "instructions": "Instructions",
       "image": {
-        "upload": "Upload image",
+        "upload": "Choose image",
         "remove": "Remove image",
-        "hint": "JPG, PNG or WebP.",
+        "hint": "JPG, PNG or WebP. It is uploaded when you save the exercise.",
         "tooLarge": "The image is too large.",
         "format": "Format not allowed. Use JPG, PNG or WebP.",
         "failed": "The image couldn't be uploaded. Please try again."

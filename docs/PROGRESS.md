@@ -1,5 +1,17 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Imagen de ejercicio: se sube al guardar
+
+### Hecho
+
+- Antes la imagen del ejercicio propio se subía a Cloudinary apenas se elegía (si se cancelaba, quedaba huérfana). Ahora elegirla solo muestra una vista previa local (`blob:`); se sube al **guardar**, y recién con la URL se crea/actualiza el ejercicio. Si la subida falla no se guarda nada y el archivo elegido sigue ahí para reintentar; si falla el guardado después de subir, la URL subida se conserva (el reintento no la vuelve a subir).
+- La firma trae `asset_folder` (backend): se envía tal cual a Cloudinary → las imágenes van a `gymapp/<env>/…` en la Media Library.
+- Las fotos de progreso ya subían al confirmar el diálogo.
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 199/199 ✅ (+4: elegir no sube, guardar sube y luego crea con la URL, subida fallida no guarda, sin archivo no sube) · `npm run build:gh` ✅.
+
 ## 2026-10-18 — Dashboard, estadísticas, medidas y fotos (ngx-echarts)
 
 ### Hecho
