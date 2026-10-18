@@ -15,7 +15,8 @@ const csp = [
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: https://res.cloudinary.com",
+  // blob:: local preview of a progress photo before it is uploaded.
+  "img-src 'self' data: blob: https://res.cloudinary.com",
   // api.cloudinary.com: signed direct image uploads (the API signs, the browser uploads).
   "connect-src 'self' https://saiyagym-api.onrender.com https://api.cloudinary.com",
   "object-src 'none'",

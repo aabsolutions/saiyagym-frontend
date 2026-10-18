@@ -41,6 +41,8 @@ export class ValidationMessagePipe implements PipeTransform {
         return this.transloco.translate('validation.passwordMismatch');
       case 'confirmationMismatch':
         return this.transloco.translate('validation.confirmationMismatch');
+      case 'noMeasurement':
+        return this.transloco.translate('validation.noMeasurement');
       default:
         // Server-side errors carry an already-localized message.
         return error.message ?? this.transloco.translate('errors.VALIDATION_ERROR');

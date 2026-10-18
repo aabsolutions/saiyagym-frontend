@@ -9,6 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { BodyMetricDto } from '../models/body-metric-dto';
+import { BodyMetricPageDto } from '../models/body-metric-page-dto';
 import { bodyMetricsControllerCreate } from '../fn/body-metrics/body-metrics-controller-create';
 import { BodyMetricsControllerCreate$Params } from '../fn/body-metrics/body-metrics-controller-create';
 import { bodyMetricsControllerGet } from '../fn/body-metrics/body-metrics-controller-get';
@@ -21,6 +23,7 @@ import { bodyMetricsControllerSeries } from '../fn/body-metrics/body-metrics-con
 import { BodyMetricsControllerSeries$Params } from '../fn/body-metrics/body-metrics-controller-series';
 import { bodyMetricsControllerUpdate } from '../fn/body-metrics/body-metrics-controller-update';
 import { BodyMetricsControllerUpdate$Params } from '../fn/body-metrics/body-metrics-controller-update';
+import { BodyMetricSeriesDto } from '../models/body-metric-series-dto';
 
 @Injectable({ providedIn: 'root' })
 export class BodyMetricsService extends BaseService {
@@ -41,7 +44,7 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerList$Response(params: BodyMetricsControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  bodyMetricsControllerList$Response(params: BodyMetricsControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<BodyMetricPageDto>> {
     const obs = bodyMetricsControllerList(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -56,9 +59,9 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerList(params: BodyMetricsControllerList$Params, context?: HttpContext): Promise<void> {
+  bodyMetricsControllerList(params: BodyMetricsControllerList$Params, context?: HttpContext): Promise<BodyMetricPageDto> {
     const resp = this.bodyMetricsControllerList$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<BodyMetricPageDto>): BodyMetricPageDto => r.body);
   }
 
   /** Path part for operation `bodyMetricsControllerCreate()` */
@@ -74,7 +77,7 @@ export class BodyMetricsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  bodyMetricsControllerCreate$Response(params: BodyMetricsControllerCreate$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  bodyMetricsControllerCreate$Response(params: BodyMetricsControllerCreate$Params, context?: HttpContext): Promise<StrictHttpResponse<BodyMetricDto>> {
     const obs = bodyMetricsControllerCreate(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -89,9 +92,9 @@ export class BodyMetricsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  bodyMetricsControllerCreate(params: BodyMetricsControllerCreate$Params, context?: HttpContext): Promise<void> {
+  bodyMetricsControllerCreate(params: BodyMetricsControllerCreate$Params, context?: HttpContext): Promise<BodyMetricDto> {
     const resp = this.bodyMetricsControllerCreate$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<BodyMetricDto>): BodyMetricDto => r.body);
   }
 
   /** Path part for operation `bodyMetricsControllerSeries()` */
@@ -107,7 +110,7 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerSeries$Response(params: BodyMetricsControllerSeries$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  bodyMetricsControllerSeries$Response(params: BodyMetricsControllerSeries$Params, context?: HttpContext): Promise<StrictHttpResponse<BodyMetricSeriesDto>> {
     const obs = bodyMetricsControllerSeries(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -122,9 +125,9 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerSeries(params: BodyMetricsControllerSeries$Params, context?: HttpContext): Promise<void> {
+  bodyMetricsControllerSeries(params: BodyMetricsControllerSeries$Params, context?: HttpContext): Promise<BodyMetricSeriesDto> {
     const resp = this.bodyMetricsControllerSeries$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<BodyMetricSeriesDto>): BodyMetricSeriesDto => r.body);
   }
 
   /** Path part for operation `bodyMetricsControllerGet()` */
@@ -136,7 +139,7 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerGet$Response(params: BodyMetricsControllerGet$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  bodyMetricsControllerGet$Response(params: BodyMetricsControllerGet$Params, context?: HttpContext): Promise<StrictHttpResponse<BodyMetricDto>> {
     const obs = bodyMetricsControllerGet(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -147,9 +150,9 @@ export class BodyMetricsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bodyMetricsControllerGet(params: BodyMetricsControllerGet$Params, context?: HttpContext): Promise<void> {
+  bodyMetricsControllerGet(params: BodyMetricsControllerGet$Params, context?: HttpContext): Promise<BodyMetricDto> {
     const resp = this.bodyMetricsControllerGet$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<BodyMetricDto>): BodyMetricDto => r.body);
   }
 
   /** Path part for operation `bodyMetricsControllerRemove()` */
@@ -186,7 +189,7 @@ export class BodyMetricsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  bodyMetricsControllerUpdate$Response(params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  bodyMetricsControllerUpdate$Response(params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Promise<StrictHttpResponse<BodyMetricDto>> {
     const obs = bodyMetricsControllerUpdate(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -197,9 +200,9 @@ export class BodyMetricsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  bodyMetricsControllerUpdate(params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Promise<void> {
+  bodyMetricsControllerUpdate(params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Promise<BodyMetricDto> {
     const resp = this.bodyMetricsControllerUpdate$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<BodyMetricDto>): BodyMetricDto => r.body);
   }
 
 }

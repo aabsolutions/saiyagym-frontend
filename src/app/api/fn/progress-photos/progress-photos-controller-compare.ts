@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CompareDto } from '../../models/compare-dto';
 
 export interface ProgressPhotosControllerCompare$Params {
   view: 'front' | 'side' | 'back';
@@ -14,7 +15,7 @@ export interface ProgressPhotosControllerCompare$Params {
   to?: string;
 }
 
-export function progressPhotosControllerCompare(http: HttpClient, rootUrl: string, params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function progressPhotosControllerCompare(http: HttpClient, rootUrl: string, params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Observable<StrictHttpResponse<CompareDto>> {
   const rb = new RequestBuilder(rootUrl, progressPhotosControllerCompare.PATH, 'get');
   if (params) {
     rb.query('view', params.view, {});
@@ -23,11 +24,11 @@ export function progressPhotosControllerCompare(http: HttpClient, rootUrl: strin
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<CompareDto>;
     })
   );
 }

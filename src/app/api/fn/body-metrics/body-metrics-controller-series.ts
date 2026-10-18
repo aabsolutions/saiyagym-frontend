@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { BodyMetricSeriesDto } from '../../models/body-metric-series-dto';
 
 export interface BodyMetricsControllerSeries$Params {
   metric: 'weightKg' | 'bodyFatPercent' | 'waistCm' | 'chestCm' | 'hipsCm' | 'armCm' | 'thighCm' | 'calfCm' | 'neckCm';
@@ -14,7 +15,7 @@ export interface BodyMetricsControllerSeries$Params {
   to?: string;
 }
 
-export function bodyMetricsControllerSeries(http: HttpClient, rootUrl: string, params: BodyMetricsControllerSeries$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function bodyMetricsControllerSeries(http: HttpClient, rootUrl: string, params: BodyMetricsControllerSeries$Params, context?: HttpContext): Observable<StrictHttpResponse<BodyMetricSeriesDto>> {
   const rb = new RequestBuilder(rootUrl, bodyMetricsControllerSeries.PATH, 'get');
   if (params) {
     rb.query('metric', params.metric, {});
@@ -23,11 +24,11 @@ export function bodyMetricsControllerSeries(http: HttpClient, rootUrl: string, p
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<BodyMetricSeriesDto>;
     })
   );
 }

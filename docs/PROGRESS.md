@@ -1,5 +1,42 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Dashboard, estadísticas, medidas y fotos (ngx-echarts)
+
+### Hecho
+
+- **Charts** (`shared/charts/`): `ngx-echarts` 22 + `echarts` 6.1 con tree-shaking y **carga diferida** (`echarts-setup.ts` vía `provideEchartsCore` en `<app-chart>`): echarts no entra al bundle inicial. `ChartTheme` expone tokens del tema resuelto, idioma y unidades; las opciones se arman en `computed` con builders puros, así cada chart sigue claro/oscuro, idioma y kg/lb (cm/in) sin recargar. `<app-chart-card>`: vista gráfico/tabla (todo valor es accesible sin hover), vacío y "refetch" a opacidad reducida. `<app-stat-range>` (30 d / 90 d / 6 m / 1 a / todo) y `<app-plan-window-note>`.
+- **Paleta validada** con el validador de dataviz contra NUESTRAS superficies (`#fbf8ff` / `#10131f`): 8 slots categóricos en orden fijo (CVD ΔE ≥ 8,4, visión normal ≥ 19 en ambos modos) + rampa ordinal de 4 pasos para el heatmap. Tres slots claros quedan < 3:1 → por eso la tabla gemela es obligatoria.
+- **Dashboard**: racha de semanas (cifra principal), totales de semana y mes (sesiones, volumen, series efectivas, tiempo), próximo entrenamiento del programa activo (hoy, o el primer día de entrenamiento de los 7 siguientes), últimos 5 récords y mini chart de peso corporal (90 días).
+- **Estadísticas** (`/stats`, pestañas Progreso · Volumen · Constancia · Récords; cada pestaña carga al mostrarse):
+  - Progreso: peso máximo + 1RM estimado (un solo eje) y volumen por sesión (chart aparte: otra escala, nunca doble eje) del ejercicio elegido (por defecto, el del récord más reciente); total de powerlifting (1RM estimado o peso levantado, escalonado por mejor marca).
+  - Volumen: barras agrupadas por semana por músculo principal (series o kg), hasta 6 músculos; **cada músculo conserva su color** al agregar/quitar otros.
+  - Constancia: heatmap anual (semana según `firstDayOfWeek`, bins por cuartiles del propio usuario, scroll interno en móvil) y adherencia por programa (%, completados/planificados, sesiones fuera de plan, barras por semana).
+  - Récords: tabla por ejercicio con peso máximo, 1RM estimado y volumen (valor, serie y fecha) + desglose de reps por peso al expandir; búsqueda por nombre.
+  - Free: pedir más de 90 días muestra el CTA (los datos siguen siendo reales: la API recorta y lo informa en `window.limitedByPlan`, que también dispara el aviso).
+- **Medidas** (`/body/measurements`): selector de medida + rango y chart con tabla gemela; diálogo (Signal Forms) con fecha local, 9 medidas en la unidad del usuario (límites de la API convertidos), "al menos una medida" y notas; historial paginado con editar/eliminar. PATCH solo con lo que cambió (un valor imperial no tocado no se reenvía → sin deriva lb↔kg).
+- **Fotos de progreso** (`/body/photos`, Premium para subir): subida firmada a Cloudinary con progreso y vista previa local, vista (frente/perfil/espalda), fecha y notas; galería por día; comparador antes/después con slider (input range nativo: teclado y lector de pantalla), por defecto la primera vs la última de la vista, elegibles. Tras un downgrade se siguen viendo y borrando.
+- **Exportar** (Premium, en Perfil): JSON completo o CSV de sesiones / medidas, descargado como blob.
+- **Backend** (mismo día): controllers de records/stats/body-metrics/progress-photos movidos a `*.controller.ts` y query de export a `*.dto.ts` → el cliente generado ya tipa esas respuestas. Se eliminó el workaround `ExerciseRecordsApi`.
+- Otros: `localDate` acepta días locales `YYYY-MM-DD` sin corrimiento UTC; `browserTimeZone()` para el `tz` de stats; `.sg-table` global (cifras tabulares); `<app-upgrade-cta customMessageKey>`; CSP `img-src` + `blob:` (vista previa de la foto).
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 195/195 ✅ · `npm run build:gh` ✅ (inicial 545,9 kB; `echarts-setup` lazy 600 kB / 171 kB gz; stats 39 kB; body 36 kB).
+- Tests: paleta y tooltips (nombres escapados, valor antes que nombre), rangos (medianoche LOCAL, ventana Free), builders (un eje para peso/1RM, lb, huecos de e1RM, semanas sin datos en 0, slots de músculo estables, bins por cuartiles, primer día de semana del heatmap), StatsStore (nada carga hasta mostrar la pestaña, `tz` del navegador, refetch al cambiar rango, aviso Free y `limitedByPlan`, programas ordenados y adherencia), medidas (imperial → kg/cm, PATCH mínimo, límites por unidad), próximo entrenamiento (hoy, descanso, antes de empezar, terminado), últimos récords, fotos por día local, export, `ChartCard` (tabla gemela, vacío).
+- **No verificado en navegador** contra datos reales (paso 7 de dataviz pendiente: mirar colisiones de etiquetas y tamaños con sesiones reales).
+
+### Decisiones y gotchas
+
+- echarts pinta en canvas y no lee CSS vars: los colores van como hex por tema en `chart-palette.ts` (validados). Cambiar un hex = volver a correr el validador.
+- `ng-content` dentro de `@if` deja el chart desacoplado del DOM (echarts mide 0): `ChartCard` usa `[hidden]`.
+- El cliente generado devuelve Promises: en tests de stores hay que dejar resolver microtareas (`settle()`) antes de asertar.
+- Export: el cliente generado parsea el body; la descarga va por `HttpClient` con `responseType: 'blob'` y el nombre de archivo lo arma la web.
+
+### Pendiente / próximo
+
+- Revisar los charts en navegador con datos reales (requiere sesiones: app móvil o carga por API).
+- Cloudinary/SMTP en Render (sin Cloudinary, subir fotos falla con `MEDIA_NOT_CONFIGURED`).
+
 ## 2026-10-18 — Historial de sesiones
 
 ### Hecho
@@ -27,7 +64,7 @@
 
 ### Pendiente / próximo
 
-- Estadísticas (stats) — requiere arreglar en el backend el schema de `stats/*` y `records` (controllers en `*.module.ts`).
+- ~~Estadísticas (stats)~~ — hecho en la entrada de arriba.
 
 ## 2026-10-18 — Rutinas y programas
 

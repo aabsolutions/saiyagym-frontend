@@ -41,3 +41,12 @@ export function weekDatesIso(iso: string, firstDayOfWeek: number): string[] {
   const start = addDaysIso(iso, -back);
   return Array.from({ length: 7 }, (_, i) => addDaysIso(start, i));
 }
+
+/** IANA zone of this browser: the API buckets stats into the user's local days with it. */
+export function browserTimeZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch {
+    return 'UTC';
+  }
+}

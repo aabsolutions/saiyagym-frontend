@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { BodyMetricPageDto } from '../../models/body-metric-page-dto';
 
 export interface BodyMetricsControllerList$Params {
   page: number;
@@ -15,7 +16,7 @@ export interface BodyMetricsControllerList$Params {
   to?: string;
 }
 
-export function bodyMetricsControllerList(http: HttpClient, rootUrl: string, params: BodyMetricsControllerList$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function bodyMetricsControllerList(http: HttpClient, rootUrl: string, params: BodyMetricsControllerList$Params, context?: HttpContext): Observable<StrictHttpResponse<BodyMetricPageDto>> {
   const rb = new RequestBuilder(rootUrl, bodyMetricsControllerList.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
@@ -25,11 +26,11 @@ export function bodyMetricsControllerList(http: HttpClient, rootUrl: string, par
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<BodyMetricPageDto>;
     })
   );
 }

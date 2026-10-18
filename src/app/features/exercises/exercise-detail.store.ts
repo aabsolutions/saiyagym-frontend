@@ -4,6 +4,7 @@ import { ExerciseDetailDto } from '../../api/models/exercise-detail-dto';
 import { ExercisePerformanceDto } from '../../api/models/exercise-performance-dto';
 import { UpdateExercisePrefsDto } from '../../api/models/update-exercise-prefs-dto';
 import { ExercisesService } from '../../api/services/exercises.service';
+import { StatsService } from '../../api/services/stats.service';
 import { Tier, TierGoal } from '../../shared/exercises/exercise-taxonomy';
 import {
   setError,
@@ -11,7 +12,7 @@ import {
   setPending,
   withRequestStatus,
 } from '../../shared/store/with-request-status';
-import { ExerciseRecords, ExerciseRecordsApi } from '../../shared/records/exercise-records';
+import { ExerciseRecords } from '../../shared/records/exercise-records';
 
 export const HISTORY_PAGE_SIZE = 10;
 
@@ -34,11 +35,11 @@ export const ExerciseDetailStore = signalStore(
     historyLoading: false,
   }),
   withRequestStatus(),
-  withProps(() => ({ _api: inject(ExercisesService), _records: inject(ExerciseRecordsApi) })),
+  withProps(() => ({ _api: inject(ExercisesService), _records: inject(StatsService) })),
   withMethods((store) => {
     const loadRecords = async (id: string) => {
       try {
-        patchState(store, { records: await store._records.get(id) });
+        patchState(store, { records: await store._records.recordsControllerForExercise({ id }) });
       } catch {
         patchState(store, { records: null });
       }

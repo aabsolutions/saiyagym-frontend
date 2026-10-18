@@ -9,8 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { exportControllerExport } from '../fn/export/export-controller-export';
-import { ExportControllerExport$Params } from '../fn/export/export-controller-export';
+import { exportControllerExport$Csv } from '../fn/export/export-controller-export-csv';
+import { ExportControllerExport$Csv$Params } from '../fn/export/export-controller-export-csv';
+import { exportControllerExport$Json } from '../fn/export/export-controller-export-json';
+import { ExportControllerExport$Json$Params } from '../fn/export/export-controller-export-json';
 
 @Injectable({ providedIn: 'root' })
 export class ExportService extends BaseService {
@@ -27,12 +29,13 @@ export class ExportService extends BaseService {
    * `format=json` → everything. `format=csv&dataset=workouts|measurements` → one table.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `exportControllerExport()` instead.
+   * To access only the response body, use `exportControllerExport$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  exportControllerExport$Response(params?: ExportControllerExport$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
-    const obs = exportControllerExport(this.http, this.rootUrl, params, context);
+  exportControllerExport$Json$Response(params: ExportControllerExport$Json$Params, context?: HttpContext): Promise<StrictHttpResponse<{
+}>> {
+    const obs = exportControllerExport$Json(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
 
@@ -42,13 +45,50 @@ export class ExportService extends BaseService {
    * `format=json` → everything. `format=csv&dataset=workouts|measurements` → one table.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `exportControllerExport$Response()` instead.
+   * To access the full response (for headers, for example), `exportControllerExport$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  exportControllerExport(params?: ExportControllerExport$Params, context?: HttpContext): Promise<void> {
-    const resp = this.exportControllerExport$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+  exportControllerExport$Json(params: ExportControllerExport$Json$Params, context?: HttpContext): Promise<{
+}> {
+    const resp = this.exportControllerExport$Json$Response(params, context);
+    return resp.then((r: StrictHttpResponse<{
+}>): {
+} => r.body);
+  }
+
+  /**
+   * Download your workouts and measurements (Premium).
+   *
+   * `format=json` → everything. `format=csv&dataset=workouts|measurements` → one table.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `exportControllerExport$Csv()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  exportControllerExport$Csv$Response(params: ExportControllerExport$Csv$Params, context?: HttpContext): Promise<StrictHttpResponse<{
+}>> {
+    const obs = exportControllerExport$Csv(this.http, this.rootUrl, params, context);
+    return firstValueFrom(obs);
+  }
+
+  /**
+   * Download your workouts and measurements (Premium).
+   *
+   * `format=json` → everything. `format=csv&dataset=workouts|measurements` → one table.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `exportControllerExport$Csv$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  exportControllerExport$Csv(params: ExportControllerExport$Csv$Params, context?: HttpContext): Promise<{
+}> {
+    const resp = this.exportControllerExport$Csv$Response(params, context);
+    return resp.then((r: StrictHttpResponse<{
+}>): {
+} => r.body);
   }
 
 }

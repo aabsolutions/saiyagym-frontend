@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ProgressPhotoPageDto } from '../../models/progress-photo-page-dto';
 
 export interface ProgressPhotosControllerList$Params {
   view?: 'front' | 'side' | 'back';
@@ -16,7 +17,7 @@ export interface ProgressPhotosControllerList$Params {
   limit: number;
 }
 
-export function progressPhotosControllerList(http: HttpClient, rootUrl: string, params: ProgressPhotosControllerList$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function progressPhotosControllerList(http: HttpClient, rootUrl: string, params: ProgressPhotosControllerList$Params, context?: HttpContext): Observable<StrictHttpResponse<ProgressPhotoPageDto>> {
   const rb = new RequestBuilder(rootUrl, progressPhotosControllerList.PATH, 'get');
   if (params) {
     rb.query('view', params.view, {});
@@ -27,11 +28,11 @@ export function progressPhotosControllerList(http: HttpClient, rootUrl: string, 
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<ProgressPhotoPageDto>;
     })
   );
 }

@@ -9,6 +9,9 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { CompareDto } from '../models/compare-dto';
+import { ProgressPhotoDto } from '../models/progress-photo-dto';
+import { ProgressPhotoPageDto } from '../models/progress-photo-page-dto';
 import { progressPhotosControllerCompare } from '../fn/progress-photos/progress-photos-controller-compare';
 import { ProgressPhotosControllerCompare$Params } from '../fn/progress-photos/progress-photos-controller-compare';
 import { progressPhotosControllerCreate } from '../fn/progress-photos/progress-photos-controller-create';
@@ -33,7 +36,7 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  progressPhotosControllerList$Response(params: ProgressPhotosControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  progressPhotosControllerList$Response(params: ProgressPhotosControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<ProgressPhotoPageDto>> {
     const obs = progressPhotosControllerList(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -44,9 +47,9 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  progressPhotosControllerList(params: ProgressPhotosControllerList$Params, context?: HttpContext): Promise<void> {
+  progressPhotosControllerList(params: ProgressPhotosControllerList$Params, context?: HttpContext): Promise<ProgressPhotoPageDto> {
     const resp = this.progressPhotosControllerList$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<ProgressPhotoPageDto>): ProgressPhotoPageDto => r.body);
   }
 
   /** Path part for operation `progressPhotosControllerCreate()` */
@@ -62,7 +65,7 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  progressPhotosControllerCreate$Response(params: ProgressPhotosControllerCreate$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  progressPhotosControllerCreate$Response(params: ProgressPhotosControllerCreate$Params, context?: HttpContext): Promise<StrictHttpResponse<ProgressPhotoDto>> {
     const obs = progressPhotosControllerCreate(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -77,9 +80,9 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  progressPhotosControllerCreate(params: ProgressPhotosControllerCreate$Params, context?: HttpContext): Promise<void> {
+  progressPhotosControllerCreate(params: ProgressPhotosControllerCreate$Params, context?: HttpContext): Promise<ProgressPhotoDto> {
     const resp = this.progressPhotosControllerCreate$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<ProgressPhotoDto>): ProgressPhotoDto => r.body);
   }
 
   /** Path part for operation `progressPhotosControllerCompare()` */
@@ -95,7 +98,7 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  progressPhotosControllerCompare$Response(params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  progressPhotosControllerCompare$Response(params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Promise<StrictHttpResponse<CompareDto>> {
     const obs = progressPhotosControllerCompare(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -110,9 +113,9 @@ export class ProgressPhotosService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  progressPhotosControllerCompare(params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Promise<void> {
+  progressPhotosControllerCompare(params: ProgressPhotosControllerCompare$Params, context?: HttpContext): Promise<CompareDto> {
     const resp = this.progressPhotosControllerCompare$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<CompareDto>): CompareDto => r.body);
   }
 
   /** Path part for operation `progressPhotosControllerRemove()` */

@@ -1,0 +1,157 @@
+<section class="page">
+  <div class="hello">
+    <div>
+      <h1 class="page-title">
+        @if (store.name(); as name) {
+          {{ 'pages.dashboard.welcome' | transloco: { name } }}
+        } @else {
+          {{ 'pages.dashboard.welcomeAnonymous' | transloco }}
+        }
+      </h1>
+      @if (store.planName(); as plan) {
+        <p class="plan">
+          <mat-icon aria-hidden="true">workspace_premium</mat-icon>
+          {{ 'pages.dashboard.plan' | transloco: { plan } }}
+        </p>
+      }
+    </div>
+    @if (store.summary(); as summary) {
+      <!-- The one hero figure of this view. -->
+      <p class="streak">
+        <span class="streak-value">{{ summary.streakWeeks }}</span>
+        <span class="streak-label">{{
+          'dashboard.streak' | transloco: { count: summary.streakWeeks }
+        }}</span>
+      </p>
+    }
+  </div>
+
+  <div class="grid">
+    @for (period of periods(); track period.key) {
+      <mat-card appearance="outlined" class="card">
+        <h2 class="card-title">{{ 'dashboard.' + period.key | transloco }}</h2>
+        <dl class="tiles">
+          <div>
+            <dt>{{ 'dashboard.sessions' | transloco }}</dt>
+            <dd>{{ period.totals.sessions }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'dashboard.volume' | transloco }}</dt>
+            <dd>{{ period.totals.volumeKg | weight: { digits: 0 } }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'dashboard.sets' | transloco }}</dt>
+            <dd>{{ period.totals.workingSets }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'dashboard.time' | transloco }}</dt>
+            <dd>{{ period.totals.durationSeconds | duration }}</dd>
+          </div>
+        </dl>
+      </mat-card>
+    }
+
+    <mat-card appearance="outlined" class="card">
+      <h2 class="card-title">{{ 'dashboard.next.title' | transloco }}</h2>
+      @let next = store.next();
+      @if (next === undefined) {
+        <p class="muted">{{ 'common.loading' | transloco }}</p>
+      } @else if (next === null) {
+        <p class="muted">
+          {{
+            (store.nextFailed() ? 'dashboard.next.failed' : 'dashboard.next.noProgram') | transloco
+          }}
+        </p>
+        <a mat-stroked-button routerLink="/programs">{{
+          'dashboard.next.goPrograms' | transloco
+        }}</a>
+      } @else {
+        <p class="program">
+          {{ next.day.programName }}
+          @if (next.day.week) {
+            ·
+            {{
+              'dashboard.next.week' | transloco: { week: next.day.week, total: next.day.totalWeeks }
+            }}
+          }
+          @if (next.day.isDeloadWeek) {
+            · {{ 'dashboard.next.deload' | transloco }}
+          }
+        </p>
+        @if (next.date && next.day.routine; as routine) {
+          <p class="routine">{{ routine.name }}</p>
+          <p class="muted">
+            {{
+              (next.date === today ? 'dashboard.next.today' : 'dashboard.next.on')
+                | transloco: { date: (next.date | localDate: 'long') }
+            }}
+            · {{ 'dashboard.next.exercises' | transloco: { count: routine.exercises.length } }}
+          </p>
+          <a mat-stroked-button routerLink="/programs/week">{{
+            'dashboard.next.seeWeek' | transloco
+          }}</a>
+        } @else {
+          <p class="muted">
+            {{
+              (next.day.status === 'finished' ? 'dashboard.next.finished' : 'dashboard.next.none')
+                | transloco
+            }}
+          </p>
+        }
+      }
+    </mat-card>
+
+    <mat-card appearance="outlined" class="card">
+      <h2 class="card-title">{{ 'dashboard.records.title' | transloco }}</h2>
+      @if (store.records().length) {
+        <ul class="records">
+          @for (r of store.records(); track r.exerciseId + r.type) {
+            <li>
+              <mat-icon class="trophy" aria-hidden="true">emoji_events</mat-icon>
+              <div class="record-text">
+                <a [routerLink]="['/exercises', r.exerciseId]">{{
+                  r.name ?? ('stats.records.unknown' | transloco)
+                }}</a>
+                <span class="muted">
+                  {{ 'exercises.records.' + r.type | transloco }}:
+                  <strong>{{ r.entry.value | weight: { digits: 1 } }}</strong>
+                  · {{ r.entry.achievedAt | localDate: 'short' }}
+                </span>
+              </div>
+            </li>
+          }
+        </ul>
+        <a mat-button routerLink="/stats/records">{{ 'dashboard.records.all' | transloco }}</a>
+      } @else {
+        <p class="muted">{{ 'dashboard.records.empty' | transloco }}</p>
+      }
+    </mat-card>
+
+    <mat-card appearance="outlined" class="card">
+      <h2 class="card-title">{{ 'dashboard.weight.title' | transloco }}</h2>
+      @if (store.latestWeight(); as last) {
+        <p class="weight">
+          <strong class="weight-value">{{ last.value | weight }}</strong>
+          @if (store.weightDelta(); as delta) {
+            <!-- Up isn't good or bad for body weight: the sign carries it, no status color. -->
+            <span class="muted">{{
+              'dashboard.weight.delta'
+                | transloco: { delta: (delta > 0 ? '+' : '') + (delta | weight) }
+            }}</span>
+          }
+        </p>
+        <app-chart
+          [options]="weightOptions()"
+          [height]="140"
+          [label]="'dashboard.weight.aria' | transloco"
+        />
+        <a mat-button routerLink="/body/measurements">{{ 'dashboard.weight.all' | transloco }}</a>
+      } @else {
+        <p class="muted">{{ 'dashboard.weight.empty' | transloco }}</p>
+        <a mat-stroked-button routerLink="/body/measurements">{{
+          'dashboard.weight.add' | transloco
+        }}</a>
+      }
+    </mat-card>
+  </div>
+</section>

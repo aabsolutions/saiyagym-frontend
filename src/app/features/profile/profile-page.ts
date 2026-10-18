@@ -30,6 +30,7 @@ import {
 import { TrainingFields } from '../../shared/profile/training-fields';
 import { ChangePasswordCard } from './change-password-card';
 import { DeleteAccountDialog } from './delete-account-dialog';
+import { ExportCard } from './export-card';
 import { ProfileStore } from './profile.store';
 
 const REST_OPTIONS = [30, 45, 60, 90, 120, 150, 180, 240, 300];
@@ -39,6 +40,7 @@ const WEEKDAYS = [1, 2, 3, 4, 5, 6, 7]; // ISO: 1 = Monday
   selector: 'app-profile-page',
   imports: [
     ChangePasswordCard,
+    ExportCard,
     FormField,
     FormRoot,
     MatButtonModule,

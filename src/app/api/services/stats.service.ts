@@ -9,10 +9,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { ExerciseRecordsDto } from '../models/exercise-records-dto';
+import { ExerciseStatsDto } from '../models/exercise-stats-dto';
+import { FrequencyDto } from '../models/frequency-dto';
+import { MuscleVolumeDto } from '../models/muscle-volume-dto';
+import { PowerliftingTotalDto } from '../models/powerlifting-total-dto';
+import { ProgramAdherenceDto } from '../models/program-adherence-dto';
 import { recordsControllerForExercise } from '../fn/stats/records-controller-for-exercise';
 import { RecordsControllerForExercise$Params } from '../fn/stats/records-controller-for-exercise';
 import { recordsControllerList } from '../fn/stats/records-controller-list';
 import { RecordsControllerList$Params } from '../fn/stats/records-controller-list';
+import { RecordsSummaryItemDto } from '../models/records-summary-item-dto';
 import { statsControllerExercise } from '../fn/stats/stats-controller-exercise';
 import { StatsControllerExercise$Params } from '../fn/stats/stats-controller-exercise';
 import { statsControllerFrequency } from '../fn/stats/stats-controller-frequency';
@@ -25,6 +32,7 @@ import { statsControllerProgramAdherence } from '../fn/stats/stats-controller-pr
 import { StatsControllerProgramAdherence$Params } from '../fn/stats/stats-controller-program-adherence';
 import { statsControllerSummary } from '../fn/stats/stats-controller-summary';
 import { StatsControllerSummary$Params } from '../fn/stats/stats-controller-summary';
+import { SummaryDto } from '../models/summary-dto';
 
 @Injectable({ providedIn: 'root' })
 export class StatsService extends BaseService {
@@ -45,7 +53,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  recordsControllerList$Response(params?: RecordsControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  recordsControllerList$Response(params?: RecordsControllerList$Params, context?: HttpContext): Promise<StrictHttpResponse<Array<RecordsSummaryItemDto>>> {
     const obs = recordsControllerList(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -60,9 +68,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  recordsControllerList(params?: RecordsControllerList$Params, context?: HttpContext): Promise<void> {
+  recordsControllerList(params?: RecordsControllerList$Params, context?: HttpContext): Promise<Array<RecordsSummaryItemDto>> {
     const resp = this.recordsControllerList$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<Array<RecordsSummaryItemDto>>): Array<RecordsSummaryItemDto> => r.body);
   }
 
   /** Path part for operation `recordsControllerForExercise()` */
@@ -78,7 +86,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  recordsControllerForExercise$Response(params: RecordsControllerForExercise$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  recordsControllerForExercise$Response(params: RecordsControllerForExercise$Params, context?: HttpContext): Promise<StrictHttpResponse<ExerciseRecordsDto>> {
     const obs = recordsControllerForExercise(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -93,9 +101,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  recordsControllerForExercise(params: RecordsControllerForExercise$Params, context?: HttpContext): Promise<void> {
+  recordsControllerForExercise(params: RecordsControllerForExercise$Params, context?: HttpContext): Promise<ExerciseRecordsDto> {
     const resp = this.recordsControllerForExercise$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<ExerciseRecordsDto>): ExerciseRecordsDto => r.body);
   }
 
   /** Path part for operation `statsControllerSummary()` */
@@ -111,7 +119,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerSummary$Response(params: StatsControllerSummary$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerSummary$Response(params: StatsControllerSummary$Params, context?: HttpContext): Promise<StrictHttpResponse<SummaryDto>> {
     const obs = statsControllerSummary(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -126,9 +134,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerSummary(params: StatsControllerSummary$Params, context?: HttpContext): Promise<void> {
+  statsControllerSummary(params: StatsControllerSummary$Params, context?: HttpContext): Promise<SummaryDto> {
     const resp = this.statsControllerSummary$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<SummaryDto>): SummaryDto => r.body);
   }
 
   /** Path part for operation `statsControllerExercise()` */
@@ -144,7 +152,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerExercise$Response(params: StatsControllerExercise$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerExercise$Response(params: StatsControllerExercise$Params, context?: HttpContext): Promise<StrictHttpResponse<ExerciseStatsDto>> {
     const obs = statsControllerExercise(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -159,9 +167,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerExercise(params: StatsControllerExercise$Params, context?: HttpContext): Promise<void> {
+  statsControllerExercise(params: StatsControllerExercise$Params, context?: HttpContext): Promise<ExerciseStatsDto> {
     const resp = this.statsControllerExercise$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<ExerciseStatsDto>): ExerciseStatsDto => r.body);
   }
 
   /** Path part for operation `statsControllerMuscleVolume()` */
@@ -177,7 +185,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerMuscleVolume$Response(params: StatsControllerMuscleVolume$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerMuscleVolume$Response(params: StatsControllerMuscleVolume$Params, context?: HttpContext): Promise<StrictHttpResponse<MuscleVolumeDto>> {
     const obs = statsControllerMuscleVolume(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -192,9 +200,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerMuscleVolume(params: StatsControllerMuscleVolume$Params, context?: HttpContext): Promise<void> {
+  statsControllerMuscleVolume(params: StatsControllerMuscleVolume$Params, context?: HttpContext): Promise<MuscleVolumeDto> {
     const resp = this.statsControllerMuscleVolume$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<MuscleVolumeDto>): MuscleVolumeDto => r.body);
   }
 
   /** Path part for operation `statsControllerFrequency()` */
@@ -210,7 +218,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerFrequency$Response(params: StatsControllerFrequency$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerFrequency$Response(params: StatsControllerFrequency$Params, context?: HttpContext): Promise<StrictHttpResponse<FrequencyDto>> {
     const obs = statsControllerFrequency(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -225,9 +233,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerFrequency(params: StatsControllerFrequency$Params, context?: HttpContext): Promise<void> {
+  statsControllerFrequency(params: StatsControllerFrequency$Params, context?: HttpContext): Promise<FrequencyDto> {
     const resp = this.statsControllerFrequency$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<FrequencyDto>): FrequencyDto => r.body);
   }
 
   /** Path part for operation `statsControllerPowerliftingTotal()` */
@@ -243,7 +251,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerPowerliftingTotal$Response(params: StatsControllerPowerliftingTotal$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerPowerliftingTotal$Response(params: StatsControllerPowerliftingTotal$Params, context?: HttpContext): Promise<StrictHttpResponse<PowerliftingTotalDto>> {
     const obs = statsControllerPowerliftingTotal(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -258,9 +266,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerPowerliftingTotal(params: StatsControllerPowerliftingTotal$Params, context?: HttpContext): Promise<void> {
+  statsControllerPowerliftingTotal(params: StatsControllerPowerliftingTotal$Params, context?: HttpContext): Promise<PowerliftingTotalDto> {
     const resp = this.statsControllerPowerliftingTotal$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<PowerliftingTotalDto>): PowerliftingTotalDto => r.body);
   }
 
   /** Path part for operation `statsControllerProgramAdherence()` */
@@ -276,7 +284,7 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerProgramAdherence$Response(params: StatsControllerProgramAdherence$Params, context?: HttpContext): Promise<StrictHttpResponse<void>> {
+  statsControllerProgramAdherence$Response(params: StatsControllerProgramAdherence$Params, context?: HttpContext): Promise<StrictHttpResponse<ProgramAdherenceDto>> {
     const obs = statsControllerProgramAdherence(this.http, this.rootUrl, params, context);
     return firstValueFrom(obs);
   }
@@ -291,9 +299,9 @@ export class StatsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  statsControllerProgramAdherence(params: StatsControllerProgramAdherence$Params, context?: HttpContext): Promise<void> {
+  statsControllerProgramAdherence(params: StatsControllerProgramAdherence$Params, context?: HttpContext): Promise<ProgramAdherenceDto> {
     const resp = this.statsControllerProgramAdherence$Response(params, context);
-    return resp.then((r: StrictHttpResponse<void>): void => r.body);
+    return resp.then((r: StrictHttpResponse<ProgramAdherenceDto>): ProgramAdherenceDto => r.body);
   }
 
 }

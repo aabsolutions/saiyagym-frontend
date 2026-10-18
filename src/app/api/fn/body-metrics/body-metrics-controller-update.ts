@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { BodyMetricDto } from '../../models/body-metric-dto';
 import { UpdateBodyMetricDto } from '../../models/update-body-metric-dto';
 
 export interface BodyMetricsControllerUpdate$Params {
@@ -14,7 +15,7 @@ export interface BodyMetricsControllerUpdate$Params {
       body: UpdateBodyMetricDto
 }
 
-export function bodyMetricsControllerUpdate(http: HttpClient, rootUrl: string, params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function bodyMetricsControllerUpdate(http: HttpClient, rootUrl: string, params: BodyMetricsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<BodyMetricDto>> {
   const rb = new RequestBuilder(rootUrl, bodyMetricsControllerUpdate.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -22,11 +23,11 @@ export function bodyMetricsControllerUpdate(http: HttpClient, rootUrl: string, p
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<BodyMetricDto>;
     })
   );
 }

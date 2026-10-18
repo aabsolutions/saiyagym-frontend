@@ -191,8 +191,10 @@ export type { ProgressPhotosControllerCompare$Params as ProgressPhotosController
 export { progressPhotosControllerCompare as progressPhotosControllerCompare } from './fn/progress-photos/progress-photos-controller-compare';
 export type { ProgressPhotosControllerRemove$Params as ProgressPhotosControllerRemove$Params } from './fn/progress-photos/progress-photos-controller-remove';
 export { progressPhotosControllerRemove as progressPhotosControllerRemove } from './fn/progress-photos/progress-photos-controller-remove';
-export type { ExportControllerExport$Params as ExportControllerExport$Params } from './fn/export/export-controller-export';
-export { exportControllerExport as exportControllerExport } from './fn/export/export-controller-export';
+export type { ExportControllerExport$Json$Params as ExportControllerExport$Json$Params } from './fn/export/export-controller-export-json';
+export { exportControllerExport$Json as exportControllerExport$Json } from './fn/export/export-controller-export-json';
+export type { ExportControllerExport$Csv$Params as ExportControllerExport$Csv$Params } from './fn/export/export-controller-export-csv';
+export { exportControllerExport$Csv as exportControllerExport$Csv } from './fn/export/export-controller-export-csv';
 export type { NutritionControllerListFoods$Params as NutritionControllerListFoods$Params } from './fn/nutrition/nutrition-controller-list-foods';
 export { nutritionControllerListFoods as nutritionControllerListFoods } from './fn/nutrition/nutrition-controller-list-foods';
 export type { NutritionControllerGetFood$Params as NutritionControllerGetFood$Params } from './fn/nutrition/nutrition-controller-get-food';

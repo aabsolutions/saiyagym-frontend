@@ -1,0 +1,105 @@
+@if (canUpload()) {
+  <div class="actions">
+    <button mat-flat-button type="button" (click)="openUpload()">
+      <mat-icon>add_a_photo</mat-icon>
+      {{ 'body.photos.add' | transloco }}
+    </button>
+  </div>
+} @else {
+  <app-upgrade-cta feature="progressPhotos" />
+}
+
+@if (store.items().length) {
+  <mat-card appearance="outlined" class="section">
+    <header class="head">
+      <h2>{{ 'body.photos.compareTitle' | transloco }}</h2>
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [value]="store.compareView()"
+        [attr.aria-label]="'body.photos.view' | transloco"
+        (change)="setView($event.value)"
+      >
+        @for (v of views; track v) {
+          <mat-button-toggle [value]="v">{{
+            'body.photos.views.' + v | transloco
+          }}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </header>
+
+    @let b = before();
+    @let a = after();
+    @if (b && a && viewPhotos().length > 1) {
+      <div class="pickers">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ 'body.photos.before' | transloco }}</mat-label>
+          <mat-select [value]="b.id" (valueChange)="beforeId.set($event)">
+            @for (p of viewPhotos(); track p.id) {
+              <mat-option [value]="p.id">{{ p.takenAt | localDate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ 'body.photos.after' | transloco }}</mat-label>
+          <mat-select [value]="a.id" (valueChange)="afterId.set($event)">
+            @for (p of viewPhotos(); track p.id) {
+              <mat-option [value]="p.id">{{ p.takenAt | localDate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <app-photo-compare [before]="b" [after]="a" />
+    } @else {
+      <p class="empty">{{ 'body.photos.compareEmpty' | transloco }}</p>
+    }
+  </mat-card>
+
+  <section class="gallery" [attr.aria-label]="'body.photos.gallery' | transloco">
+    @for (day of days(); track day.date) {
+      <h3 class="day">{{ day.date | localDate: 'long' }}</h3>
+      <ul class="thumbs">
+        @for (photo of day.photos; track photo.id) {
+          <li class="thumb">
+            <img
+              [src]="photo.url"
+              loading="lazy"
+              [alt]="
+                'body.photos.alt'
+                  | transloco
+                    : {
+                        view: ('body.photos.views.' + photo.view | transloco),
+                        date: (photo.takenAt | localDate),
+                      }
+              "
+            />
+            <div class="caption">
+              <span>{{ 'body.photos.views.' + photo.view | transloco }}</span>
+              <button
+                mat-icon-button
+                type="button"
+                [attr.aria-label]="'body.photos.delete' | transloco"
+                (click)="remove(photo)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            @if (photo.notes) {
+              <p class="notes">{{ photo.notes }}</p>
+            }
+          </li>
+        }
+      </ul>
+    }
+    @if (store.items().length < store.total()) {
+      <div class="more">
+        <button mat-stroked-button type="button" (click)="store.loadMore()">
+          {{ 'body.photos.loadMore' | transloco }}
+        </button>
+      </div>
+    }
+  </section>
+} @else if (store.isFulfilled()) {
+  <p class="empty">{{ 'body.photos.empty' | transloco }}</p>
+} @else if (store.isPending()) {
+  <p class="empty">{{ 'common.loading' | transloco }}</p>
+}

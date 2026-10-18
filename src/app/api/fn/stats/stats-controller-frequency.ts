@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { FrequencyDto } from '../../models/frequency-dto';
 
 export interface StatsControllerFrequency$Params {
 
@@ -21,7 +22,7 @@ export interface StatsControllerFrequency$Params {
   year?: number;
 }
 
-export function statsControllerFrequency(http: HttpClient, rootUrl: string, params: StatsControllerFrequency$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function statsControllerFrequency(http: HttpClient, rootUrl: string, params: StatsControllerFrequency$Params, context?: HttpContext): Observable<StrictHttpResponse<FrequencyDto>> {
   const rb = new RequestBuilder(rootUrl, statsControllerFrequency.PATH, 'get');
   if (params) {
     rb.query('tz', params.tz, {});
@@ -29,11 +30,11 @@ export function statsControllerFrequency(http: HttpClient, rootUrl: string, para
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<FrequencyDto>;
     })
   );
 }

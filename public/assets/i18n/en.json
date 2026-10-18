@@ -96,7 +96,8 @@
     "max": "At most {{max}}.",
     "futureDate": "The date can't be in the future.",
     "passwordMismatch": "Passwords don't match.",
-    "confirmationMismatch": "The text doesn't match."
+    "confirmationMismatch": "The text doesn't match.",
+    "noMeasurement": "Fill in at least one measurement."
   },
   "common": {
     "close": "Close",
@@ -170,7 +171,8 @@
     "kg": "kg",
     "lb": "lb",
     "cm": "cm",
-    "in": "in"
+    "in": "in",
+    "percent": "%"
   },
   "errors": {
     "BAD_REQUEST": "The request is not valid.",
@@ -315,6 +317,13 @@
       "5": "Fri",
       "6": "Sat",
       "7": "Sun"
+    },
+    "export": {
+      "title": "Export my data",
+      "hint": "Download your whole history of sessions and measurements.",
+      "json": "Everything (JSON)",
+      "workouts": "Sessions (CSV)",
+      "measurements": "Measurements (CSV)"
     }
   },
   "plans": {
@@ -782,6 +791,233 @@
       "date": "Date",
       "e1rm": "Est. 1RM",
       "volume": "Volume"
+    }
+  },
+  "charts": {
+    "view": "View as",
+    "asChart": "Chart",
+    "asTable": "Table",
+    "empty": "No data to show yet.",
+    "planWindow": "Your plan shows the last 90 days. Premium shows your whole history.",
+    "range": {
+      "label": "Period",
+      "premium": "Premium",
+      "30d": "30 days",
+      "90d": "90 days",
+      "6m": "6 months",
+      "1y": "1 year",
+      "all": "All"
+    }
+  },
+  "stats": {
+    "tabs": {
+      "progress": "Progress",
+      "volume": "Volume",
+      "consistency": "Consistency",
+      "records": "Records"
+    },
+    "table": {
+      "date": "Date",
+      "week": "Week"
+    },
+    "exercise": {
+      "pick": "Exercise",
+      "maxWeight": "Max weight",
+      "e1rm": "Estimated 1RM",
+      "volume": "Volume",
+      "strengthTitle": "Max weight and estimated 1RM",
+      "volumeTitle": "Volume per session",
+      "empty": "No sessions of this exercise in this period.",
+      "pickFirst": "Pick an exercise to see its progress.",
+      "strengthAria": "Max weight and estimated 1RM over time for {{name}}",
+      "volumeAria": "Volume per session for {{name}}"
+    },
+    "powerlifting": {
+      "title": "Powerlifting total",
+      "subtitle": "Squat + bench + deadlift (best so far, per week)",
+      "empty": "No data for all three lifts in this period yet.",
+      "metric": "Total based on",
+      "e1rm": "Estimated 1RM",
+      "maxWeight": "Weight lifted",
+      "best": "Best total",
+      "aria": "Powerlifting total and each lift over time",
+      "squat": "Squat",
+      "bench": "Bench press",
+      "deadlift": "Deadlift",
+      "total": "Total"
+    },
+    "volume": {
+      "metric": "Measure by",
+      "sets": "Sets",
+      "kg": "Weight",
+      "title": "Weekly volume per muscle group",
+      "subtitle": "Working sets (no warm-ups) of the primary muscle",
+      "empty": "No sets logged in this period.",
+      "pickHint": "Pick up to {{max}} muscle groups to compare.",
+      "muscles": "Muscle groups",
+      "aria": "Weekly volume per muscle group",
+      "setsN": "{{n}} sets",
+      "setsUnit": "sets",
+      "weekOf": "Week of {{date}}"
+    },
+    "frequency": {
+      "title": "Yearly frequency",
+      "subtitle": "{{days}} days trained in {{year}}",
+      "prevYear": "Previous year",
+      "nextYear": "Next year",
+      "aria": "Heatmap of the days trained in {{year}}",
+      "less": "Less",
+      "more": "More",
+      "daysTrained": "Days trained",
+      "volume": "volume",
+      "sessions": "sessions"
+    },
+    "adherence": {
+      "title": "Program adherence",
+      "empty": "This program has no planned days up to today yet.",
+      "noPrograms": "Activate a program to see your adherence.",
+      "program": "Program",
+      "goPrograms": "Go to programs",
+      "percent": "Adherence",
+      "completed": "Completed",
+      "ofPlanned": "{{done}} of {{planned}}",
+      "extra": "Off-plan sessions",
+      "aria": "Planned and completed days per program week",
+      "planned": "Planned",
+      "weekN": "Week {{n}}"
+    },
+    "records": {
+      "search": "Search exercise",
+      "empty": "No records yet. They show up as you log sessions.",
+      "exercise": "Exercise",
+      "unknown": "Deleted exercise",
+      "repsBreakdown": "Show reps per weight for {{name}}",
+      "noReps": "No reps-per-weight records.",
+      "noMatch": "No exercise matches your search."
+    }
+  },
+  "body": {
+    "tabs": {
+      "measurements": "Measurements",
+      "photos": "Progress photos"
+    },
+    "fields": {
+      "weightKg": "Weight",
+      "bodyFatPercent": "Body fat",
+      "waistCm": "Waist",
+      "chestCm": "Chest",
+      "hipsCm": "Hips",
+      "armCm": "Arm",
+      "thighCm": "Thigh",
+      "calfCm": "Calf",
+      "neckCm": "Neck"
+    },
+    "short": {
+      "weightKg": "Weight",
+      "bodyFatPercent": "Fat",
+      "waistCm": "Waist",
+      "chestCm": "Chest",
+      "hipsCm": "Hips",
+      "armCm": "Arm",
+      "thighCm": "Thigh",
+      "calfCm": "Calf",
+      "neckCm": "Neck"
+    },
+    "add": "New entry",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteTitle": "Delete this entry?",
+    "deleteMessage": "All of that day's measurements will be deleted. This can't be undone.",
+    "saved": "Entry saved.",
+    "deleted": "Entry deleted.",
+    "dialog": {
+      "newTitle": "New entry",
+      "editTitle": "Edit entry",
+      "date": "Date",
+      "hint": "Fill in only what you measured; the rest can stay empty.",
+      "notes": "Notes"
+    },
+    "chart": {
+      "measure": "Measurement",
+      "subtitle": "In {{unit}}",
+      "empty": "No entries for this measurement in this period.",
+      "aria": "{{measure}} over time"
+    },
+    "table": {
+      "title": "Measurement history",
+      "empty": "You haven't logged any measurements yet."
+    },
+    "photos": {
+      "add": "Upload photo",
+      "added": "Photo saved.",
+      "deleted": "Photo deleted.",
+      "uploadFailed": "The photo couldn't be uploaded. Please try again.",
+      "rejected": {
+        "tooLarge": "The image is too large.",
+        "format": "Unsupported format (use JPG, PNG, WebP or HEIC)."
+      },
+      "uploadTitle": "New progress photo",
+      "preview": "Preview of the chosen photo",
+      "change": "Change photo",
+      "choose": "Choose photo",
+      "view": "View",
+      "views": {
+        "front": "Front",
+        "side": "Side",
+        "back": "Back"
+      },
+      "private": "Your photos are private: only you can see them.",
+      "upload": "Upload",
+      "compareTitle": "Before and after",
+      "before": "Before",
+      "after": "After",
+      "compareEmpty": "You need at least two photos of this view to compare.",
+      "gallery": "Photo gallery",
+      "alt": "{{view}} photo from {{date}}",
+      "beforeAlt": "Before: photo from {{date}}",
+      "afterAlt": "After: photo from {{date}}",
+      "slider": "Slide to compare before and after",
+      "delete": "Delete photo",
+      "deleteTitle": "Delete this photo?",
+      "deleteMessage": "It will be deleted forever. This can't be undone.",
+      "loadMore": "Load more",
+      "empty": "No progress photos yet."
+    }
+  },
+  "dashboard": {
+    "streak": "weeks in a row training",
+    "week": "This week",
+    "month": "This month",
+    "sessions": "Sessions",
+    "volume": "Volume",
+    "sets": "Working sets",
+    "time": "Time",
+    "next": {
+      "title": "Next workout",
+      "failed": "Your program couldn't be loaded.",
+      "noProgram": "You don't have an active program.",
+      "goPrograms": "See programs",
+      "week": "week {{week}} of {{total}}",
+      "deload": "deload",
+      "today": "Today, {{date}}",
+      "on": "{{date}}",
+      "exercises": "{{count}} exercises",
+      "seeWeek": "See the week",
+      "finished": "You finished this program.",
+      "none": "No workouts in the next 7 days."
+    },
+    "records": {
+      "title": "Latest records",
+      "all": "See all",
+      "empty": "Your records will show up here."
+    },
+    "weight": {
+      "title": "Body weight",
+      "delta": "{{delta}} in 90 days",
+      "aria": "Body weight over the last 90 days",
+      "all": "See measurements",
+      "empty": "Log your weight to see how it changes.",
+      "add": "Log weight"
     }
   }
 }

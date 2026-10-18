@@ -1,0 +1,44 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.select {
+  flex: 0 1 240px;
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+.entries {
+  padding: 16px;
+}
+
+.entries-title {
+  margin: 0 0 8px;
+  font: var(--mat-sys-title-medium);
+}
+
+.scroll {
+  overflow-x: auto;
+  transition: opacity 150ms;
+}
+
+.scroll.pending {
+  opacity: 0.5;
+}
+
+.empty {
+  margin: 24px 0;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}

@@ -1,0 +1,131 @@
+<div class="filters">
+  <mat-form-field class="select" subscriptSizing="dynamic">
+    <mat-label>{{ 'body.chart.measure' | transloco }}</mat-label>
+    <mat-select [value]="store.field()" (valueChange)="setField($event)">
+      @for (field of fields; track field) {
+        <mat-option [value]="field">{{ 'body.fields.' + field | transloco }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <app-stat-range [value]="store.range()" (changed)="store.setRange($event)" />
+  <span class="spacer"></span>
+  <button mat-flat-button type="button" (click)="openEditor()">
+    <mat-icon>add</mat-icon>
+    {{ 'body.add' | transloco }}
+  </button>
+</div>
+
+@if (store.rangeLocked() || store.series()?.window?.limitedByPlan) {
+  <app-plan-window-note class="note" />
+}
+
+<app-chart-card
+  [titleKey]="'body.fields.' + store.field()"
+  [subtitle]="'body.chart.subtitle' | transloco: { unit: unit() }"
+  [empty]="!points().length"
+  emptyKey="body.chart.empty"
+  [pending]="store.seriesPending()"
+>
+  <app-chart
+    chart
+    [options]="options()"
+    [label]="
+      'body.chart.aria' | transloco: { measure: ('body.fields.' + store.field() | transloco) }
+    "
+  />
+  <table table class="sg-table">
+    <thead>
+      <tr>
+        <th scope="col">{{ 'stats.table.date' | transloco }}</th>
+        <th scope="col" class="num">{{ 'body.fields.' + store.field() | transloco }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of pointsDesc(); track p.measuredAt) {
+        <tr>
+          <td>{{ p.measuredAt | localDate }}</td>
+          <td class="num">{{ format()(p.value) }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</app-chart-card>
+
+<mat-card appearance="outlined" class="entries">
+  <h2 class="entries-title">{{ 'body.table.title' | transloco }}</h2>
+  @if (!store.items().length) {
+    <p class="empty">
+      {{ (store.isPending() ? 'common.loading' : 'body.table.empty') | transloco }}
+    </p>
+  } @else {
+    <div class="scroll" [class.pending]="store.isPending()">
+      <table class="sg-table">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'stats.table.date' | transloco }}</th>
+            @for (field of fields; track field) {
+              <th scope="col" class="num">{{ 'body.short.' + field | transloco }}</th>
+            }
+            <th scope="col">
+              <span class="cdk-visually-hidden">{{ 'common.actions' | transloco }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of store.items(); track m.id) {
+            <tr>
+              <td>{{ m.measuredAt | localDate }}</td>
+              @for (field of fields; track field) {
+                @let value = m[field];
+                <td class="num">
+                  @if (value === null) {
+                    —
+                  } @else {
+                    @switch (kindOf(field)) {
+                      @case ('weight') {
+                        {{ value | weight }}
+                      }
+                      @case ('length') {
+                        {{ value | length }}
+                      }
+                      @default {
+                        {{ value }} %
+                      }
+                    }
+                  }
+                </td>
+              }
+              <td>
+                <button
+                  mat-icon-button
+                  type="button"
+                  [matMenuTriggerFor]="menu"
+                  [attr.aria-label]="'common.actions' | transloco"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item type="button" (click)="openEditor(m)">
+                    <mat-icon>edit</mat-icon>
+                    {{ 'body.edit' | transloco }}
+                  </button>
+                  <button mat-menu-item type="button" (click)="remove(m)">
+                    <mat-icon>delete</mat-icon>
+                    {{ 'body.delete' | transloco }}
+                  </button>
+                </mat-menu>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      [length]="store.total()"
+      [pageIndex]="store.page() - 1"
+      [pageSize]="pageSize"
+      [hidePageSize]="true"
+      (page)="onPage($event)"
+    />
+  }
+</mat-card>

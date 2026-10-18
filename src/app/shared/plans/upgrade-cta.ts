@@ -64,6 +64,8 @@ export class UpgradeCta {
   /** The limit value, when known (from PLAN_LIMIT_REACHED details). */
   readonly limitValue = input<number | null>(null);
   readonly compact = input(false);
+  /** Replaces the generic message (e.g. what exactly the plan leaves out). */
+  readonly customMessageKey = input<string | null>(null);
   readonly navigated = output<void>();
 
   protected readonly titleKey = computed(() =>
@@ -71,6 +73,8 @@ export class UpgradeCta {
   );
 
   protected readonly messageKey = computed(() => {
+    const custom = this.customMessageKey();
+    if (custom) return custom;
     const limit = this.limit();
     if (limit) return this.limitValue() === null ? 'plans.cta.limitGeneric' : 'plans.cta.limit';
     return this.feature() ? 'plans.cta.feature' : 'plans.cta.featureGeneric';

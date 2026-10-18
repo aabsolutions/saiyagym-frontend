@@ -96,7 +96,8 @@
     "max": "Máximo {{max}}.",
     "futureDate": "La fecha no puede ser futura.",
     "passwordMismatch": "Las contraseñas no coinciden.",
-    "confirmationMismatch": "El texto no coincide."
+    "confirmationMismatch": "El texto no coincide.",
+    "noMeasurement": "Completa al menos una medida."
   },
   "common": {
     "close": "Cerrar",
@@ -170,7 +171,8 @@
     "kg": "kg",
     "lb": "lb",
     "cm": "cm",
-    "in": "in"
+    "in": "in",
+    "percent": "%"
   },
   "errors": {
     "BAD_REQUEST": "La solicitud no es válida.",
@@ -315,6 +317,13 @@
       "5": "Vie",
       "6": "Sáb",
       "7": "Dom"
+    },
+    "export": {
+      "title": "Exportar mis datos",
+      "hint": "Descarga todo tu historial de sesiones y medidas.",
+      "json": "Todo (JSON)",
+      "workouts": "Sesiones (CSV)",
+      "measurements": "Medidas (CSV)"
     }
   },
   "plans": {
@@ -782,6 +791,233 @@
       "date": "Fecha",
       "e1rm": "1RM est.",
       "volume": "Volumen"
+    }
+  },
+  "charts": {
+    "view": "Ver como",
+    "asChart": "Gráfico",
+    "asTable": "Tabla",
+    "empty": "Todavía no hay datos para mostrar.",
+    "planWindow": "Tu plan muestra los últimos 90 días. Con Premium ves todo tu historial.",
+    "range": {
+      "label": "Periodo",
+      "premium": "Premium",
+      "30d": "30 días",
+      "90d": "90 días",
+      "6m": "6 meses",
+      "1y": "1 año",
+      "all": "Todo"
+    }
+  },
+  "stats": {
+    "tabs": {
+      "progress": "Progreso",
+      "volume": "Volumen",
+      "consistency": "Constancia",
+      "records": "Récords"
+    },
+    "table": {
+      "date": "Fecha",
+      "week": "Semana"
+    },
+    "exercise": {
+      "pick": "Ejercicio",
+      "maxWeight": "Peso máximo",
+      "e1rm": "1RM estimado",
+      "volume": "Volumen",
+      "strengthTitle": "Peso máximo y 1RM estimado",
+      "volumeTitle": "Volumen por sesión",
+      "empty": "No hay sesiones de este ejercicio en el periodo.",
+      "pickFirst": "Elige un ejercicio para ver su evolución.",
+      "strengthAria": "Evolución del peso máximo y del 1RM estimado de {{name}}",
+      "volumeAria": "Volumen por sesión de {{name}}"
+    },
+    "powerlifting": {
+      "title": "Total de powerlifting",
+      "subtitle": "Sentadilla + banca + peso muerto (mejor marca acumulada por semana)",
+      "empty": "Aún no hay datos de los tres levantamientos en el periodo.",
+      "metric": "Cálculo del total",
+      "e1rm": "1RM estimado",
+      "maxWeight": "Peso levantado",
+      "best": "Mejor total",
+      "aria": "Evolución del total de powerlifting y de cada levantamiento",
+      "squat": "Sentadilla",
+      "bench": "Press banca",
+      "deadlift": "Peso muerto",
+      "total": "Total"
+    },
+    "volume": {
+      "metric": "Medir por",
+      "sets": "Series",
+      "kg": "Kilos",
+      "title": "Volumen semanal por grupo muscular",
+      "subtitle": "Series efectivas (sin calentamiento) del músculo principal",
+      "empty": "No hay series registradas en el periodo.",
+      "pickHint": "Elige hasta {{max}} grupos musculares para comparar.",
+      "muscles": "Grupos musculares",
+      "aria": "Volumen semanal por grupo muscular",
+      "setsN": "{{n}} series",
+      "setsUnit": "series",
+      "weekOf": "Semana del {{date}}"
+    },
+    "frequency": {
+      "title": "Frecuencia anual",
+      "subtitle": "{{days}} días entrenados en {{year}}",
+      "prevYear": "Año anterior",
+      "nextYear": "Año siguiente",
+      "aria": "Mapa de calor de los días entrenados en {{year}}",
+      "less": "Menos",
+      "more": "Más",
+      "daysTrained": "Días entrenados",
+      "volume": "volumen",
+      "sessions": "sesiones"
+    },
+    "adherence": {
+      "title": "Adherencia al programa",
+      "empty": "Este programa todavía no tiene días planificados hasta hoy.",
+      "noPrograms": "Activa un programa para ver tu adherencia.",
+      "program": "Programa",
+      "goPrograms": "Ir a programas",
+      "percent": "Adherencia",
+      "completed": "Completados",
+      "ofPlanned": "{{done}} de {{planned}}",
+      "extra": "Sesiones fuera de plan",
+      "aria": "Días planificados y completados por semana del programa",
+      "planned": "Planificados",
+      "weekN": "Semana {{n}}"
+    },
+    "records": {
+      "search": "Buscar ejercicio",
+      "empty": "Todavía no tienes récords. Aparecen al registrar sesiones.",
+      "exercise": "Ejercicio",
+      "unknown": "Ejercicio eliminado",
+      "repsBreakdown": "Ver repeticiones por peso de {{name}}",
+      "noReps": "Sin récords de repeticiones por peso.",
+      "noMatch": "Ningún ejercicio coincide con la búsqueda."
+    }
+  },
+  "body": {
+    "tabs": {
+      "measurements": "Medidas",
+      "photos": "Fotos de progreso"
+    },
+    "fields": {
+      "weightKg": "Peso",
+      "bodyFatPercent": "Grasa corporal",
+      "waistCm": "Cintura",
+      "chestCm": "Pecho",
+      "hipsCm": "Cadera",
+      "armCm": "Brazo",
+      "thighCm": "Muslo",
+      "calfCm": "Pantorrilla",
+      "neckCm": "Cuello"
+    },
+    "short": {
+      "weightKg": "Peso",
+      "bodyFatPercent": "Grasa",
+      "waistCm": "Cintura",
+      "chestCm": "Pecho",
+      "hipsCm": "Cadera",
+      "armCm": "Brazo",
+      "thighCm": "Muslo",
+      "calfCm": "Pantorr.",
+      "neckCm": "Cuello"
+    },
+    "add": "Nueva medición",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "deleteTitle": "¿Eliminar esta medición?",
+    "deleteMessage": "Se borrarán todas las medidas de ese día. No se puede deshacer.",
+    "saved": "Medición guardada.",
+    "deleted": "Medición eliminada.",
+    "dialog": {
+      "newTitle": "Nueva medición",
+      "editTitle": "Editar medición",
+      "date": "Fecha",
+      "hint": "Completa solo lo que mediste; el resto puede quedar vacío.",
+      "notes": "Notas"
+    },
+    "chart": {
+      "measure": "Medida",
+      "subtitle": "En {{unit}}",
+      "empty": "No hay registros de esta medida en el periodo.",
+      "aria": "Evolución de {{measure}}"
+    },
+    "table": {
+      "title": "Historial de mediciones",
+      "empty": "Todavía no registraste mediciones."
+    },
+    "photos": {
+      "add": "Subir foto",
+      "added": "Foto guardada.",
+      "deleted": "Foto eliminada.",
+      "uploadFailed": "No se pudo subir la foto. Inténtalo de nuevo.",
+      "rejected": {
+        "tooLarge": "La imagen es demasiado grande.",
+        "format": "Formato no admitido (usa JPG, PNG, WebP o HEIC)."
+      },
+      "uploadTitle": "Nueva foto de progreso",
+      "preview": "Vista previa de la foto elegida",
+      "change": "Cambiar foto",
+      "choose": "Elegir foto",
+      "view": "Vista",
+      "views": {
+        "front": "Frente",
+        "side": "Perfil",
+        "back": "Espalda"
+      },
+      "private": "Tus fotos son privadas: solo tú puedes verlas.",
+      "upload": "Subir",
+      "compareTitle": "Antes y después",
+      "before": "Antes",
+      "after": "Después",
+      "compareEmpty": "Necesitas al menos dos fotos de esta vista para comparar.",
+      "gallery": "Galería de fotos",
+      "alt": "Foto de {{view}} del {{date}}",
+      "beforeAlt": "Antes: foto del {{date}}",
+      "afterAlt": "Después: foto del {{date}}",
+      "slider": "Desliza para comparar antes y después",
+      "delete": "Eliminar foto",
+      "deleteTitle": "¿Eliminar esta foto?",
+      "deleteMessage": "Se borrará para siempre. No se puede deshacer.",
+      "loadMore": "Cargar más",
+      "empty": "Todavía no hay fotos de progreso."
+    }
+  },
+  "dashboard": {
+    "streak": "semanas seguidas entrenando",
+    "week": "Esta semana",
+    "month": "Este mes",
+    "sessions": "Sesiones",
+    "volume": "Volumen",
+    "sets": "Series efectivas",
+    "time": "Tiempo",
+    "next": {
+      "title": "Próximo entrenamiento",
+      "failed": "No se pudo cargar tu programa.",
+      "noProgram": "No tienes un programa activo.",
+      "goPrograms": "Ver programas",
+      "week": "semana {{week}} de {{total}}",
+      "deload": "descarga",
+      "today": "Hoy, {{date}}",
+      "on": "{{date}}",
+      "exercises": "{{count}} ejercicios",
+      "seeWeek": "Ver la semana",
+      "finished": "Terminaste este programa.",
+      "none": "No hay entrenamientos en los próximos 7 días."
+    },
+    "records": {
+      "title": "Últimos récords",
+      "all": "Ver todos",
+      "empty": "Tus récords aparecerán aquí."
+    },
+    "weight": {
+      "title": "Peso corporal",
+      "delta": "{{delta}} en 90 días",
+      "aria": "Peso corporal de los últimos 90 días",
+      "all": "Ver medidas",
+      "empty": "Registra tu peso para ver su evolución.",
+      "add": "Registrar peso"
     }
   }
 }

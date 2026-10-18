@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { MuscleVolumeDto } from '../../models/muscle-volume-dto';
 
 export interface StatsControllerMuscleVolume$Params {
 
@@ -22,7 +23,7 @@ export interface StatsControllerMuscleVolume$Params {
   to?: string;
 }
 
-export function statsControllerMuscleVolume(http: HttpClient, rootUrl: string, params: StatsControllerMuscleVolume$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function statsControllerMuscleVolume(http: HttpClient, rootUrl: string, params: StatsControllerMuscleVolume$Params, context?: HttpContext): Observable<StrictHttpResponse<MuscleVolumeDto>> {
   const rb = new RequestBuilder(rootUrl, statsControllerMuscleVolume.PATH, 'get');
   if (params) {
     rb.query('tz', params.tz, {});
@@ -31,11 +32,11 @@ export function statsControllerMuscleVolume(http: HttpClient, rootUrl: string, p
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<MuscleVolumeDto>;
     })
   );
 }

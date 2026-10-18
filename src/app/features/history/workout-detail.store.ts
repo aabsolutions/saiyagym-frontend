@@ -4,12 +4,8 @@ import { BrokenRecordDto } from '../../api/models/broken-record-dto';
 import { UpdateWorkoutDto } from '../../api/models/update-workout-dto';
 import { WorkoutDetailDto } from '../../api/models/workout-detail-dto';
 import { WorkoutsService } from '../../api/services/workouts.service';
-import {
-  ExerciseRecordsApi,
-  RecordEntry,
-  RecordType,
-  recordsFromWorkout,
-} from '../../shared/records/exercise-records';
+import { StatsService } from '../../api/services/stats.service';
+import { RecordEntry, RecordType, recordsFromWorkout } from '../../shared/records/exercise-records';
 import {
   setError,
   setFulfilled,
@@ -33,7 +29,7 @@ interface WorkoutDetailState {
 export const WorkoutDetailStore = signalStore(
   withState<WorkoutDetailState>({ workout: null, records: [], saving: false }),
   withRequestStatus(),
-  withProps(() => ({ _api: inject(WorkoutsService), _records: inject(ExerciseRecordsApi) })),
+  withProps(() => ({ _api: inject(WorkoutsService), _records: inject(StatsService) })),
   withMethods((store) => {
     /**
      * The API keeps only the current records (each with its workoutId), so "PRs of this
@@ -42,7 +38,9 @@ export const WorkoutDetailStore = signalStore(
     const loadRecords = async (workout: WorkoutDetailDto) => {
       const exerciseIds = [...new Set(workout.exercises.map((e) => e.exerciseId))];
       const all = await Promise.all(
-        exerciseIds.map((id) => store._records.get(id).catch(() => null)),
+        exerciseIds.map((id) =>
+          store._records.recordsControllerForExercise({ id }).catch(() => null),
+        ),
       );
       const records = all.flatMap((r) =>
         r ? recordsFromWorkout(r, workout.id).map((x) => ({ exerciseId: r.exerciseId, ...x })) : [],

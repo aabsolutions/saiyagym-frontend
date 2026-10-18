@@ -1,0 +1,137 @@
+<div class="filters">
+  <app-stat-range [value]="store.range()" (changed)="store.setRange($event)" />
+  <app-exercise-autocomplete
+    class="exercise"
+    label="stats.exercise.pick"
+    [selected]="store.exercise()"
+    (picked)="store.setExercise($event)"
+  />
+</div>
+
+@if (store.rangeLocked() || store.limitedWindow()) {
+  <app-plan-window-note class="note" />
+}
+
+@let exerciseName = store.exercise()?.name ?? null;
+<div class="grid">
+  <app-chart-card
+    titleKey="stats.exercise.strengthTitle"
+    [subtitle]="exerciseName"
+    [empty]="!points().length"
+    [emptyKey]="store.exercise() ? 'stats.exercise.empty' : 'stats.exercise.pickFirst'"
+    [pending]="store.pending().exercise"
+  >
+    <app-chart
+      chart
+      [options]="strengthOptions()"
+      [label]="'stats.exercise.strengthAria' | transloco: { name: exerciseName ?? '' }"
+    />
+    <table table class="sg-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'stats.table.date' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.exercise.maxWeight' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.exercise.e1rm' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of pointsDesc(); track p.workoutId) {
+          <tr>
+            <td>{{ p.date | localDate }}</td>
+            <td class="num">{{ p.maxWeightKg | weight }}</td>
+            <td class="num">{{ p.bestE1RM | weight }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </app-chart-card>
+
+  <app-chart-card
+    titleKey="stats.exercise.volumeTitle"
+    [subtitle]="exerciseName"
+    [empty]="!points().length"
+    [emptyKey]="store.exercise() ? 'stats.exercise.empty' : 'stats.exercise.pickFirst'"
+    [pending]="store.pending().exercise"
+  >
+    <app-chart
+      chart
+      [options]="volumeOptions()"
+      [label]="'stats.exercise.volumeAria' | transloco: { name: exerciseName ?? '' }"
+    />
+    <table table class="sg-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'stats.table.date' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.exercise.volume' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of pointsDesc(); track p.workoutId) {
+          <tr>
+            <td>{{ p.date | localDate }}</td>
+            <td class="num">{{ p.volumeKg | weight: { digits: 0 } }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </app-chart-card>
+
+  <app-chart-card
+    class="wide"
+    titleKey="stats.powerlifting.title"
+    [subtitle]="'stats.powerlifting.subtitle' | transloco"
+    [empty]="!totalPoints().length"
+    emptyKey="stats.powerlifting.empty"
+    [pending]="store.pending().total"
+  >
+    <mat-button-toggle-group
+      tools
+      hideSingleSelectionIndicator
+      [value]="store.totalMetric()"
+      [attr.aria-label]="'stats.powerlifting.metric' | transloco"
+      (change)="setTotalMetric($event.value)"
+    >
+      <mat-button-toggle value="e1rm">{{
+        'stats.powerlifting.e1rm' | transloco
+      }}</mat-button-toggle>
+      <mat-button-toggle value="max_weight">{{
+        'stats.powerlifting.maxWeight' | transloco
+      }}</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (store.total()?.bestTotal; as best) {
+      <p class="hero">
+        <span class="hero-label">{{ 'stats.powerlifting.best' | transloco }}</span>
+        <span class="hero-value">{{ best | weight: { digits: 1 } }}</span>
+      </p>
+    }
+    <app-chart
+      chart
+      [options]="totalOptions()"
+      [height]="320"
+      [label]="'stats.powerlifting.aria' | transloco"
+    />
+    <table table class="sg-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'stats.table.week' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.powerlifting.squat' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.powerlifting.bench' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.powerlifting.deadlift' | transloco }}</th>
+          <th scope="col" class="num">{{ 'stats.powerlifting.total' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of totalDesc(); track p.weekStart) {
+          <tr>
+            <td>{{ p.weekStart | localDate }}</td>
+            <td class="num">{{ p.squat | weight }}</td>
+            <td class="num">{{ p.bench | weight }}</td>
+            <td class="num">{{ p.deadlift | weight }}</td>
+            <td class="num">{{ p.total | weight }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </app-chart-card>
+</div>
