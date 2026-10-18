@@ -1,5 +1,39 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Rutinas y programas
+
+### Hecho
+
+- **Rutinas** (`/routines`): lista activas/archivadas con duplicar, archivar/desarchivar y eliminar (confirmación; `409 ROUTINE_IN_USE` lo explica el snackbar); contador "x de 3" y `<app-upgrade-cta>` al límite (archivar libera un hueco).
+- **Constructor** (`/routines/new`, `/routines/:id`): buscador lateral de ejercicios (debounce + `switchMap`; en móvil, desplegable); reordenar con CDK drag & drop (asa por ejercicio); superseries contiguas ("superserie con el siguiente" / "separar"); series objetivo (tipo, reps mín–máx, sin carga / peso / %1RM, descanso) y notas; regla de progresión por ejercicio (Premium, `*requireFeature`). Signal Forms con arrays anidados (`applyEach`, `applyWhen`): errores inline. **Cambios sin guardar**: indicador, `canDeactivate` con diálogo y `beforeunload`.
+- **Programas** (`/programs`, pestañas Mis programas · Esta semana · Plantillas): lista con activar (fecha de inicio LOCAL), pausar, completar y eliminar; aviso de límite de programas activos.
+- **Asistente** (`/programs/new`, `/programs/:id/edit`), 5 pasos: nombre y duración → cuadrícula semana × día (en el orden de semana del usuario; "copiar semana a todas"; semanas nuevas repiten la última) → descarga (semanas, modo, %) → progresión (Premium: reglas por ejercicio de cada rutina programada) + training maxes para ejercicios en %1RM → revisar y "Guardar borrador" / "Guardar y activar".
+- **Plantillas**: galería (objetivo, nivel, semanas, días/semana, aviso si la progresión se descartará en Free), vista previa (cuadrícula + rutinas) y "Usar plantilla" (nombre + training maxes de los ejercicios en %) → `POST /program-templates/:id/copy` → asistente del programa copiado.
+- **Esta semana**: los 7 días locales de la semana del programa activo (selector si hay varios), con rutina, series agrupadas y pesos objetivo calculados por la API, notas de progresión traducidas (sube X, mantén, % del máximo, descarga), semana de descarga y navegación entre semanas.
+- `shared/format/local-dates.ts` (fechas `YYYY-MM-DD` locales, semanas según `firstDayOfWeek`), `unsavedChangesGuard`, `app-exercise-picker`.
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 139/139 ✅ (+38) · `npm run build:gh` ✅ (inicial 543 kB sin cambios; rutinas 34 kB y programas 140 kB lazy).
+- Tests: superseries (vincular, tríos, unir grupos, separar, mover/borrar nunca deja grupos de uno o partidos), conversión kg↔lb y %1RM, regla sin tocar reenviada tal cual, schema (rango de reps, carga según modo, tope en la unidad del usuario, semanas de %1RM), constructor de punta a punta (elegir ejercicio → sin guardar → POST en kg → navegación), guard de cambios sin guardar, modelo del programa (ida y vuelta, redimensionar, copiar semana, descarga, maxes), guardado del asistente (reglas → programa → activación; activación fallida devuelve el borrador; regla rechazada no guarda el programa), semana (7 fechas locales en orden), máximos de plantillas, fechas locales.
+- **No verificado en navegador**: drag & drop del constructor (mouse/touch), asistente completo, copia de plantillas y "Esta semana" contra producción.
+
+### Decisiones y gotchas
+
+- **Las reglas de progresión viven en las rutinas** (`RoutineExerciseDto.progression`), no en el programa: el paso "Progresión" del asistente edita las rutinas programadas y las guarda con PATCH antes que el programa. Una rutina usada en dos programas comparte reglas (la UI lo avisa).
+- La API exige Premium solo si una regla **cambia** (compara JSON): una regla sin tocar se reenvía exactamente como vino, para que un usuario que bajó a Free pueda seguir editando sus rutinas.
+- Unidades fijadas al abrir un editor (constructor, asistente): cambiar kg↔lb a mitad de la edición reinterpretaría los números ya escritos.
+- "Esta semana" = 7 llamadas paralelas a `GET /programs/active/today?date=` (la API calcula los objetivos día a día).
+- "Sin guardar" del asistente compara el body que se enviaría (no el borrador crudo): las filas vacías de training max no cuentan como cambio. `syncTrainingMaxes` devuelve la misma referencia si nada cambia (se llama desde un `effect` que también lee el borrador).
+- Guardar y activar: si solo falla la activación (límite Free → diálogo de upgrade), el programa queda guardado como borrador y la página lo refleja.
+
+### Pendiente / próximo
+
+- Probar en navegador el constructor (drag & drop, móvil) y el asistente completo.
+- Etiquetas por día del programa (`label`): se conservan pero no se editan todavía.
+- Override de descarga por ejercicio (`deload` en la regla): se conserva, no se edita.
+- Siguiente: historial (sesiones registradas en el móvil) y estadísticas.
+
 ## 2026-10-18 — Catálogo de ejercicios
 
 ### Hecho

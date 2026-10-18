@@ -1,0 +1,186 @@
+@let it = item();
+<article
+  class="item"
+  [class.linked-prev]="linkedWithPrevious()"
+  [class.linked-next]="linkedWithNext()"
+>
+  <header>
+    <button
+      mat-icon-button
+      type="button"
+      cdkDragHandle
+      class="handle"
+      [attr.aria-label]="'routines.builder.dragHandle' | transloco: { name: name() }"
+    >
+      <mat-icon>drag_indicator</mat-icon>
+    </button>
+    <span class="index">{{ index() + 1 }}</span>
+    <h3>
+      @if (name()) {
+        {{ name() }}
+      } @else {
+        <span class="missing">{{ 'routines.builder.missingExercise' | transloco }}</span>
+      }
+    </h3>
+    @if (linkedWithPrevious() || linkedWithNext()) {
+      <span class="superset">{{ 'routines.builder.superset' | transloco }}</span>
+    }
+    <button
+      mat-icon-button
+      type="button"
+      [attr.aria-label]="'routines.builder.removeExercise' | transloco: { name: name() }"
+      (click)="removed.emit()"
+    >
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+  </header>
+
+  <div class="sets" role="table" [attr.aria-label]="'routines.builder.sets' | transloco">
+    <div class="sets-head" role="row">
+      <span role="columnheader">{{ 'routines.builder.setNumber' | transloco }}</span>
+      <span role="columnheader">{{ 'routines.builder.setType' | transloco }}</span>
+      <span role="columnheader">{{ 'routines.builder.reps' | transloco }}</span>
+      <span role="columnheader">{{ 'routines.builder.load' | transloco }}</span>
+      <span role="columnheader">{{ 'routines.builder.rest' | transloco }}</span>
+      <span role="columnheader"
+        ><span class="cdk-visually-hidden">{{ 'common.actions' | transloco }}</span></span
+      >
+    </div>
+    @for (set of it.sets; track $index) {
+      <div class="set" role="row">
+        <span role="cell" class="n">{{ $index + 1 }}</span>
+        <mat-form-field role="cell" subscriptSizing="dynamic">
+          <mat-label class="cdk-visually-hidden">{{
+            'routines.builder.setType' | transloco
+          }}</mat-label>
+          <mat-select [formField]="set.type">
+            @for (t of setTypes; track t) {
+              <mat-option [value]="t">{{ 'routines.setType.' + t | transloco }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <span role="cell" class="reps">
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>{{ 'routines.builder.min' | transloco }}</mat-label>
+            <input matInput type="number" inputmode="numeric" [formField]="set.repsMin" />
+            <mat-error>{{ set.repsMin().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>{{ 'routines.builder.max' | transloco }}</mat-label>
+            <input matInput type="number" inputmode="numeric" [formField]="set.repsMax" />
+            <mat-error>{{ set.repsMax().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+        </span>
+        <span role="cell" class="load">
+          <mat-form-field subscriptSizing="dynamic" class="mode">
+            <mat-label class="cdk-visually-hidden">{{
+              'routines.builder.loadMode' | transloco
+            }}</mat-label>
+            <mat-select [formField]="set.loadMode">
+              @for (m of loadModes; track m) {
+                <mat-option [value]="m">{{ 'routines.loadMode.' + m | transloco }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          @if (set.loadMode().value() !== 'none') {
+            <mat-form-field subscriptSizing="dynamic">
+              <mat-label>{{
+                (set.loadMode().value() === 'percent'
+                  ? 'routines.builder.percent'
+                  : 'routines.builder.weight'
+                ) | transloco
+              }}</mat-label>
+              <input matInput type="number" step="0.5" inputmode="decimal" [formField]="set.load" />
+              <span matTextSuffix>{{
+                (set.loadMode().value() === 'percent'
+                  ? 'routines.builder.percentSuffix'
+                  : weightUnitKey()
+                ) | transloco
+              }}</span>
+              <mat-error>{{ set.load().errors() | validationMessage }}</mat-error>
+            </mat-form-field>
+          }
+        </span>
+        <mat-form-field role="cell" subscriptSizing="dynamic" class="rest">
+          <mat-label class="cdk-visually-hidden">{{
+            'routines.builder.rest' | transloco
+          }}</mat-label>
+          <input
+            matInput
+            type="number"
+            step="15"
+            inputmode="numeric"
+            [formField]="set.restSeconds"
+          />
+          <span matTextSuffix>{{ 'routines.builder.seconds' | transloco }}</span>
+          <mat-error>{{ set.restSeconds().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+        <span role="cell">
+          <button
+            mat-icon-button
+            type="button"
+            [disabled]="it.sets.length <= 1"
+            [attr.aria-label]="'routines.builder.removeSet' | transloco: { n: $index + 1 }"
+            (click)="setRemoved.emit($index)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </span>
+      </div>
+    }
+  </div>
+  @if (it.sets().errors().length) {
+    <p class="error" role="alert">{{ it.sets().errors() | validationMessage }}</p>
+  }
+
+  <div class="row-actions">
+    <button mat-button type="button" (click)="setAdded.emit()">
+      <mat-icon>add</mat-icon>
+      {{ 'routines.builder.addSet' | transloco }}
+    </button>
+  </div>
+
+  <mat-form-field class="full-width notes" subscriptSizing="dynamic">
+    <mat-label>{{ 'routines.builder.exerciseNotes' | transloco }}</mat-label>
+    <textarea matInput rows="1" [formField]="it.notes"></textarea>
+    <mat-error>{{ it.notes().errors() | validationMessage }}</mat-error>
+  </mat-form-field>
+
+  <mat-expansion-panel class="progression">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon aria-hidden="true">trending_up</mat-icon>
+        {{ 'routines.progression.title' | transloco }}
+      </mat-panel-title>
+      <mat-panel-description>{{
+        'routines.progression.kind.' + it.progression.kind().value() | transloco
+      }}</mat-panel-description>
+    </mat-expansion-panel-header>
+    <div *requireFeature="'autoProgression'; else locked">
+      <app-progression-editor
+        [rule]="it.progression"
+        [units]="units()"
+        (weekAdded)="weekAdded.emit()"
+        (weekRemoved)="weekRemoved.emit($event)"
+      />
+    </div>
+    <ng-template #locked>
+      <app-upgrade-cta feature="autoProgression" [compact]="true" />
+    </ng-template>
+  </mat-expansion-panel>
+</article>
+
+@if (!isLast()) {
+  <div class="link">
+    <button
+      mat-stroked-button
+      type="button"
+      [class.on]="linkedWithNext()"
+      [attr.aria-pressed]="linkedWithNext()"
+      (click)="linkToggled.emit()"
+    >
+      <mat-icon>{{ linkedWithNext() ? 'link_off' : 'link' }}</mat-icon>
+      {{ (linkedWithNext() ? 'routines.builder.unlink' : 'routines.builder.link') | transloco }}
+    </button>
+  </div>
+}

@@ -1,0 +1,157 @@
+@if (programs.loaded() && !programs.active().length) {
+  <div class="empty">
+    <mat-icon aria-hidden="true">event_busy</mat-icon>
+    <p>{{ 'programs.week.noActive' | transloco }}</p>
+    <div class="empty-actions">
+      <a mat-flat-button routerLink="/programs">{{ 'programs.tabs.mine' | transloco }}</a>
+      <a mat-stroked-button routerLink="/programs/templates">{{
+        'programs.list.fromTemplate' | transloco
+      }}</a>
+    </div>
+  </div>
+} @else {
+  <div class="head">
+    @if (programs.active().length > 1) {
+      <mat-select
+        class="program-select"
+        [value]="week.programId()"
+        (selectionChange)="week.show($event.value)"
+        [attr.aria-label]="'programs.week.program' | transloco"
+      >
+        @for (p of programs.active(); track p.id) {
+          <mat-option [value]="p.id">{{ p.name }}</mat-option>
+        }
+      </mat-select>
+    } @else if (program(); as p) {
+      <h2>{{ p.name }}</h2>
+    }
+
+    <div class="nav">
+      <button
+        mat-icon-button
+        type="button"
+        [attr.aria-label]="'programs.week.previous' | transloco"
+        (click)="week.shiftWeek(-1)"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-button type="button" (click)="week.thisWeek()">
+        {{ 'programs.week.today' | transloco }}
+      </button>
+      <button
+        mat-icon-button
+        type="button"
+        [attr.aria-label]="'programs.week.next' | transloco"
+        (click)="week.shiftWeek(1)"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (summary(); as s) {
+    <p class="status">
+      @switch (s.status) {
+        @case ('not_started') {
+          {{ 'programs.week.startsIn' | transloco: { days: s.startsInDays } }}
+        }
+        @case ('finished') {
+          {{ 'programs.week.finished' | transloco }}
+        }
+        @default {
+          @if (s.week !== null) {
+            {{ 'programs.week.weekOf' | transloco: { week: s.week, total: s.totalWeeks } }}
+          }
+          @if (s.isDeloadWeek) {
+            <span class="deload">{{ 'programs.week.deload' | transloco }}</span>
+          }
+        }
+      }
+      @if (!s.progressionEnabled) {
+        <span class="muted">{{ 'programs.week.noProgression' | transloco }}</span>
+      }
+    </p>
+  }
+
+  @if (week.isPending()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <ol class="days" [attr.aria-busy]="week.isPending()">
+    @for (day of week.days(); track day.date) {
+      <li class="day" [class.today]="day.date === week.today()" [class]="'status-' + day.status">
+        <header>
+          <span class="weekday">{{ 'profile.weekdays.' + weekday(day.date) | transloco }}</span>
+          <span class="date">{{ day.date | localDate: 'short' }}</span>
+          @if (day.date === week.today()) {
+            <span class="today-badge">{{ 'programs.week.today' | transloco }}</span>
+          }
+        </header>
+
+        @if (day.status === 'training') {
+          @if (day.routine; as routine) {
+            <h3>{{ day.dayLabel || routine.name }}</h3>
+            <ul class="exercises">
+              @for (ex of routine.exercises; track ex.id) {
+                <li [class.superset]="!!ex.groupId">
+                  <span class="name">{{
+                    ex.name ?? ('routines.builder.missingExercise' | transloco)
+                  }}</span>
+                  <span class="sets">
+                    @for (g of groupSets(ex.sets); track $index) {
+                      <span class="set" [class]="'set-' + g.set.type">
+                        {{
+                          'programs.week.setLine'
+                            | transloco
+                              : {
+                                  count: g.count,
+                                  reps:
+                                    g.set.repsMin === g.set.repsMax
+                                      ? g.set.repsMin
+                                      : g.set.repsMin + '–' + g.set.repsMax,
+                                  weight:
+                                    g.set.weightKg === null
+                                      ? ('programs.week.noWeight' | transloco)
+                                      : (g.set.weightKg | weight),
+                                }
+                        }}
+                      </span>
+                    }
+                  </span>
+                  @if (ex.adjustments.length) {
+                    <span class="notes">
+                      @for (note of ex.adjustments; track note.code) {
+                        <span class="note" [class]="'note-' + note.code">
+                          {{
+                            'programs.notes.' + note.code
+                              | transloco
+                                : {
+                                    percent: noteParam(note, 'percent'),
+                                    increment:
+                                      noteParam(note, 'incrementKg') === null
+                                        ? ''
+                                        : (noteParam(note, 'incrementKg') | weight),
+                                  }
+                          }}
+                        </span>
+                      }
+                    </span>
+                  }
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="muted">{{ 'programs.week.routineMissing' | transloco }}</p>
+          }
+        } @else if (day.status === 'rest') {
+          <p class="rest">
+            <mat-icon aria-hidden="true">self_improvement</mat-icon>
+            {{ 'programs.wizard.rest' | transloco }}
+          </p>
+        } @else {
+          <p class="muted">{{ 'programs.week.outside' | transloco }}</p>
+        }
+      </li>
+    }
+  </ol>
+}

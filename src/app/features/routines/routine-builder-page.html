@@ -1,0 +1,99 @@
+<section class="page builder">
+  <a mat-button routerLink="/routines" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'nav.routines' | transloco }}
+  </a>
+
+  @if (loading()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (notFound()) {
+    <p class="center">{{ 'routines.builder.notFound' | transloco }}</p>
+  } @else {
+    <form [formRoot]="routineForm" class="layout">
+      <div class="main">
+        <div class="head">
+          <mat-form-field class="name" subscriptSizing="dynamic">
+            <mat-label>{{ 'routines.builder.name' | transloco }}</mat-label>
+            <input matInput [formField]="routineForm.name" />
+            <mat-error>{{ routineForm.name().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <div class="save">
+            @if (dirty()) {
+              <span class="dirty" role="status">
+                <mat-icon aria-hidden="true">edit_note</mat-icon>
+                {{ 'common.unsaved.badge' | transloco }}
+              </span>
+            }
+            <button mat-flat-button type="submit" [disabled]="store.saving() || !dirty()">
+              {{ 'common.save' | transloco }}
+            </button>
+          </div>
+        </div>
+
+        <mat-form-field class="full-width" subscriptSizing="dynamic">
+          <mat-label>{{ 'routines.builder.notes' | transloco }}</mat-label>
+          <textarea matInput rows="2" [formField]="routineForm.notes"></textarea>
+          <mat-error>{{ routineForm.notes().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="picker-toggle"
+          [attr.aria-expanded]="showPicker()"
+          aria-controls="exercise-picker"
+          (click)="showPicker.set(!showPicker())"
+        >
+          <mat-icon>{{ showPicker() ? 'close' : 'add' }}</mat-icon>
+          {{
+            (showPicker() ? 'routines.builder.hidePicker' : 'routines.builder.showPicker')
+              | transloco
+          }}
+        </button>
+
+        @if (routineForm.items().errors().length && routineForm.items().touched()) {
+          <p class="error" role="alert">{{ routineForm.items().errors() | validationMessage }}</p>
+        }
+
+        <ol class="items" cdkDropList (cdkDropListDropped)="onDrop($event)">
+          @for (item of routineForm.items; track item().value().id; let i = $index, last = $last) {
+            <li cdkDrag cdkDragLockAxis="y">
+              <div class="placeholder" *cdkDragPlaceholder></div>
+              <app-routine-item-editor
+                [item]="item"
+                [index]="i"
+                [units]="units"
+                [linkedWithPrevious]="i > 0 && linked(i - 1)"
+                [linkedWithNext]="linked(i)"
+                [isLast]="last"
+                (removed)="remove(i)"
+                (linkToggled)="toggleLink(i)"
+                (setAdded)="addSet(i)"
+                (setRemoved)="removeSet(i, $event)"
+                (weekAdded)="addWeek(i)"
+                (weekRemoved)="removeWeek(i, $event)"
+              />
+            </li>
+          } @empty {
+            <li class="empty">
+              <mat-icon aria-hidden="true">playlist_add</mat-icon>
+              <p>{{ 'routines.builder.empty' | transloco }}</p>
+            </li>
+          }
+        </ol>
+      </div>
+
+      <aside
+        id="exercise-picker"
+        class="picker"
+        [class.open]="showPicker()"
+        [attr.aria-label]="'routines.builder.pickerTitle' | transloco"
+      >
+        <h2>{{ 'routines.builder.pickerTitle' | transloco }}</h2>
+        <app-exercise-picker (picked)="add($event)" />
+      </aside>
+    </form>
+  }
+</section>

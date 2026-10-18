@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.item {
+  padding: 8px 12px 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container-low);
+
+  // Supersets: one visual block with a gold spine.
+  &.linked-prev,
+  &.linked-next {
+    border-left: 4px solid var(--sg-gold);
+  }
+  &.linked-prev {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  &.linked-next {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  h3 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font: var(--mat-sys-title-medium);
+  }
+}
+
+.handle {
+  cursor: grab;
+}
+
+.index {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font: var(--mat-sys-label-large);
+}
+
+.missing {
+  color: var(--mat-sys-error);
+}
+
+.superset {
+  padding: 2px 8px;
+  border-radius: var(--mat-sys-corner-full);
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  font: var(--mat-sys-label-small);
+}
+
+.sets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+}
+
+.sets-head,
+.set {
+  display: grid;
+  grid-template-columns: 24px 140px 170px minmax(200px, 1fr) 110px 40px;
+  gap: 8px;
+  align-items: center;
+  min-width: 720px;
+}
+
+.sets-head {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.n {
+  text-align: center;
+  font: var(--mat-sys-label-large);
+}
+
+.reps,
+.load {
+  display: flex;
+  gap: 6px;
+
+  mat-form-field {
+    width: 80px;
+  }
+}
+
+.load {
+  .mode {
+    width: 120px;
+  }
+  mat-form-field:not(.mode) {
+    width: 110px;
+  }
+}
+
+.row-actions {
+  margin-top: 4px;
+}
+
+.notes {
+  margin-top: 8px;
+}
+
+.progression {
+  margin-top: 8px;
+
+  mat-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.error {
+  margin: 4px 0 0;
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-body-small);
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+
+  .on {
+    color: var(--sg-gold);
+  }
+}

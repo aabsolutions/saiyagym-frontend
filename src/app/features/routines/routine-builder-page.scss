@@ -1,0 +1,133 @@
+.builder {
+  max-width: 1400px;
+}
+
+.back {
+  margin-bottom: 8px;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  padding: 48px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1099.98px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  .name {
+    flex: 1 1 280px;
+  }
+}
+
+.save {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dirty {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--mat-sys-tertiary);
+  font: var(--mat-sys-label-large);
+}
+
+// Desktop: the picker is always visible on the side; the toggle is for handsets.
+.picker-toggle {
+  align-self: flex-start;
+
+  @media (min-width: 1100px) {
+    display: none;
+  }
+}
+
+.picker {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 104px);
+  padding: 16px;
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container);
+
+  h2 {
+    margin: 0 0 8px;
+    font: var(--mat-sys-title-medium);
+  }
+
+  @media (max-width: 1099.98px) {
+    position: static;
+    display: none;
+    max-height: 60vh;
+    order: -1;
+
+    &.open {
+      display: flex;
+    }
+  }
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.placeholder {
+  min-height: 72px;
+  border: 2px dashed var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 40px 16px;
+  border: 1px dashed var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  color: var(--mat-sys-on-surface-variant);
+  text-align: center;
+
+  mat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+  }
+}
+
+.error {
+  margin: 0;
+  color: var(--mat-sys-error);
+}

@@ -1,6 +1,7 @@
 import { max, maxLength, min, required, schema, validate } from '@angular/forms/signals';
 import { ProfileDto } from '../../api/models/profile-dto';
 import { UpdateProfileDto } from '../../api/models/update-profile-dto';
+import { todayIso } from '../format/local-dates';
 import { UnitSystem, cmToIn, inToCm } from '../units/units';
 
 export type Sex = NonNullable<ProfileDto['sex']>;
@@ -86,11 +87,7 @@ export function toUpdateProfileDto(
   };
 }
 
-/** Local calendar date as `YYYY-MM-DD` (what a native date input compares against). */
-export function todayIso(now = new Date()): string {
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-}
+export { todayIso } from '../format/local-dates';
 
 export interface ProfileSchemaOptions {
   units: () => UnitSystem;

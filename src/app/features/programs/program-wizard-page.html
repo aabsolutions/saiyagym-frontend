@@ -1,0 +1,313 @@
+@let d = draft();
+<section class="page wizard">
+  <a mat-button routerLink="/programs" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'nav.programs' | transloco }}
+  </a>
+  <h1 class="page-title">
+    {{ (id() ? 'programs.wizard.editTitle' : 'programs.wizard.createTitle') | transloco }}
+  </h1>
+
+  @if (loading()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (notFound()) {
+    <p class="center">{{ 'programs.wizard.notFound' | transloco }}</p>
+  } @else {
+    <mat-stepper
+      [orientation]="isHandset() ? 'vertical' : 'horizontal'"
+      (selectionChange)="onStep($event.selectedIndex)"
+    >
+      <!-- 1. Name & duration -->
+      <mat-step [label]="'programs.wizard.steps.basics' | transloco">
+        <div class="step">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'programs.wizard.name' | transloco }}</mat-label>
+            <input matInput [formField]="programForm.name" />
+            <mat-error>{{ programForm.name().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="weeks-field">
+            <mat-label>{{ 'programs.wizard.duration' | transloco }}</mat-label>
+            <input
+              matInput
+              type="number"
+              min="1"
+              max="52"
+              inputmode="numeric"
+              [value]="d.durationWeeks"
+              (change)="setWeeks($any($event.target).value)"
+            />
+            <span matTextSuffix>{{ 'programs.wizard.weeksSuffix' | transloco }}</span>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'programs.wizard.notes' | transloco }}</mat-label>
+            <textarea matInput rows="3" [formField]="programForm.notes"></textarea>
+            <mat-error>{{ programForm.notes().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <div class="actions">
+            <button mat-flat-button matStepperNext type="button">
+              {{ 'onboarding.next' | transloco }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- 2. Week × day grid -->
+      <mat-step [label]="'programs.wizard.steps.schedule' | transloco">
+        <div class="step">
+          <p class="hint">{{ 'programs.wizard.scheduleHint' | transloco }}</p>
+          @if (!store.routines().length) {
+            <p class="hint">
+              {{ 'programs.wizard.noRoutines' | transloco }}
+              <a routerLink="/routines/new">{{ 'routines.list.create' | transloco }}</a>
+            </p>
+          }
+          <div class="grid-wrap">
+            <table class="grid">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'programs.wizard.week' | transloco }}</th>
+                  @for (day of weekdays; track day) {
+                    <th scope="col">{{ 'profile.weekdaysShort.' + day | transloco }}</th>
+                  }
+                  <th scope="col">
+                    <span class="cdk-visually-hidden">{{ 'common.actions' | transloco }}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (week of weeks(); track week; let w = $index) {
+                  <tr [class.deload]="d.deloadWeeks.includes(week)">
+                    <th scope="row">{{ week }}</th>
+                    @for (day of weekdays; track day) {
+                      <td>
+                        <mat-select
+                          [value]="d.grid[w][day - 1]"
+                          (selectionChange)="setCell(w, day, $event.value)"
+                          [placeholder]="'programs.wizard.rest' | transloco"
+                          [attr.aria-label]="
+                            'programs.wizard.cellLabel'
+                              | transloco: { week, day: ('profile.weekdays.' + day | transloco) }
+                          "
+                          [class.filled]="!!d.grid[w][day - 1]"
+                        >
+                          <mat-option [value]="null">{{
+                            'programs.wizard.rest' | transloco
+                          }}</mat-option>
+                          @for (r of store.routines(); track r.id) {
+                            <mat-option [value]="r.id">{{ r.name }}</mat-option>
+                          }
+                          @if (d.grid[w][day - 1] && !routineName()(d.grid[w][day - 1])) {
+                            <mat-option [value]="d.grid[w][day - 1]" disabled>
+                              {{ 'programs.wizard.missingRoutine' | transloco }}
+                            </mat-option>
+                          }
+                        </mat-select>
+                      </td>
+                    }
+                    <td>
+                      @if (weeks().length > 1) {
+                        <button
+                          mat-icon-button
+                          type="button"
+                          [attr.aria-label]="'programs.wizard.copyWeek' | transloco: { week }"
+                          (click)="copyWeek(w)"
+                        >
+                          <mat-icon>content_copy</mat-icon>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <p class="hint">
+            {{ 'programs.wizard.trainingDays' | transloco: { count: trainingDays() } }}
+          </p>
+          @if (programForm.grid().errors().length && programForm.grid().touched()) {
+            <p class="error" role="alert">{{ programForm.grid().errors() | validationMessage }}</p>
+          }
+          <div class="actions">
+            <button mat-button matStepperPrevious type="button">
+              {{ 'onboarding.back' | transloco }}
+            </button>
+            <button mat-flat-button matStepperNext type="button">
+              {{ 'onboarding.next' | transloco }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- 3. Deload -->
+      <mat-step [label]="'programs.wizard.steps.deload' | transloco">
+        <div class="step">
+          <p class="hint">{{ 'programs.wizard.deloadHint' | transloco }}</p>
+          <mat-chip-listbox multiple [attr.aria-label]="'programs.wizard.deloadWeeks' | transloco">
+            @for (week of weeks(); track week) {
+              <mat-chip-option
+                [selected]="d.deloadWeeks.includes(week)"
+                (selectionChange)="toggleDeload(week)"
+              >
+                {{ 'programs.wizard.weekN' | transloco: { n: week } }}
+              </mat-chip-option>
+            }
+          </mat-chip-listbox>
+          @if (d.deloadWeeks.length) {
+            <div class="row">
+              <mat-form-field>
+                <mat-label>{{ 'programs.wizard.deloadMode' | transloco }}</mat-label>
+                <mat-select [formField]="programForm.deloadMode">
+                  <mat-option value="weight">{{
+                    'programs.wizard.deloadWeight' | transloco
+                  }}</mat-option>
+                  <mat-option value="sets">{{
+                    'programs.wizard.deloadSets' | transloco
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{ 'programs.wizard.deloadPercent' | transloco }}</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  inputmode="numeric"
+                  [formField]="programForm.deloadPercent"
+                />
+                <span matTextSuffix>{{ 'routines.builder.percentSuffix' | transloco }}</span>
+                <mat-error>{{
+                  programForm.deloadPercent().errors() | validationMessage
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          }
+          <div class="actions">
+            <button mat-button matStepperPrevious type="button">
+              {{ 'onboarding.back' | transloco }}
+            </button>
+            <button mat-flat-button matStepperNext type="button">
+              {{ 'onboarding.next' | transloco }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- 4. Progression (Premium) & training maxes -->
+      <mat-step [label]="'programs.wizard.steps.progression' | transloco">
+        <div class="step">
+          <h2>{{ 'programs.wizard.rulesTitle' | transloco }}</h2>
+          <p class="hint">{{ 'programs.wizard.rulesHint' | transloco }}</p>
+          <div *requireFeature="'autoProgression'; else locked" class="panels">
+            @for (routine of scheduled(); track routine.id) {
+              <app-routine-rules-panel [routine]="routine" [units]="units" />
+            } @empty {
+              <p class="hint">{{ 'programs.wizard.noScheduled' | transloco }}</p>
+            }
+          </div>
+          <ng-template #locked>
+            <app-upgrade-cta feature="autoProgression" [compact]="true" />
+          </ng-template>
+
+          @if (maxNeeds().length) {
+            <h2>{{ 'programs.wizard.maxesTitle' | transloco }}</h2>
+            <p class="hint">{{ 'programs.wizard.maxesHint' | transloco }}</p>
+            <div class="maxes">
+              @for (need of maxNeeds(); track need.exerciseId) {
+                @let i = maxIndex(need.exerciseId);
+                @if (i >= 0) {
+                  <mat-form-field>
+                    <mat-label>{{ need.name }}</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      step="0.5"
+                      inputmode="decimal"
+                      [formField]="programForm.trainingMaxes[i].value"
+                    />
+                    <span matTextSuffix>{{
+                      (units === 'imperial' ? 'units.lb' : 'units.kg') | transloco
+                    }}</span>
+                    <mat-error>{{
+                      programForm.trainingMaxes[i].value().errors() | validationMessage
+                    }}</mat-error>
+                  </mat-form-field>
+                }
+              }
+            </div>
+          }
+          <div class="actions">
+            <button mat-button matStepperPrevious type="button">
+              {{ 'onboarding.back' | transloco }}
+            </button>
+            <button mat-flat-button matStepperNext type="button">
+              {{ 'onboarding.next' | transloco }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- 5. Review -->
+      <mat-step [label]="'programs.wizard.steps.review' | transloco">
+        <div class="step">
+          <dl class="summary">
+            <dt>{{ 'programs.wizard.name' | transloco }}</dt>
+            <dd>{{ d.name || ('profile.notSet' | transloco) }}</dd>
+            <dt>{{ 'programs.wizard.duration' | transloco }}</dt>
+            <dd>{{ 'programs.wizard.weeksCount' | transloco: { count: d.durationWeeks } }}</dd>
+            <dt>{{ 'programs.wizard.steps.schedule' | transloco }}</dt>
+            <dd>{{ 'programs.wizard.trainingDays' | transloco: { count: trainingDays() } }}</dd>
+            <dt>{{ 'programs.wizard.steps.deload' | transloco }}</dt>
+            <dd>
+              @if (d.deloadWeeks.length) {
+                {{
+                  'programs.wizard.deloadSummary'
+                    | transloco: { weeks: d.deloadWeeks.join(', '), percent: d.deloadPercent }
+                }}
+              } @else {
+                {{ 'programs.wizard.noDeload' | transloco }}
+              }
+            </dd>
+          </dl>
+
+          @if (canActivate()) {
+            <mat-form-field class="start">
+              <mat-label>{{ 'programs.wizard.startDate' | transloco }}</mat-label>
+              <input
+                matInput
+                type="date"
+                [value]="startDate()"
+                (change)="startDate.set($any($event.target).value || startDate())"
+              />
+            </mat-form-field>
+          }
+
+          <div class="actions">
+            <button mat-button matStepperPrevious type="button">
+              {{ 'onboarding.back' | transloco }}
+            </button>
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="store.saving()"
+              (click)="save(false)"
+            >
+              {{ (canActivate() ? 'programs.wizard.saveDraft' : 'common.save') | transloco }}
+            </button>
+            @if (canActivate()) {
+              <button
+                mat-flat-button
+                type="button"
+                [disabled]="store.saving()"
+                (click)="save(true)"
+              >
+                <mat-icon>play_arrow</mat-icon>
+                {{ 'programs.wizard.saveActivate' | transloco }}
+              </button>
+            }
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  }
+</section>

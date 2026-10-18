@@ -104,7 +104,14 @@
     "saved": "Cambios guardados.",
     "comingSoon": "Esta sección está en construcción.",
     "loading": "Cargando…",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "actions": "Acciones",
+    "unsaved": {
+      "title": "¿Salir sin guardar?",
+      "message": "Tienes cambios sin guardar. Si sales ahora, se perderán.",
+      "leave": "Salir sin guardar",
+      "badge": "Cambios sin guardar"
+    }
   },
   "pages": {
     "dashboard": {
@@ -299,6 +306,15 @@
       "typeToConfirm": "Escribe {{word}} para confirmar",
       "deleteConfirm": "Eliminar definitivamente",
       "deleted": "Tu cuenta se eliminó."
+    },
+    "weekdaysShort": {
+      "1": "Lun",
+      "2": "Mar",
+      "3": "Mié",
+      "4": "Jue",
+      "5": "Vie",
+      "6": "Sáb",
+      "7": "Dom"
     }
   },
   "plans": {
@@ -484,6 +500,217 @@
       "strength": "Fuerza",
       "powerlifting_main": "Básico de powerlifting",
       "accessory": "Accesorio"
+    }
+  },
+  "routines": {
+    "setType": {
+      "warmup": "Calentamiento",
+      "normal": "Normal",
+      "dropset": "Drop set",
+      "failure": "Al fallo"
+    },
+    "loadMode": {
+      "none": "Sin carga",
+      "weight": "Peso",
+      "percent": "% 1RM"
+    },
+    "list": {
+      "create": "Nueva rutina",
+      "usage": "Rutinas: {{count}} de {{max}}",
+      "view": "Mostrar",
+      "active": "Activas",
+      "archivedView": "Archivadas",
+      "counts": "{{exercises}} ejercicios · {{sets}} series",
+      "updated": "Editada {{date}}",
+      "actions": "Acciones de {{name}}",
+      "edit": "Editar",
+      "duplicate": "Duplicar",
+      "archive": "Archivar",
+      "unarchive": "Desarchivar",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar esta rutina?",
+      "deleteMessage": "Se elimina de tu lista. Si un programa en borrador o activo la usa, primero quítala del programa.",
+      "duplicated": "Rutina duplicada.",
+      "archived": "Rutina archivada. Ya no cuenta para el límite de tu plan.",
+      "unarchived": "Rutina restaurada.",
+      "deleted": "Rutina eliminada.",
+      "empty": "Todavía no tienes rutinas. Crea la primera o usa una plantilla de programa.",
+      "emptyArchived": "No tienes rutinas archivadas."
+    },
+    "builder": {
+      "name": "Nombre de la rutina",
+      "notes": "Notas",
+      "notFound": "Esta rutina no existe o no tienes acceso.",
+      "invalid": "Revisa los campos marcados antes de guardar.",
+      "pickerTitle": "Añadir ejercicios",
+      "showPicker": "Añadir ejercicios",
+      "hidePicker": "Cerrar buscador",
+      "addExercise": "Añadir {{name}}",
+      "added": "{{name}} añadido.",
+      "empty": "Añade ejercicios desde el buscador.",
+      "dragHandle": "Mover {{name}}",
+      "missingExercise": "Ejercicio no disponible",
+      "removeExercise": "Quitar {{name}}",
+      "superset": "Superserie",
+      "link": "Superserie con el siguiente",
+      "unlink": "Separar superserie",
+      "sets": "Series",
+      "setNumber": "N.º",
+      "setType": "Tipo",
+      "reps": "Repeticiones",
+      "min": "Mín",
+      "max": "Máx",
+      "load": "Carga",
+      "loadMode": "Tipo de carga",
+      "weight": "Peso",
+      "percent": "% 1RM",
+      "percentSuffix": "%",
+      "rest": "Descanso",
+      "seconds": "s",
+      "addSet": "Añadir serie",
+      "removeSet": "Quitar serie {{n}}",
+      "exerciseNotes": "Notas del ejercicio"
+    },
+    "progression": {
+      "title": "Progresión automática",
+      "kind": {
+        "none": "Sin progresión",
+        "double_progression": "Doble progresión",
+        "percent_1rm": "% del 1RM por semana"
+      },
+      "doubleHint": "Cuando completes el máximo del rango en todas las series, la próxima vez sube el peso.",
+      "percentHint": "Cada semana trabaja a un % de tu máximo (training max o 1RM estimado). Si el programa es más largo, las semanas se repiten.",
+      "increment": "Incremento",
+      "rounding": "Redondeo",
+      "defaultHint": "Vacío = 2,5 kg compuestos / 1 kg aislados",
+      "week": "Semana {{n}}",
+      "percent": "%",
+      "reps": "Reps",
+      "sets": "Series",
+      "addWeek": "Añadir semana",
+      "removeWeek": "Quitar semana {{n}}"
+    }
+  },
+  "programs": {
+    "tabs": {
+      "mine": "Mis programas",
+      "week": "Esta semana",
+      "templates": "Plantillas"
+    },
+    "status": {
+      "draft": "Borrador",
+      "active": "Activo",
+      "completed": "Completado"
+    },
+    "list": {
+      "create": "Nuevo programa",
+      "fromTemplate": "Desde una plantilla",
+      "startedOn": "Desde el {{date}}",
+      "actions": "Acciones de {{name}}",
+      "activate": "Activar",
+      "deactivate": "Pausar",
+      "complete": "Marcar como completado",
+      "completeTitle": "¿Completar el programa?",
+      "completeMessage": "Quedará como completado y no se podrá reactivar.",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar este programa?",
+      "deleteMessage": "Las rutinas no se eliminan; siguen en tu lista.",
+      "activated": "Programa activado.",
+      "deactivated": "Programa pausado.",
+      "completed": "Programa completado.",
+      "deleted": "Programa eliminado.",
+      "empty": "Todavía no tienes programas. Crea uno o empieza desde una plantilla."
+    },
+    "activate": {
+      "title": "Activar «{{name}}»",
+      "message": "¿Qué día empieza la semana 1? Es la fecha de tu calendario, en tu zona horaria."
+    },
+    "wizard": {
+      "createTitle": "Nuevo programa",
+      "editTitle": "Editar programa",
+      "notFound": "Este programa no existe o no tienes acceso.",
+      "invalid": "Revisa los pasos con errores antes de guardar.",
+      "steps": {
+        "basics": "Nombre y duración",
+        "schedule": "Calendario",
+        "deload": "Descarga",
+        "progression": "Progresión",
+        "review": "Revisar"
+      },
+      "name": "Nombre",
+      "notes": "Notas",
+      "duration": "Duración",
+      "weeksSuffix": "semanas",
+      "weeksCount": "{{count}} semanas",
+      "week": "Semana",
+      "weekN": "Semana {{n}}",
+      "scheduleHint": "Elige qué rutina toca cada día. Los días sin rutina son de descanso.",
+      "noRoutines": "Aún no tienes rutinas para programar.",
+      "rest": "Descanso",
+      "missingRoutine": "Rutina no disponible",
+      "cellLabel": "Semana {{week}}, {{day}}",
+      "copyWeek": "Copiar la semana {{week}} a todas",
+      "trainingDays": "{{count}} días de entrenamiento en total",
+      "deloadHint": "En las semanas de descarga se reduce el peso o el número de series para recuperarte.",
+      "deloadWeeks": "Semanas de descarga",
+      "deloadMode": "Cómo descargar",
+      "deloadWeight": "Bajar el peso",
+      "deloadSets": "Bajar las series",
+      "deloadPercent": "Reducción",
+      "deloadSummary": "Semanas {{weeks}} (−{{percent}} %)",
+      "noDeload": "Sin semanas de descarga",
+      "rulesTitle": "Reglas por ejercicio",
+      "rulesHint": "Las reglas se guardan en cada rutina: si usas la misma rutina en otro programa, también se aplican allí.",
+      "rulesCount": "{{count}} con progresión",
+      "noScheduled": "Asigna rutinas en el calendario para configurar su progresión.",
+      "maxesTitle": "Tus máximos (training max)",
+      "maxesHint": "Para los ejercicios con objetivos en % del 1RM. Si lo dejas vacío se usa tu 1RM estimado del historial.",
+      "startDate": "Fecha de inicio",
+      "saveDraft": "Guardar borrador",
+      "saveActivate": "Guardar y activar"
+    },
+    "templates": {
+      "hint": "Programas creados por el equipo de SaiyaGym. Al usar uno se copian sus rutinas a tu cuenta.",
+      "daysPerWeek": "{{count}} días/semana",
+      "routines": "{{count}} rutinas",
+      "withProgression": "Con progresión automática",
+      "progressionDropped": "La progresión automática es Premium: se copiará sin sus reglas.",
+      "empty": "No hay plantillas disponibles.",
+      "notFound": "Esta plantilla no existe.",
+      "setsReps": "{{sets}} × {{reps}}",
+      "use": "Usar plantilla",
+      "useTitle": "Usar esta plantilla",
+      "useMessage": "Se crean sus rutinas en tu cuenta y un programa en borrador que podrás ajustar.",
+      "copied": "Plantilla copiada. Revisa el programa y actívalo.",
+      "copiedWithoutRules": "Plantilla copiada sin reglas de progresión (Premium).",
+      "copiedSkipped": "Plantilla copiada. Se omitieron {{count}} ejercicios que ya no existen."
+    },
+    "week": {
+      "noActive": "No tienes un programa activo.",
+      "program": "Programa",
+      "previous": "Semana anterior",
+      "next": "Semana siguiente",
+      "today": "Hoy",
+      "startsIn": "Empieza en {{days}} días.",
+      "finished": "El programa ya terminó.",
+      "weekOf": "Semana {{week}} de {{total}}",
+      "deload": "Semana de descarga",
+      "noProgression": "Sin progresión automática en tu plan: se muestran los objetivos de la rutina.",
+      "routineMissing": "La rutina de este día ya no existe.",
+      "outside": "Fuera del programa",
+      "noWeight": "—",
+      "setLine": "{{count}} × {{reps}} · {{weight}}"
+    },
+    "notes": {
+      "PERCENT_OF_MAX": "Peso calculado con tu máximo",
+      "NO_REFERENCE_MAX": "Sin máximo de referencia: elige el peso",
+      "PROGRESSION_DISABLED": "Progresión automática no disponible en tu plan",
+      "NO_HISTORY": "Primera vez: usa el peso objetivo",
+      "INCREASE": "Sube {{increment}}",
+      "HOLD": "Mantén el peso",
+      "WEEK_PERCENT": "{{percent}} % del máximo",
+      "DELOAD_WEIGHT": "Descarga: −{{percent}} % de peso",
+      "DELOAD_SETS": "Descarga: −{{percent}} % de series"
     }
   }
 }

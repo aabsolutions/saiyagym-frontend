@@ -104,7 +104,14 @@
     "saved": "Changes saved.",
     "comingSoon": "This section is under construction.",
     "loading": "Loading…",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "actions": "Actions",
+    "unsaved": {
+      "title": "Leave without saving?",
+      "message": "You have unsaved changes. If you leave now, they will be lost.",
+      "leave": "Leave without saving",
+      "badge": "Unsaved changes"
+    }
   },
   "pages": {
     "dashboard": {
@@ -299,6 +306,15 @@
       "typeToConfirm": "Type {{word}} to confirm",
       "deleteConfirm": "Delete permanently",
       "deleted": "Your account was deleted."
+    },
+    "weekdaysShort": {
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat",
+      "7": "Sun"
     }
   },
   "plans": {
@@ -484,6 +500,217 @@
       "strength": "Strength",
       "powerlifting_main": "Powerlifting main lift",
       "accessory": "Accessory"
+    }
+  },
+  "routines": {
+    "setType": {
+      "warmup": "Warm-up",
+      "normal": "Normal",
+      "dropset": "Drop set",
+      "failure": "To failure"
+    },
+    "loadMode": {
+      "none": "No load",
+      "weight": "Weight",
+      "percent": "% 1RM"
+    },
+    "list": {
+      "create": "New routine",
+      "usage": "Routines: {{count}} of {{max}}",
+      "view": "Show",
+      "active": "Active",
+      "archivedView": "Archived",
+      "counts": "{{exercises}} exercises · {{sets}} sets",
+      "updated": "Edited {{date}}",
+      "actions": "Actions for {{name}}",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "delete": "Delete",
+      "deleteTitle": "Delete this routine?",
+      "deleteMessage": "It is removed from your list. If a draft or active program uses it, remove it from the program first.",
+      "duplicated": "Routine duplicated.",
+      "archived": "Routine archived. It no longer counts toward your plan limit.",
+      "unarchived": "Routine restored.",
+      "deleted": "Routine deleted.",
+      "empty": "You don't have routines yet. Create one or start from a program template.",
+      "emptyArchived": "You don't have archived routines."
+    },
+    "builder": {
+      "name": "Routine name",
+      "notes": "Notes",
+      "notFound": "This routine doesn't exist or you can't access it.",
+      "invalid": "Check the highlighted fields before saving.",
+      "pickerTitle": "Add exercises",
+      "showPicker": "Add exercises",
+      "hidePicker": "Close search",
+      "addExercise": "Add {{name}}",
+      "added": "{{name}} added.",
+      "empty": "Add exercises from the search panel.",
+      "dragHandle": "Move {{name}}",
+      "missingExercise": "Exercise not available",
+      "removeExercise": "Remove {{name}}",
+      "superset": "Superset",
+      "link": "Superset with next",
+      "unlink": "Split superset",
+      "sets": "Sets",
+      "setNumber": "No.",
+      "setType": "Type",
+      "reps": "Reps",
+      "min": "Min",
+      "max": "Max",
+      "load": "Load",
+      "loadMode": "Load type",
+      "weight": "Weight",
+      "percent": "% 1RM",
+      "percentSuffix": "%",
+      "rest": "Rest",
+      "seconds": "s",
+      "addSet": "Add set",
+      "removeSet": "Remove set {{n}}",
+      "exerciseNotes": "Exercise notes"
+    },
+    "progression": {
+      "title": "Auto-progression",
+      "kind": {
+        "none": "No progression",
+        "double_progression": "Double progression",
+        "percent_1rm": "% of 1RM per week"
+      },
+      "doubleHint": "When you hit the top of the rep range on every set, the weight goes up next time.",
+      "percentHint": "Each week works at a % of your max (training max or estimated 1RM). Weeks repeat if the program is longer.",
+      "increment": "Increment",
+      "rounding": "Rounding",
+      "defaultHint": "Empty = 2.5 kg compound / 1 kg isolation",
+      "week": "Week {{n}}",
+      "percent": "%",
+      "reps": "Reps",
+      "sets": "Sets",
+      "addWeek": "Add week",
+      "removeWeek": "Remove week {{n}}"
+    }
+  },
+  "programs": {
+    "tabs": {
+      "mine": "My programs",
+      "week": "This week",
+      "templates": "Templates"
+    },
+    "status": {
+      "draft": "Draft",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "list": {
+      "create": "New program",
+      "fromTemplate": "From a template",
+      "startedOn": "Since {{date}}",
+      "actions": "Actions for {{name}}",
+      "activate": "Activate",
+      "deactivate": "Pause",
+      "complete": "Mark as completed",
+      "completeTitle": "Complete the program?",
+      "completeMessage": "It will be marked as completed and can't be reactivated.",
+      "delete": "Delete",
+      "deleteTitle": "Delete this program?",
+      "deleteMessage": "Routines are not deleted; they stay in your list.",
+      "activated": "Program activated.",
+      "deactivated": "Program paused.",
+      "completed": "Program completed.",
+      "deleted": "Program deleted.",
+      "empty": "You don't have programs yet. Create one or start from a template."
+    },
+    "activate": {
+      "title": "Activate “{{name}}”",
+      "message": "Which day does week 1 start? It is your calendar date, in your time zone."
+    },
+    "wizard": {
+      "createTitle": "New program",
+      "editTitle": "Edit program",
+      "notFound": "This program doesn't exist or you can't access it.",
+      "invalid": "Check the steps with errors before saving.",
+      "steps": {
+        "basics": "Name & length",
+        "schedule": "Schedule",
+        "deload": "Deload",
+        "progression": "Progression",
+        "review": "Review"
+      },
+      "name": "Name",
+      "notes": "Notes",
+      "duration": "Length",
+      "weeksSuffix": "weeks",
+      "weeksCount": "{{count}} weeks",
+      "week": "Week",
+      "weekN": "Week {{n}}",
+      "scheduleHint": "Pick the routine for each day. Days without a routine are rest days.",
+      "noRoutines": "You don't have routines to schedule yet.",
+      "rest": "Rest",
+      "missingRoutine": "Routine not available",
+      "cellLabel": "Week {{week}}, {{day}}",
+      "copyWeek": "Copy week {{week}} to all weeks",
+      "trainingDays": "{{count}} training days in total",
+      "deloadHint": "Deload weeks reduce the weight or the number of sets so you can recover.",
+      "deloadWeeks": "Deload weeks",
+      "deloadMode": "How to deload",
+      "deloadWeight": "Lower the weight",
+      "deloadSets": "Fewer sets",
+      "deloadPercent": "Reduction",
+      "deloadSummary": "Weeks {{weeks}} (−{{percent}}%)",
+      "noDeload": "No deload weeks",
+      "rulesTitle": "Rules per exercise",
+      "rulesHint": "Rules are saved in each routine: if you use the same routine in another program, they apply there too.",
+      "rulesCount": "{{count}} with progression",
+      "noScheduled": "Schedule routines first to set up their progression.",
+      "maxesTitle": "Your maxes (training max)",
+      "maxesHint": "For exercises with targets as a % of 1RM. Leave empty to use your estimated 1RM from history.",
+      "startDate": "Start date",
+      "saveDraft": "Save draft",
+      "saveActivate": "Save & activate"
+    },
+    "templates": {
+      "hint": "Programs made by the SaiyaGym team. Using one copies its routines into your account.",
+      "daysPerWeek": "{{count}} days/week",
+      "routines": "{{count}} routines",
+      "withProgression": "With auto-progression",
+      "progressionDropped": "Auto-progression is Premium: it will be copied without its rules.",
+      "empty": "No templates available.",
+      "notFound": "This template doesn't exist.",
+      "setsReps": "{{sets}} × {{reps}}",
+      "use": "Use template",
+      "useTitle": "Use this template",
+      "useMessage": "Its routines are created in your account, plus a draft program you can adjust.",
+      "copied": "Template copied. Review the program and activate it.",
+      "copiedWithoutRules": "Template copied without progression rules (Premium).",
+      "copiedSkipped": "Template copied. {{count}} exercises no longer exist and were skipped."
+    },
+    "week": {
+      "noActive": "You don't have an active program.",
+      "program": "Program",
+      "previous": "Previous week",
+      "next": "Next week",
+      "today": "Today",
+      "startsIn": "Starts in {{days}} days.",
+      "finished": "The program has finished.",
+      "weekOf": "Week {{week}} of {{total}}",
+      "deload": "Deload week",
+      "noProgression": "No auto-progression on your plan: the routine targets are shown.",
+      "routineMissing": "This day's routine no longer exists.",
+      "outside": "Outside the program",
+      "noWeight": "—",
+      "setLine": "{{count}} × {{reps}} · {{weight}}"
+    },
+    "notes": {
+      "PERCENT_OF_MAX": "Weight from your max",
+      "NO_REFERENCE_MAX": "No reference max: choose the weight",
+      "PROGRESSION_DISABLED": "Auto-progression not available on your plan",
+      "NO_HISTORY": "First time: use the target weight",
+      "INCREASE": "Add {{increment}}",
+      "HOLD": "Keep the weight",
+      "WEEK_PERCENT": "{{percent}}% of max",
+      "DELOAD_WEIGHT": "Deload: −{{percent}}% weight",
+      "DELOAD_SETS": "Deload: −{{percent}}% sets"
     }
   }
 }

@@ -1,0 +1,94 @@
+<section class="page">
+  <a mat-button routerLink="/programs/templates" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'programs.tabs.templates' | transloco }}
+  </a>
+
+  @if (store.isPending()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (store.detail(); as t) {
+    <header class="head">
+      <div>
+        <h1 class="page-title">{{ t.name }}</h1>
+        <p class="tags">
+          <span>{{ 'profile.goal.' + t.goal | transloco }}</span>
+          <span>{{ 'profile.level.' + t.level | transloco }}</span>
+          <span>{{ 'programs.wizard.weeksCount' | transloco: { count: t.durationWeeks } }}</span>
+          <span>{{ 'programs.templates.daysPerWeek' | transloco: { count: t.daysPerWeek } }}</span>
+        </p>
+        <p class="desc">{{ t.description }}</p>
+      </div>
+      <button mat-flat-button type="button" (click)="use()">
+        <mat-icon>download_done</mat-icon>
+        {{ 'programs.templates.use' | transloco }}
+      </button>
+    </header>
+
+    <h2>{{ 'programs.wizard.steps.schedule' | transloco }}</h2>
+    <div class="grid-wrap">
+      <table class="grid">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'programs.wizard.week' | transloco }}</th>
+            @for (day of weekdays; track day) {
+              <th scope="col">{{ 'profile.weekdaysShort.' + day | transloco }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (week of t.weeks; track $index; let w = $index) {
+            <tr [class.deload]="t.deload.weeks.includes(w + 1)">
+              <th scope="row">{{ w + 1 }}</th>
+              @for (day of weekdays; track day) {
+                @let name = routineOn(week, day);
+                <td [class.filled]="!!name">{{ name ?? ('programs.wizard.rest' | transloco) }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (t.deload.weeks.length) {
+      <p class="hint">
+        {{
+          'programs.wizard.deloadSummary'
+            | transloco: { weeks: t.deload.weeks.join(', '), percent: t.deload.percent }
+        }}
+      </p>
+    }
+
+    <h2>{{ 'nav.routines' | transloco }}</h2>
+    <div class="routines">
+      @for (r of t.routines; track r.key) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ r.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ol class="exercises">
+              @for (e of r.exercises; track $index) {
+                @let summary = setsSummary(e.sets);
+                <li [class.missing]="!e.exerciseId">
+                  <span>{{ e.name ?? e.exerciseSlug }}</span>
+                  <span class="sets">
+                    {{
+                      'programs.templates.setsReps'
+                        | transloco: { sets: summary.count, reps: summary.reps }
+                    }}
+                  </span>
+                  @if (e.progression) {
+                    <mat-icon class="rule" aria-hidden="true">trending_up</mat-icon>
+                  }
+                </li>
+              }
+            </ol>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  } @else if (store.error()) {
+    <p class="center">{{ 'programs.templates.notFound' | transloco }}</p>
+  }
+</section>

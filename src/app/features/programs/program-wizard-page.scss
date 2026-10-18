@@ -1,0 +1,132 @@
+.wizard {
+  max-width: 1200px;
+}
+
+.back {
+  margin-bottom: 8px;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  padding: 48px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+
+  h2 {
+    margin: 8px 0 0;
+    font: var(--mat-sys-title-medium);
+  }
+}
+
+.weeks-field {
+  max-width: 200px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.error {
+  margin: 0;
+  color: var(--mat-sys-error);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.grid-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+.grid {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    text-align: center;
+  }
+
+  thead th {
+    font: var(--mat-sys-label-large);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  tbody th {
+    width: 48px;
+    font: var(--mat-sys-title-small);
+  }
+
+  // Deload weeks get the gold accent.
+  tr.deload th {
+    color: var(--sg-gold);
+  }
+
+  mat-select {
+    min-width: 100px;
+    padding: 6px 8px;
+    border-radius: var(--mat-sys-corner-small);
+    background: var(--mat-sys-surface-container);
+    text-align: left;
+
+    &.filled {
+      background: var(--mat-sys-primary-container);
+      color: var(--mat-sys-on-primary-container);
+    }
+  }
+}
+
+.panels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.maxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0 12px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 24px;
+  margin: 0;
+
+  dt {
+    font: var(--mat-sys-label-large);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.start {
+  max-width: 240px;
+}
