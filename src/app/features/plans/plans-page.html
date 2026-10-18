@@ -1,0 +1,93 @@
+<section class="page">
+  <h1 class="page-title">{{ 'plans.title' | transloco }}</h1>
+  <p class="subtitle">{{ 'plans.subtitle' | transloco }}</p>
+
+  @if (store.isPending()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (store.error()) {
+    <div class="center">
+      <button mat-stroked-button type="button" (click)="store.load()">
+        {{ 'coldStart.retry' | transloco }}
+      </button>
+    </div>
+  } @else {
+    <div class="table-wrap">
+      <table class="comparison">
+        <caption class="cdk-visually-hidden">
+          {{
+            'plans.title' | transloco
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <span class="cdk-visually-hidden">{{ 'plans.feature' | transloco }}</span>
+            </th>
+            @for (plan of store.plans(); track plan.id) {
+              <th scope="col" [class.current]="isCurrent(plan.code)">
+                <span class="plan-name">{{ plan.name }}</span>
+                <span class="plan-description">{{ plan.description }}</span>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of store.comparison(); track row.labelKey) {
+            <tr>
+              <th scope="row">{{ row.labelKey | transloco }}</th>
+              @for (cell of row.cells; track $index) {
+                <td [class.current]="isCurrent(store.plans()[$index].code)">
+                  @switch (cell.type) {
+                    @case ('included') {
+                      <mat-icon
+                        [class.yes]="cell.value"
+                        [attr.aria-label]="
+                          (cell.value ? 'plans.included' : 'plans.notIncluded') | transloco
+                        "
+                      >
+                        {{ cell.value ? 'check_circle' : 'remove' }}
+                      </mat-icon>
+                    }
+                    @case ('limit') {
+                      {{
+                        cell.value === null
+                          ? ('plans.unlimited' | transloco)
+                          : ('plans.upTo' | transloco: { count: cell.value })
+                      }}
+                    }
+                    @case ('history') {
+                      {{
+                        cell.days === null
+                          ? ('plans.fullHistory' | transloco)
+                          : ('plans.lastDays' | transloco: { days: cell.days })
+                      }}
+                    }
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            @for (plan of store.plans(); track plan.id) {
+              <td [class.current]="isCurrent(plan.code)">
+                @if (isCurrent(plan.code)) {
+                  <span class="badge">{{ 'plans.yourPlan' | transloco }}</span>
+                } @else {
+                  <button mat-flat-button type="button" disabled>
+                    {{ 'plans.comingSoon' | transloco }}
+                  </button>
+                }
+              </td>
+            }
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="note">{{ 'plans.paymentsNote' | transloco }}</p>
+  }
+</section>

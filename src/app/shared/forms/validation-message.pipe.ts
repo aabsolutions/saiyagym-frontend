@@ -26,6 +26,21 @@ export class ValidationMessagePipe implements PipeTransform {
         return this.transloco.translate('validation.maxlength', {
           max: (error as ValidationError & { maxLength: number }).maxLength,
         });
+      case 'min':
+        return this.transloco.translate('validation.min', {
+          min: (error as ValidationError & { min: number }).min,
+        });
+      case 'max':
+        return this.transloco.translate('validation.max', {
+          max: (error as ValidationError & { max: number }).max,
+        });
+      // App-specific kinds, raised by our own `validate()` rules.
+      case 'futureDate':
+        return this.transloco.translate('validation.futureDate');
+      case 'passwordMismatch':
+        return this.transloco.translate('validation.passwordMismatch');
+      case 'confirmationMismatch':
+        return this.transloco.translate('validation.confirmationMismatch');
       default:
         // Server-side errors carry an already-localized message.
         return error.message ?? this.transloco.translate('errors.VALIDATION_ERROR');

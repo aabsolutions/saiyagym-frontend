@@ -1,5 +1,39 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Auth, perfil, onboarding y planes
+
+### Hecho
+
+- **Auth** (ya existían de la base): login, registro, verificar email, olvidé / restablecer contraseña, con validación y mensajes traducidos. Guards `authGuard`, `guestGuard`, `adminGuard`.
+- **AuthStore**: suma `hasFeature(feature)`, `limit(key)`, `changePassword()` y `deleteAccount()` (además de usuario, plan, entitlements y estado de sesión).
+- **Onboarding** (`/onboarding`, fuera del shell): wizard `mat-stepper` (vertical en móvil) de 3 pasos: idioma + unidades → datos físicos (nacimiento, sexo, altura) → nivel + objetivo (obligatorios). `onboardingGuard` en el shell, después de `authGuard`: perfil sin `level` o `goal` = primer login. "Omitir" queda guardado por usuario en `localStorage` (`sg.onboarding.skipped.<id>`).
+- **Perfil** (`/profile`): datos personales + físicos + entrenamiento; preferencias (idioma, unidades, tema, descanso por defecto, primer día de la semana); plan actual; cambio de contraseña (confirmación coincidente; la API cierra las otras sesiones); cerrar sesión en todos los dispositivos (con confirmación); eliminar cuenta (escribir "ELIMINAR"/"DELETE" + contraseña; el diálogo sigue abierto si la contraseña es incorrecta).
+- **Modelo de perfil compartido** (`shared/profile/profile-form.ts`): mapeo DTO ↔ formulario, altura en la unidad del usuario (cm/in) con los límites del API convertidos, schema reutilizado por onboarding (`requireTraining: true`) y perfil. Campos presentacionales `app-physical-fields`, `app-training-fields`, `app-preferences-fields`.
+- **Gating por plan**: `*requireFeature="'progressPhotos'"` (con `; else tpl` opcional; por defecto muestra `<app-upgrade-cta>`) y `<app-upgrade-cta [feature] | [limit] [limitValue]>`. Ante `403 PLAN_FEATURE_REQUIRED` / `PLAN_LIMIT_REACHED`, `errorInterceptor` abre un diálogo de upgrade (uno a la vez) en lugar del snackbar, leyendo `details.feature` / `details.resource|limit`.
+- **Planes** (`/plans`, en el menú): comparación de los planes de `GET /plans` armada desde sus entitlements (límites, ventana de estadísticas, features); el plan actual resaltado y "Próximamente" en el resto (todavía no hay pagos).
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 66/66 ✅ (+26) · `npm run build:gh` ✅ (inicial 533 kB raw / 137 kB transferidos).
+- Tests nuevos: mapeo y schema del perfil (cm↔in, nulls, límites, fecha futura, training obligatorio solo en onboarding), `planRestrictionOf`, comparación de planes, `*requireFeature` (CTA, else, reacciona al cambio de plan), onboarding (detección, guard, "omitir" por usuario), errores `PLAN_*` → diálogo y no snackbar, tarjeta de cambio de contraseña (no envía si no coinciden; limpia al terminar).
+- **No verificado en navegador**: onboarding, perfil, diálogos y página de planes contra la API real.
+
+### Decisiones y gotchas
+
+- **Signal Forms, no Reactive Forms**: el pedido decía "formularios reactivos tipados". En Angular 22 Signal Forms es la API estable (`@publicApi 22.0`), tipada de punta a punta desde el modelo y ya usada en la base. Mezclar `FormGroup` acá daría dos sistemas de formularios en la misma app.
+- **Deriva de altura en imperial**: in→cm→in con 1 decimal convertía 164 cm en 164,1 cm en cada guardado. `toUpdateProfileDto` recibe el perfil guardado y, si la altura que se muestra no cambió, reenvía los cm originales.
+- Onboarding pide primero idioma y unidades (el pedido listaba datos físicos primero), porque la altura se carga en la unidad elegida.
+- El diálogo de eliminar cuenta inyecta `ProfileStore` (provisto en la ruta): se abre con `injector` de la página, porque `MatDialog` es root y no lo encontraría.
+- `MatDialog` + diálogo de upgrade se importan lazy desde `UpgradePrompt`: el interceptor es eager y los metía en el bundle inicial (+37 kB).
+- `*requireFeature` sin prefijo `app` (excepción de ESLint documentada) porque es la API pedida.
+- Regla i18n de plantillas desactivada solo para hosts de test (`**/*.spec.ts/**/*.html`).
+
+### Pendiente / próximo
+
+- Probar onboarding / perfil / planes en el navegador contra producción.
+- Usar `*requireFeature` y `<app-upgrade-cta>` en las features que lo necesitan (fotos de progreso, exportación, auto-progresión, stats completas, nutrición completa).
+- Features: exercises → routines → programs → history → stats → body → nutrition → admin.
+
 ## 2026-10-17 — Base del proyecto
 
 ### Hecho
@@ -26,7 +60,8 @@
 
 - `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 40/40 ✅ (Vitest) · `npm run build:gh` ✅ (inicial 525 kB raw / 132 kB transferidos).
 - Tests: cola de refresh (un solo refresh con 401 concurrentes, peticiones encoladas, restore desde refresh token, fin de sesión, fallo de red conserva el token), cold-start con timers falsos (banner a los 3 s, backoff, espera al usuario, POST con status 0 no se reintenta), mapeo de errores, guards + `safeReturnUrl` (open redirect), conversiones y pipes, paridad de claves es/en, shell.
-- **No verificado**: la app en un navegador real contra la API, el workflow en GitHub (el repo todavía no tiene remoto) y la CSP en GitHub Pages.
+- **Producción** (https://aabsolutions.github.io/saiyagym-frontend/): workflow verde (build + deploy). Verificado por el usuario en navegador: login con el admin y registro de un usuario nuevo contra la API de Render, sin bloqueos de CSP.
+- Deep links (`/login`, `/routines/123`) responden 404 con el contenido de `404.html` (= `index.html`): Angular arranca igual. Limitación conocida de Pages, solo afectaría SEO.
 
 ### Decisiones y gotchas
 
@@ -41,8 +76,7 @@
 
 ### Pendiente / próximo
 
-- Crear el repo `aabsolutions/saiyagym-frontend` en GitHub y activar Pages con "GitHub Actions" como fuente.
-- Probar de punta a punta contra producción (CORS ya permite `https://aabsolutions.github.io`). Los emails de verificación/reset dependen de que el backend configure SMTP.
+- Emails de verificación/reset: dependen de SMTP en el backend y de `APP_WEB_URL=https://aabsolutions.github.io/saiyagym-frontend/` en Render.
 - Backend: corregir el swagger de `TierListDto.tiers` y `SyncPullResultDto.changes` (`additionalProperties: false` o sin `Record`).
 - Features: exercises (lista + tier board) → routines → programs → history → stats → body → nutrition → admin.
 - Mostrar la UI de plan (límites/features) según `entitlements`: los clientes solo ocultan, la API decide.

@@ -1,14 +1,22 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard } from './core/auth/auth.guards';
+import { onboardingGuard } from './core/onboarding/onboarding';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '', loadChildren: () => import('./features/auth/auth.routes') },
   {
+    // Full-screen wizard, outside the shell. Reachable later too (e.g. after skipping).
+    path: 'onboarding',
+    canMatch: [authGuard],
+    loadChildren: () => import('./features/onboarding/onboarding.routes'),
+  },
+  {
     path: '',
     // Lazy: guests (login page) never download the sidenav/toolbar/menu code.
     loadComponent: () => import('./core/layout/shell').then((m) => m.Shell),
-    canMatch: [authGuard],
+    // In order: signed in, then first-login onboarding.
+    canMatch: [authGuard, onboardingGuard],
     children: [
       { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.routes') },
       { path: 'exercises', loadChildren: () => import('./features/exercises/exercises.routes') },
@@ -19,6 +27,7 @@ export const routes: Routes = [
       { path: 'body', loadChildren: () => import('./features/body/body.routes') },
       { path: 'nutrition', loadChildren: () => import('./features/nutrition/nutrition.routes') },
       { path: 'profile', loadChildren: () => import('./features/profile/profile.routes') },
+      { path: 'plans', loadChildren: () => import('./features/plans/plans.routes') },
       {
         path: 'admin',
         canMatch: [adminGuard],

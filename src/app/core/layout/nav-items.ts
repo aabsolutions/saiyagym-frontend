@@ -15,5 +15,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/body', labelKey: 'nav.body', icon: 'straighten' },
   { path: '/nutrition', labelKey: 'nav.nutrition', icon: 'restaurant' },
   { path: '/profile', labelKey: 'nav.profile', icon: 'person' },
+  { path: '/plans', labelKey: 'nav.plans', icon: 'workspace_premium' },
   { path: '/admin', labelKey: 'nav.admin', icon: 'admin_panel_settings', adminOnly: true },
 ];

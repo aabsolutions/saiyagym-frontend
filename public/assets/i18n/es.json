@@ -14,7 +14,8 @@
     "body": "Medidas",
     "nutrition": "Nutrición",
     "profile": "Perfil",
-    "admin": "Administración"
+    "admin": "Administración",
+    "plans": "Planes"
   },
   "toolbar": {
     "toggleMenu": "Abrir o cerrar el menú",
@@ -90,14 +91,20 @@
     "required": "Campo obligatorio.",
     "email": "Introduce un email válido.",
     "minlength": "Mínimo {{min}} caracteres.",
-    "maxlength": "Máximo {{max}} caracteres."
+    "maxlength": "Máximo {{max}} caracteres.",
+    "min": "Mínimo {{min}}.",
+    "max": "Máximo {{max}}.",
+    "futureDate": "La fecha no puede ser futura.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "confirmationMismatch": "El texto no coincide."
   },
   "common": {
     "close": "Cerrar",
     "save": "Guardar",
     "saved": "Cambios guardados.",
     "comingSoon": "Esta sección está en construcción.",
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "cancel": "Cancelar"
   },
   "pages": {
     "dashboard": {
@@ -133,10 +140,7 @@
     "profile": {
       "title": "Perfil",
       "profileSection": "Datos personales",
-      "preferencesSection": "Preferencias",
-      "language": "Idioma",
-      "theme": "Tema",
-      "units": "Unidades"
+      "preferencesSection": "Preferencias"
     },
     "notFound": {
       "title": "Página no encontrada",
@@ -211,5 +215,127 @@
     "NETWORK_ERROR": "No hay conexión con el servidor. Revisa tu conexión a internet.",
     "SESSION_EXPIRED": "Tu sesión ha caducado. Inicia sesión de nuevo.",
     "UNKNOWN_ERROR": "Se produjo un error inesperado."
+  },
+  "onboarding": {
+    "title": "¡Bienvenido, {{name}}!",
+    "subtitle": "Tres pasos para adaptar SaiyaGym a ti. Puedes cambiarlo luego en tu perfil.",
+    "steps": {
+      "preferences": "Idioma y unidades",
+      "physical": "Datos físicos",
+      "training": "Entrenamiento"
+    },
+    "hints": {
+      "preferences": "Elige cómo quieres ver la app.",
+      "physical": "Opcional: ayuda a calcular estimaciones como las calorías.",
+      "training": "Tu nivel y objetivo ajustan las recomendaciones y la tier list."
+    },
+    "next": "Siguiente",
+    "back": "Atrás",
+    "finish": "Empezar",
+    "skip": "Omitir por ahora"
+  },
+  "profile": {
+    "notSet": "Sin especificar",
+    "restSeconds": "{{seconds}} s",
+    "fields": {
+      "birthDate": "Fecha de nacimiento",
+      "sex": "Sexo",
+      "height": "Altura",
+      "level": "Nivel",
+      "goal": "Objetivo",
+      "language": "Idioma",
+      "theme": "Tema",
+      "units": "Unidades",
+      "defaultRest": "Descanso por defecto",
+      "firstDayOfWeek": "Primer día de la semana"
+    },
+    "sex": {
+      "male": "Hombre",
+      "female": "Mujer",
+      "other": "Otro"
+    },
+    "level": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "goal": {
+      "hypertrophy": "Hipertrofia",
+      "powerlifting": "Powerlifting",
+      "both": "Ambos"
+    },
+    "weekdays": {
+      "1": "Lunes",
+      "2": "Martes",
+      "3": "Miércoles",
+      "4": "Jueves",
+      "5": "Viernes",
+      "6": "Sábado",
+      "7": "Domingo"
+    },
+    "plan": {
+      "title": "Tu plan",
+      "compare": "Comparar planes"
+    },
+    "security": {
+      "changePassword": "Cambiar contraseña",
+      "changePasswordHint": "Se cerrará la sesión en tus otros dispositivos.",
+      "currentPassword": "Contraseña actual",
+      "confirmPassword": "Repite la nueva contraseña",
+      "passwordChanged": "Contraseña cambiada. Cerramos la sesión en tus otros dispositivos.",
+      "sessions": "Sesiones",
+      "sessionsHint": "Cierra la sesión en la web y en el móvil, también en este navegador.",
+      "logoutAll": "Cerrar sesión en todos los dispositivos",
+      "logoutAllTitle": "¿Cerrar todas las sesiones?",
+      "logoutAllMessage": "Tendrás que volver a iniciar sesión en todos tus dispositivos, incluido este."
+    },
+    "danger": {
+      "title": "Zona de peligro",
+      "hint": "Eliminar tu cuenta borra tus datos personales y cierra todas tus sesiones.",
+      "delete": "Eliminar cuenta",
+      "deleteTitle": "Eliminar cuenta",
+      "deleteWarning": "Esta acción no se puede deshacer. Tus rutinas, programas, entrenamientos y medidas dejarán de estar disponibles.",
+      "confirmWord": "ELIMINAR",
+      "typeToConfirm": "Escribe {{word}} para confirmar",
+      "deleteConfirm": "Eliminar definitivamente",
+      "deleted": "Tu cuenta se eliminó."
+    }
+  },
+  "plans": {
+    "title": "Planes",
+    "subtitle": "Compara lo que incluye cada plan.",
+    "feature": "Característica",
+    "included": "Incluido",
+    "notIncluded": "No incluido",
+    "unlimited": "Ilimitado",
+    "upTo": "Hasta {{count}}",
+    "statsHistory": "Historial de estadísticas",
+    "fullHistory": "Completo",
+    "lastDays": "Últimos {{days}} días",
+    "yourPlan": "Tu plan",
+    "comingSoon": "Próximamente",
+    "paymentsNote": "Los pagos aún no están disponibles. Pronto podrás mejorar tu plan desde aquí.",
+    "limits": {
+      "routines": "Rutinas propias",
+      "activePrograms": "Programas activos",
+      "customExercises": "Ejercicios personalizados"
+    },
+    "features": {
+      "fullStats": "Estadísticas completas",
+      "autoProgression": "Progresión automática",
+      "progressPhotos": "Fotos de progreso",
+      "fullNutrition": "Todas las sugerencias de comidas",
+      "dataExport": "Exportación CSV/JSON"
+    },
+    "cta": {
+      "dialogTitle": "Mejora tu plan",
+      "featureTitle": "Función Premium",
+      "feature": "{{feature}} no está incluido en tu plan.",
+      "featureGeneric": "Esta función no está incluida en tu plan.",
+      "limitTitle": "Límite alcanzado",
+      "limit": "Tu plan permite hasta {{limit}} en {{resource}}.",
+      "limitGeneric": "Alcanzaste el límite de {{resource}} de tu plan.",
+      "seePlans": "Ver planes"
+    }
   }
 }

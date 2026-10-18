@@ -1,0 +1,34 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+mat-card-content {
+  padding-top: 16px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--mat-sys-title-medium);
+
+  mat-icon {
+    color: var(--sg-gold);
+  }
+}
+
+.danger-zone {
+  border-color: var(--mat-sys-error);
+}

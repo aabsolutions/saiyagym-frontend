@@ -14,7 +14,8 @@
     "body": "Body",
     "nutrition": "Nutrition",
     "profile": "Profile",
-    "admin": "Admin"
+    "admin": "Admin",
+    "plans": "Plans"
   },
   "toolbar": {
     "toggleMenu": "Toggle menu",
@@ -90,14 +91,20 @@
     "required": "This field is required.",
     "email": "Enter a valid email.",
     "minlength": "At least {{min}} characters.",
-    "maxlength": "At most {{max}} characters."
+    "maxlength": "At most {{max}} characters.",
+    "min": "At least {{min}}.",
+    "max": "At most {{max}}.",
+    "futureDate": "The date can't be in the future.",
+    "passwordMismatch": "Passwords don't match.",
+    "confirmationMismatch": "The text doesn't match."
   },
   "common": {
     "close": "Close",
     "save": "Save",
     "saved": "Changes saved.",
     "comingSoon": "This section is under construction.",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "cancel": "Cancel"
   },
   "pages": {
     "dashboard": {
@@ -133,10 +140,7 @@
     "profile": {
       "title": "Profile",
       "profileSection": "Personal details",
-      "preferencesSection": "Preferences",
-      "language": "Language",
-      "theme": "Theme",
-      "units": "Units"
+      "preferencesSection": "Preferences"
     },
     "notFound": {
       "title": "Page not found",
@@ -211,5 +215,127 @@
     "NETWORK_ERROR": "Can't reach the server. Check your internet connection.",
     "SESSION_EXPIRED": "Your session has expired. Please sign in again.",
     "UNKNOWN_ERROR": "An unexpected error occurred."
+  },
+  "onboarding": {
+    "title": "Welcome, {{name}}!",
+    "subtitle": "Three steps to make SaiyaGym yours. You can change it later in your profile.",
+    "steps": {
+      "preferences": "Language & units",
+      "physical": "Body details",
+      "training": "Training"
+    },
+    "hints": {
+      "preferences": "Choose how you want to see the app.",
+      "physical": "Optional: helps with estimates such as calories.",
+      "training": "Your level and goal tune recommendations and the tier list."
+    },
+    "next": "Next",
+    "back": "Back",
+    "finish": "Let's go",
+    "skip": "Skip for now"
+  },
+  "profile": {
+    "notSet": "Not specified",
+    "restSeconds": "{{seconds}} s",
+    "fields": {
+      "birthDate": "Date of birth",
+      "sex": "Sex",
+      "height": "Height",
+      "level": "Level",
+      "goal": "Goal",
+      "language": "Language",
+      "theme": "Theme",
+      "units": "Units",
+      "defaultRest": "Default rest",
+      "firstDayOfWeek": "First day of the week"
+    },
+    "sex": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "goal": {
+      "hypertrophy": "Hypertrophy",
+      "powerlifting": "Powerlifting",
+      "both": "Both"
+    },
+    "weekdays": {
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday",
+      "7": "Sunday"
+    },
+    "plan": {
+      "title": "Your plan",
+      "compare": "Compare plans"
+    },
+    "security": {
+      "changePassword": "Change password",
+      "changePasswordHint": "You'll be signed out on your other devices.",
+      "currentPassword": "Current password",
+      "confirmPassword": "Repeat the new password",
+      "passwordChanged": "Password changed. We signed you out on your other devices.",
+      "sessions": "Sessions",
+      "sessionsHint": "Signs you out on the web and on mobile, this browser included.",
+      "logoutAll": "Sign out of all devices",
+      "logoutAllTitle": "Sign out everywhere?",
+      "logoutAllMessage": "You'll need to sign in again on all your devices, including this one."
+    },
+    "danger": {
+      "title": "Danger zone",
+      "hint": "Deleting your account removes your personal data and ends all your sessions.",
+      "delete": "Delete account",
+      "deleteTitle": "Delete account",
+      "deleteWarning": "This can't be undone. Your routines, programs, workouts and measurements will no longer be available.",
+      "confirmWord": "DELETE",
+      "typeToConfirm": "Type {{word}} to confirm",
+      "deleteConfirm": "Delete permanently",
+      "deleted": "Your account was deleted."
+    }
+  },
+  "plans": {
+    "title": "Plans",
+    "subtitle": "Compare what each plan includes.",
+    "feature": "Feature",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "unlimited": "Unlimited",
+    "upTo": "Up to {{count}}",
+    "statsHistory": "Stats history",
+    "fullHistory": "Full",
+    "lastDays": "Last {{days}} days",
+    "yourPlan": "Your plan",
+    "comingSoon": "Coming soon",
+    "paymentsNote": "Payments aren't available yet. Soon you'll be able to upgrade from here.",
+    "limits": {
+      "routines": "Own routines",
+      "activePrograms": "Active programs",
+      "customExercises": "Custom exercises"
+    },
+    "features": {
+      "fullStats": "Full stats",
+      "autoProgression": "Auto-progression",
+      "progressPhotos": "Progress photos",
+      "fullNutrition": "All meal suggestions",
+      "dataExport": "CSV/JSON export"
+    },
+    "cta": {
+      "dialogTitle": "Upgrade your plan",
+      "featureTitle": "Premium feature",
+      "feature": "{{feature}} isn't included in your plan.",
+      "featureGeneric": "This feature isn't included in your plan.",
+      "limitTitle": "Limit reached",
+      "limit": "Your plan allows up to {{limit}} {{resource}}.",
+      "limitGeneric": "You've reached your plan's limit for {{resource}}.",
+      "seePlans": "See plans"
+    }
   }
 }

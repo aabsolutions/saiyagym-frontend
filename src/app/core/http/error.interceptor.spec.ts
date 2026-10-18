@@ -3,12 +3,14 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { TranslocoTestingModule } from '@jsverse/transloco';
 import { Notifier } from '../notify/notifier';
+import { UpgradePrompt } from '../plans/upgrade-prompt';
 import { errorInterceptor } from './error.interceptor';
 
 const es = {
   errors: {
     ROUTINE_NOT_FOUND: 'La rutina no existe.',
-    PLAN_LIMIT_REACHED: 'Has alcanzado el límite de tu plan ({{limit}}).',
+    // Test-only code with a placeholder (PLAN_* errors go to the upgrade dialog instead).
+    TOO_BIG: 'Máximo {{max}} elementos.',
     NETWORK_ERROR: 'Sin conexión.',
     UNKNOWN_ERROR: 'Error inesperado.',
   },
@@ -18,9 +20,11 @@ describe('errorInterceptor', () => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
   const notifier = { error: vi.fn() };
+  const upgradePrompt = { open: vi.fn(() => Promise.resolve()) };
 
   beforeEach(() => {
     notifier.error.mockReset();
+    upgradePrompt.open.mockClear();
     TestBed.configureTestingModule({
       imports: [
         TranslocoTestingModule.forRoot({
@@ -33,6 +37,7 @@ describe('errorInterceptor', () => {
         provideHttpClient(withInterceptors([errorInterceptor])),
         provideHttpClientTesting(),
         { provide: Notifier, useValue: notifier },
+        { provide: UpgradePrompt, useValue: upgradePrompt },
       ],
     });
     http = TestBed.inject(HttpClient);
@@ -61,19 +66,48 @@ describe('errorInterceptor', () => {
   it('interpolates placeholders from `details`', () => {
     failWith(
       '/api/v1/routines',
-      { statusCode: 403, code: 'PLAN_LIMIT_REACHED', message: 'm', details: { limit: 3 } },
-      403,
+      { statusCode: 400, code: 'TOO_BIG', message: 'm', details: { max: 3 } },
+      400,
     );
-    expect(notifier.error).toHaveBeenCalledWith('Has alcanzado el límite de tu plan (3).');
+    expect(notifier.error).toHaveBeenCalledWith('Máximo 3 elementos.');
   });
 
   it("falls back to the API's localized message when the placeholder can't be filled", () => {
+    failWith('/api/v1/routines', { statusCode: 400, code: 'TOO_BIG', message: 'Máx (3).' }, 400);
+    expect(notifier.error).toHaveBeenCalledWith('Máx (3).');
+  });
+
+  it('opens the upgrade dialog (not the snackbar) for PLAN_* errors', () => {
     failWith(
       '/api/v1/routines',
-      { statusCode: 403, code: 'PLAN_LIMIT_REACHED', message: 'Límite (3).' },
+      {
+        statusCode: 403,
+        code: 'PLAN_LIMIT_REACHED',
+        message: 'm',
+        details: { resource: 'routines', limit: 3, current: 3, requested: 1 },
+      },
       403,
     );
-    expect(notifier.error).toHaveBeenCalledWith('Límite (3).');
+    failWith(
+      '/api/v1/progress-photos',
+      {
+        statusCode: 403,
+        code: 'PLAN_FEATURE_REQUIRED',
+        message: 'm',
+        details: { feature: 'progressPhotos' },
+      },
+      403,
+    );
+    expect(upgradePrompt.open).toHaveBeenNthCalledWith(1, {
+      kind: 'limit',
+      resource: 'routines',
+      limit: 3,
+    });
+    expect(upgradePrompt.open).toHaveBeenNthCalledWith(2, {
+      kind: 'feature',
+      feature: 'progressPhotos',
+    });
+    expect(notifier.error).not.toHaveBeenCalled();
   });
 
   it("falls back to the API's message for codes we don't know", () => {

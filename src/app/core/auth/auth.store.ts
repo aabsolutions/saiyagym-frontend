@@ -9,6 +9,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { AuthResponseDto } from '../../api/models/auth-response-dto';
+import { ChangePasswordDto } from '../../api/models/change-password-dto';
 import { LoginDto } from '../../api/models/login-dto';
 import { MeDto } from '../../api/models/me-dto';
 import { RegisterDto } from '../../api/models/register-dto';
@@ -16,6 +17,7 @@ import { UpdateMeDto } from '../../api/models/update-me-dto';
 import { AuthService as AuthApi } from '../../api/services/auth.service';
 import { UsersService } from '../../api/services/users.service';
 import { Notifier } from '../notify/notifier';
+import { FeatureKey, LimitKey } from '../plans/entitlements';
 import { SessionExpiredError, SessionService } from './session.service';
 
 export type AuthStatus = 'unknown' | 'authenticated' | 'anonymous';
@@ -43,6 +45,16 @@ export const AuthStore = signalStore(
     plan: computed(() => user()?.plan ?? null),
     entitlements: computed(() => user()?.plan.entitlements ?? null),
     displayName: computed(() => user()?.profile.name || user()?.email || ''),
+  })),
+  withMethods(({ entitlements }) => ({
+    /** UI hint only: the API enforces the plan again on every request. */
+    hasFeature(feature: FeatureKey): boolean {
+      return entitlements()?.features[feature] ?? false;
+    },
+    /** null = unlimited (or unknown while signed out). */
+    limit(key: LimitKey): number | null {
+      return entitlements()?.limits[key] ?? null;
+    },
   })),
   withMethods((store) => {
     let ready: Promise<void> | null = null;
@@ -104,6 +116,19 @@ export const AuthStore = signalStore(
 
       async logoutAll(): Promise<void> {
         await store._authApi.authControllerLogoutAll();
+        store._session.clear();
+        signOutLocally();
+        await store._router.navigateByUrl('/login');
+      },
+
+      /** The API revokes every other session; this one stays signed in. */
+      async changePassword(dto: ChangePasswordDto): Promise<void> {
+        await store._usersApi.accountControllerChangePassword({ body: dto });
+      },
+
+      /** Soft delete + anonymization on the API; all sessions end. */
+      async deleteAccount(password: string): Promise<void> {
+        await store._usersApi.accountControllerDeleteAccount({ body: { password } });
         store._session.clear();
         signOutLocally();
         await store._router.navigateByUrl('/login');

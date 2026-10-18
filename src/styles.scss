@@ -71,6 +71,16 @@ body {
   width: 100%;
 }
 
+// Destructive actions (delete account…).
+.mat-mdc-unelevated-button.danger {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-error),
+      filled-label-text-color: var(--mat-sys-on-error),
+    )
+  );
+}
+
 .sg-snack-error {
   @include mat.snack-bar-overrides(
     (

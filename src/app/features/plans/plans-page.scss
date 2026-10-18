@@ -1,0 +1,81 @@
+.subtitle,
+.note {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  padding: 48px 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+}
+
+.comparison {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    text-align: center;
+  }
+
+  tbody th {
+    text-align: left;
+    font: var(--mat-sys-body-medium);
+  }
+
+  thead th {
+    vertical-align: bottom;
+  }
+
+  tfoot td {
+    border-bottom: none;
+  }
+
+  .current {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+}
+
+.plan-name {
+  display: block;
+  font: var(--mat-sys-title-large);
+  font-weight: 700;
+}
+
+.plan-description {
+  display: block;
+  font: var(--mat-sys-body-small);
+  color: inherit;
+  opacity: 0.8;
+}
+
+mat-icon {
+  color: var(--mat-sys-outline);
+
+  &.yes {
+    color: var(--mat-sys-primary);
+  }
+}
+
+.current mat-icon.yes {
+  color: var(--sg-gold);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--mat-sys-corner-full);
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  font: var(--mat-sys-label-large);
+}

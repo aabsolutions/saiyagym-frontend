@@ -1,139 +1,113 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormField, FormRoot, form, maxLength } from '@angular/forms/signals';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  computed,
+  inject,
+  linkedSignal,
+} from '@angular/core';
+import { FormField, FormRoot, form } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
-import { LANGUAGES } from '../../core/i18n/languages';
-import {
-  PreferencesStore,
-  ThemePreference,
-  UnitSystem,
-} from '../../core/preferences/preferences.store';
+import { PreferencesStore } from '../../core/preferences/preferences.store';
 import { ValidationMessagePipe } from '../../shared/forms/validation-message.pipe';
+import { PhysicalFields } from '../../shared/profile/physical-fields';
+import { PreferencesFields } from '../../shared/profile/preferences-fields';
+import {
+  EMPTY_PROFILE,
+  profileSchema,
+  toProfileModel,
+  toUpdateProfileDto,
+} from '../../shared/profile/profile-form';
+import { TrainingFields } from '../../shared/profile/training-fields';
+import { ChangePasswordCard } from './change-password-card';
+import { DeleteAccountDialog } from './delete-account-dialog';
 import { ProfileStore } from './profile.store';
 
-const THEMES: readonly ThemePreference[] = ['system', 'light', 'dark'];
-const UNIT_SYSTEMS: readonly UnitSystem[] = ['metric', 'imperial'];
+const REST_OPTIONS = [30, 45, 60, 90, 120, 150, 180, 240, 300];
+const WEEKDAYS = [1, 2, 3, 4, 5, 6, 7]; // ISO: 1 = Monday
 
 @Component({
   selector: 'app-profile-page',
   imports: [
+    ChangePasswordCard,
     FormField,
     FormRoot,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSelectModule,
+    PhysicalFields,
+    PreferencesFields,
+    RouterLink,
+    TrainingFields,
     TranslocoPipe,
     ValidationMessagePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <section class="page">
-      <h1 class="page-title">{{ 'pages.profile.title' | transloco }}</h1>
-
-      <div class="grid">
-        <mat-card appearance="outlined">
-          <mat-card-header>
-            <mat-card-title>{{ 'pages.profile.profileSection' | transloco }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <form [formRoot]="profileForm">
-              <mat-form-field class="full-width">
-                <mat-label>{{ 'auth.fields.name' | transloco }}</mat-label>
-                <input matInput autocomplete="name" [formField]="profileForm.name" />
-                <mat-error>{{ profileForm.name().errors() | validationMessage }}</mat-error>
-              </mat-form-field>
-              <button mat-flat-button type="submit" [disabled]="store.isPending()">
-                {{ 'common.save' | transloco }}
-              </button>
-            </form>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card appearance="outlined">
-          <mat-card-header>
-            <mat-card-title>{{ 'pages.profile.preferencesSection' | transloco }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="prefs">
-            <mat-form-field>
-              <mat-label>{{ 'pages.profile.language' | transloco }}</mat-label>
-              <mat-select
-                [value]="prefs.language()"
-                (selectionChange)="prefs.setLanguage($event.value)"
-              >
-                @for (lang of languages; track lang.code) {
-                  <mat-option [value]="lang.code">{{ lang.label }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>{{ 'pages.profile.theme' | transloco }}</mat-label>
-              <mat-select [value]="prefs.theme()" (selectionChange)="prefs.setTheme($event.value)">
-                @for (theme of themes; track theme) {
-                  <mat-option [value]="theme">
-                    {{ 'preferences.theme.' + theme | transloco }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>{{ 'pages.profile.units' | transloco }}</mat-label>
-              <mat-select [value]="prefs.units()" (selectionChange)="prefs.setUnits($event.value)">
-                @for (units of unitSystems; track units) {
-                  <mat-option [value]="units">
-                    {{ 'preferences.units.' + units | transloco }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </section>
-  `,
-  styles: `
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    mat-card-content {
-      padding-top: 16px;
-    }
-    .prefs {
-      display: flex;
-      flex-direction: column;
-    }
-  `,
+  templateUrl: './profile-page.html',
+  styleUrl: './profile-page.scss',
 })
 export class ProfilePage {
   protected readonly store = inject(ProfileStore);
   protected readonly prefs = inject(PreferencesStore);
-  private readonly auth = inject(AuthStore);
+  protected readonly auth = inject(AuthStore);
+  private readonly dialog = inject(MatDialog);
+  private readonly injector = inject(Injector);
 
-  protected readonly languages = LANGUAGES;
-  protected readonly themes = THEMES;
-  protected readonly unitSystems = UNIT_SYSTEMS;
+  protected readonly weekdays = WEEKDAYS;
+
+  /** Server copy in the current units; re-derived after every save or units change. */
+  private readonly model = linkedSignal(() => {
+    const user = this.auth.user();
+    return user ? toProfileModel(user.profile, this.prefs.units()) : { ...EMPTY_PROFILE };
+  });
 
   protected readonly profileForm = form(
-    signal({ name: this.auth.user()?.profile.name ?? '' }),
-    (path) => maxLength(path.name, 80),
+    this.model,
+    profileSchema({ units: () => this.prefs.units(), requireTraining: false }),
     {
       submission: {
         action: async (field) => {
-          const name = field().value().name.trim();
-          await this.store.saveProfile({ name: name || null });
+          await this.store.saveProfile(
+            toUpdateProfileDto(field().value(), this.prefs.units(), this.auth.user()?.profile),
+          );
           return undefined;
         },
       },
     },
   );
+
+  protected readonly serverPrefs = computed(() => this.auth.user()?.preferences ?? null);
+
+  /** Keeps a value set elsewhere (e.g. on mobile) selectable even if it isn't a preset. */
+  protected readonly restOptions = computed(() => {
+    const current = this.serverPrefs()?.defaultRestSeconds;
+    return current && !REST_OPTIONS.includes(current)
+      ? [...REST_OPTIONS, current].sort((a, b) => a - b)
+      : REST_OPTIONS;
+  });
+
+  protected setRest(seconds: number): void {
+    void this.store.savePreferences({ defaultRestSeconds: seconds });
+  }
+
+  protected setFirstDay(day: number): void {
+    void this.store.savePreferences({ firstDayOfWeek: day });
+  }
+
+  protected openDeleteDialog(): void {
+    // The dialog injects ProfileStore, which is provided by this route, not by root.
+    this.dialog.open(DeleteAccountDialog, { injector: this.injector, maxWidth: '480px' });
+  }
 }

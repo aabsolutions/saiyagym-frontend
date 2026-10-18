@@ -57,4 +57,9 @@ module.exports = defineConfig([
       ],
     },
   },
+  {
+    // Inline templates of test host components (virtual files under the .spec.ts) aren't UI.
+    files: ['**/*.spec.ts/**/*.html'],
+    rules: { '@angular-eslint/template/i18n': 'off' },
+  },
 ]);

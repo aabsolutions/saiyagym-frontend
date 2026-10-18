@@ -1,0 +1,102 @@
+<section class="page">
+  <h1 class="page-title">{{ 'pages.profile.title' | transloco }}</h1>
+
+  <div class="layout">
+    <mat-card appearance="outlined" class="wide">
+      <mat-card-header>
+        <mat-card-title>{{ 'pages.profile.profileSection' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ auth.user()?.email }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formRoot]="profileForm">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'auth.fields.name' | transloco }}</mat-label>
+            <input matInput autocomplete="name" [formField]="profileForm.name" />
+            <mat-error>{{ profileForm.name().errors() | validationMessage }}</mat-error>
+          </mat-form-field>
+          <app-physical-fields [fields]="profileForm" [units]="prefs.units()" />
+          <app-training-fields [fields]="profileForm" />
+          <button mat-flat-button type="submit" [disabled]="store.isPending()">
+            {{ 'common.save' | transloco }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ 'pages.profile.preferencesSection' | transloco }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="stack">
+        <app-preferences-fields />
+        @if (serverPrefs(); as server) {
+          <mat-form-field>
+            <mat-label>{{ 'profile.fields.defaultRest' | transloco }}</mat-label>
+            <mat-select
+              [value]="server.defaultRestSeconds"
+              (selectionChange)="setRest($event.value)"
+            >
+              @for (seconds of restOptions(); track seconds) {
+                <mat-option [value]="seconds">
+                  {{ 'profile.restSeconds' | transloco: { seconds } }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{ 'profile.fields.firstDayOfWeek' | transloco }}</mat-label>
+            <mat-select
+              [value]="server.firstDayOfWeek"
+              (selectionChange)="setFirstDay($event.value)"
+            >
+              @for (day of weekdays; track day) {
+                <mat-option [value]="day">{{ 'profile.weekdays.' + day | transloco }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ 'profile.plan.title' | transloco }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="plan-name">
+          <mat-icon aria-hidden="true">workspace_premium</mat-icon>
+          {{ auth.plan()?.name }}
+        </p>
+        <a mat-stroked-button routerLink="/plans">{{ 'profile.plan.compare' | transloco }}</a>
+      </mat-card-content>
+    </mat-card>
+
+    <app-change-password-card />
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ 'profile.security.sessions' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'profile.security.sessionsHint' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <button mat-stroked-button type="button" (click)="store.logoutAll()">
+          <mat-icon>devices</mat-icon>
+          {{ 'profile.security.logoutAll' | transloco }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="danger-zone">
+      <mat-card-header>
+        <mat-card-title>{{ 'profile.danger.title' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'profile.danger.hint' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <button mat-flat-button type="button" class="danger" (click)="openDeleteDialog()">
+          <mat-icon>delete_forever</mat-icon>
+          {{ 'profile.danger.delete' | transloco }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
