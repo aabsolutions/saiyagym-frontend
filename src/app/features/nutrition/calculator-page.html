@@ -1,0 +1,136 @@
+<div class="layout">
+  <mat-card appearance="outlined" class="card">
+    <h2 class="title">{{ 'nutrition.calculator.title' | transloco }}</h2>
+    <p class="hint">{{ 'nutrition.calculator.hint' | transloco }}</p>
+    <form [formRoot]="calculatorForm" class="form">
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.goal' | transloco }}</mat-label>
+        <mat-select [formField]="calculatorForm.goal">
+          @for (goal of goals; track goal) {
+            <mat-option [value]="goal">{{ 'nutrition.goals.' + goal | transloco }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.activity' | transloco }}</mat-label>
+        <mat-select [formField]="calculatorForm.activityLevel">
+          @for (level of activityLevels; track level) {
+            <mat-option [value]="level">{{ 'nutrition.activity.' + level | transloco }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>{{
+          'nutrition.activityHint.' + calculatorForm.activityLevel().value() | transloco
+        }}</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.sex' | transloco }}</mat-label>
+        <mat-select [formField]="calculatorForm.sex">
+          <mat-option [value]="null">{{
+            'nutrition.calculator.fromProfile' | transloco
+          }}</mat-option>
+          @for (sex of sexes; track sex) {
+            <mat-option [value]="sex">{{ 'profile.sex.' + sex | transloco }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.age' | transloco }}</mat-label>
+        <input matInput type="number" inputmode="numeric" [formField]="calculatorForm.ageYears" />
+        <mat-error>{{ calculatorForm.ageYears().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.height' | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          inputmode="decimal"
+          step="0.1"
+          [formField]="calculatorForm.height"
+        />
+        <span matTextSuffix>{{ unitKey('height') | transloco }}</span>
+        <mat-error>{{ calculatorForm.height().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'nutrition.calculator.weight' | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          inputmode="decimal"
+          step="0.1"
+          [formField]="calculatorForm.weight"
+        />
+        <span matTextSuffix>{{ unitKey('weight') | transloco }}</span>
+        <mat-hint>{{ 'nutrition.calculator.weightHint' | transloco }}</mat-hint>
+        <mat-error>{{ calculatorForm.weight().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-flat-button type="submit" [disabled]="store.calculating()">
+          {{ 'nutrition.calculator.submit' | transloco }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="card result" aria-live="polite">
+    @if (store.result(); as r) {
+      <p class="hero">
+        <span class="hero-label">{{ 'nutrition.calculator.target' | transloco }}</span>
+        <span class="hero-value">{{ r.targetKcal }} {{ 'units.kcal' | transloco }}</span>
+        <span class="hero-sub">{{ 'nutrition.goals.' + r.input.goal | transloco }}</span>
+      </p>
+      <dl class="tiles">
+        <div>
+          <dt>{{ 'nutrition.calculator.bmr' | transloco }}</dt>
+          <dd>{{ r.bmrKcal }} {{ 'units.kcal' | transloco }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'nutrition.calculator.tdee' | transloco }}</dt>
+          <dd>{{ r.tdeeKcal }} {{ 'units.kcal' | transloco }}</dd>
+        </div>
+      </dl>
+      @if (r.clampedToBmr) {
+        <p class="note">{{ 'nutrition.calculator.clamped' | transloco }}</p>
+      }
+
+      <h3 class="subtitle">{{ 'nutrition.calculator.macros' | transloco }}</h3>
+      <!-- Part-to-whole of 3: one stacked bar, 2px surface gaps, every value also in text. -->
+      <div class="bar" role="img" [attr.aria-label]="'nutrition.calculator.macrosAria' | transloco">
+        @for (m of macros(); track m.key; let i = $index) {
+          <span
+            class="segment"
+            [style.flex-grow]="m.percent"
+            [style.background]="macroColors()[i]"
+          ></span>
+        }
+      </div>
+      <ul class="legend">
+        @for (m of macros(); track m.key; let i = $index) {
+          <li>
+            <span class="swatch" [style.background]="macroColors()[i]"></span>
+            <strong>{{ m.grams }} {{ 'units.g' | transloco }}</strong>
+            <span>{{ 'nutrition.macros.' + m.key | transloco }} · {{ m.percent }} %</span>
+          </li>
+        }
+      </ul>
+
+      @if (sources().length) {
+        <p class="note">
+          {{ 'nutrition.calculator.usedStored' | transloco }}
+          @for (s of sources(); track s[0]; let last = $last) {
+            {{ 'nutrition.calculator.fields.' + s[0] | transloco }}
+            ({{ 'nutrition.calculator.sources.' + s[1] | transloco }}){{ last ? '.' : ',' }}
+          }
+        </p>
+      }
+      <p class="disclaimer">{{ r.disclaimer }}</p>
+    } @else {
+      <p class="empty">{{ 'nutrition.calculator.empty' | transloco }}</p>
+    }
+  </mat-card>
+</div>

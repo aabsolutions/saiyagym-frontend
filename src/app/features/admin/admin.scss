@@ -1,0 +1,106 @@
+// Shared by the admin sections: a toolbar row (filters + primary action), then a table.
+:host {
+  display: block;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-bottom: 16px;
+
+  mat-form-field {
+    flex: 0 1 220px;
+  }
+}
+
+.search {
+  flex: 1 1 260px !important;
+  max-width: 400px;
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+.card {
+  padding: 8px 0;
+}
+
+.scroll {
+  overflow-x: auto;
+  transition: opacity 150ms;
+}
+
+.pending {
+  opacity: 0.5;
+}
+
+th[scope='row'] {
+  position: static;
+  background: none;
+  font: var(--mat-sys-body-medium);
+  font-weight: 500;
+}
+
+.sub {
+  display: block;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.actions-cell {
+  width: 1%;
+  text-align: right;
+}
+
+.empty {
+  margin: 24px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: var(--mat-sys-corner-small);
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  font: var(--mat-sys-label-medium);
+}
+
+.badge.off {
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Editors (pages and dialogs).
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0 16px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.section-title {
+  margin: 16px 0 8px;
+  font: var(--mat-sys-title-small);
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.hint {
+  margin: 0 0 12px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}

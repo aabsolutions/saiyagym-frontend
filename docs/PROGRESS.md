@@ -1,5 +1,44 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Nutrición y panel de administración
+
+### Hecho
+
+- **Nutrición** (`/nutrition`, pestañas Calculadora · Comidas · Guías · Alimentos; cada una carga al mostrarse). El **aviso legal** está en el shell, encima de las pestañas, así que se ve en todas las pantallas (además del `disclaimer` que manda la API en cada respuesta).
+  - Calculadora: objetivo, actividad (con descripción), sexo, edad, altura y peso en la unidad del usuario, prellenados desde el perfil. Solo se envía lo que difiere del perfil (sin deriva in↔cm); con el peso vacío la API usa el último registrado. Resultado: kcal objetivo (cifra principal), basal, gasto total, aviso si se ajustó al basal, reparto de macros (barra apilada de 3 con gaps y valores en texto) y qué datos salieron de la cuenta (`input.sources`).
+  - Comidas: filtros por objetivo y tipo, detalle de alimentos con gramos y macros + totales. Free: las de muestra + CTA "hay N más con Premium" (`limitedByPlan` / `lockedCount` de la API).
+  - Guías por objetivo (texto plano en párrafos, nunca HTML) y buscador de alimentos (debounce, categoría, etiquetas) con macros por 100 g.
+- **Admin** (`/admin`, `adminGuard`; la API vuelve a validar el rol): Usuarios · Planes · Ejercicios · Tiers · Etiquetas · Plantillas · Alimentos · Comidas · Guías.
+  - **Editor traducible** `<app-translatable-field>` (control de Signal Forms): una pestaña por idioma de `LANGUAGES` (agregar un idioma agrega su pestaña sin tocar código), marca las pestañas sin traducir, `es` obligatorio. `toTranslatable` omite los vacíos (lo exige `IsTranslatable`). Se usa en ejercicios, etiquetas, planes, plantillas, alimentos, comidas y guías.
+  - Usuarios: búsqueda (debounce) y filtro por rol, cambio de rol inline (no el propio), asignar plan con vencimiento opcional (fin del día local).
+  - Planes: tarjetas con entitlements. El editor maneja límites (número o "ilimitado" → `null`), funciones y días de estadísticas. El código es inmutable y el plan por defecto no se puede borrar.
+  - Ejercicios globales: CRUD con slug sugerido desde el nombre (inmutable al editar), músculos, equipo, mecánica, categoría, etiquetas, tiers por objetivo e imagen (se sube al guardar, firma `exercise_image`). **Tiers en lote**: tabla editable por objetivo y grupo muscular, cambios pendientes resaltados, un solo `PATCH /admin/exercises/tiers`.
+  - Plantillas de programa: CRUD con rutinas (clave, nombre traducible, ejercicios del catálogo por slug, series con tipo/reps/%1RM/descanso, notas, reordenar), calendario semana × día (en el orden de `firstDayOfWeek`, con "copiar semana 1") y descarga. Las reglas de progresión que ya existían se conservan. Lo que la API rechazaría se lista antes de guardar.
+  - Alimentos (macros por 100 g, 1 decimal), comidas (buscador de alimentos, gramos 1–2000, marca de muestra Free) y guías: CRUD con el mismo editor traducible.
+- **Compartido**: `PendingImage` (la imagen se sube al guardar; ahora también la usa el formulario de ejercicio propio), `slugify`/`slugRule` (validación + readonly), pipe `localized`, `units.kcal`/`units.g`, mensajes de validación nuevos.
+- **Revisión final**:
+  - `npm run i18n:check` (`scripts/i18n-check.mjs`, también corre en CI antes del build): compara TODAS las claves de cada idioma contra `es.json` (faltantes, sobrantes, vacías, placeholders distintos) y verifica que cada clave literal del código exista. Probado con un caso negativo.
+  - Accesibilidad: botones de solo ícono con `aria-label`, imágenes con `alt`, controles nativos con label, tablas con `caption`, foco visible en controles propios, `h1` en los editores fuera del shell. Responsive: tablas con scroll interno, filtros que bajan de línea, pestañas paginadas.
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run i18n:check` ✅ (1048 claves es/en) · `npm run test:ci` 222/222 ✅ · `npm run build:gh` ✅ (inicial 546 kB; admin lazy 168 kB / 25 kB gz; nutrición 36 kB).
+- Tests: editor traducible (pestañas por idioma, marca faltantes, escribe solo el idioma activo), reglas traducibles y slugs, calculadora (edad, prellenado, solo lo cambiado, lb→kg, límites), NutritionStore (carga por pestaña, filtros → página 1, debounce de búsqueda), planes (ilimitado ↔ null, código inmutable), tiers en lote (solo cambios reales, un PATCH), alimentos y comidas, plantillas (grilla ↔ DTO, semanas nuevas repiten la última, renombrar o quitar una rutina mantiene el calendario, problemas).
+- **No verificado en navegador** contra la API real.
+
+### Decisiones y gotchas
+
+- Signal Forms no permite bindear `[readonly]`/`min` en nodos con `[formField]`: van en el schema (`readonly()`, `min()`).
+- Un control propio no puede recibir `[required]` a mano (lo maneja `[formField]`): el editor traducible usa `mandatory`.
+- El buscador de alimentos de la API busca por nombre, no por slug: el admin de comidas arma un índice slug → nombre cargando el catálogo una vez (es chico).
+- `mat-autocomplete` necesita un `displayWith` vacío cuando la opción se agrega a una lista; si no, el input muestra "[object Object]".
+- El tool Write desescapa las secuencias unicode con barra invertida: el regex de `slugify` quedó con caracteres combinantes literales y se reescribió escapado.
+
+### Pendiente / próximo
+
+- Probar nutrición y admin en navegador contra la API desplegada.
+- App móvil (Flutter).
+
 ## 2026-10-18 — Imagen de ejercicio: se sube al guardar
 
 ### Hecho

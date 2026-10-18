@@ -41,6 +41,18 @@ export class ValidationMessagePipe implements PipeTransform {
         return this.transloco.translate('validation.passwordMismatch');
       case 'confirmationMismatch':
         return this.transloco.translate('validation.confirmationMismatch');
+      case 'translatableDefault':
+        return this.transloco.translate('validation.translatableDefault');
+      case 'maxItems':
+        return this.transloco.translate('validation.maxItems', {
+          max: (error as ValidationError & { max: number }).max,
+        });
+      case 'pattern':
+        return this.transloco.translate('validation.pattern');
+      case 'slug':
+        return this.transloco.translate('validation.slug');
+      case 'mealNoItems':
+        return this.transloco.translate('validation.mealNoItems');
       case 'noMeasurement':
         return this.transloco.translate('validation.noMeasurement');
       default:

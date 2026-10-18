@@ -1,0 +1,97 @@
+@use '../admin';
+
+.block {
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.routine-head,
+.exercise-head,
+.exercise-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.key {
+  width: 180px;
+}
+
+.exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.exercise {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.notes {
+  flex: 1 1 240px;
+}
+
+// Compact native controls inside dense tables (sets, schedule).
+.cell {
+  min-width: 72px;
+  padding: 6px 8px;
+  border: 1px solid var(--mat-sys-outline);
+  border-radius: var(--mat-sys-corner-extra-small);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-primary);
+    outline-offset: 1px;
+  }
+}
+
+input.cell {
+  width: 72px;
+}
+
+.grid select.cell {
+  min-width: 110px;
+}
+
+tr.deload th,
+tr.deload td {
+  background: var(--mat-sys-surface-container-high);
+}
+
+.add-routine {
+  margin-bottom: 16px;
+}
+
+.save-bar {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 0;
+  background: var(--mat-sys-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.problems {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-body-small);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}

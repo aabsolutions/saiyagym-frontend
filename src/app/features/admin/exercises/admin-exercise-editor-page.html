@@ -1,0 +1,178 @@
+<div class="toolbar">
+  <a mat-button routerLink="/admin/exercises">
+    <mat-icon>arrow_back</mat-icon>{{ 'admin.exercises.back' | transloco }}
+  </a>
+</div>
+
+@if (store.error()) {
+  <p class="empty">{{ 'admin.notFound' | transloco }}</p>
+} @else {
+  <mat-card appearance="outlined" class="card">
+    <h1 class="page-title">
+      {{ (isNew() ? 'admin.exercises.newTitle' : 'admin.exercises.editTitle') | transloco }}
+    </h1>
+    <form [formRoot]="exerciseForm">
+      <section class="image">
+        @if (store.image.shown(); as url) {
+          <img [src]="url" alt="" />
+        } @else {
+          <span class="placeholder" aria-hidden="true"
+            ><mat-icon>add_photo_alternate</mat-icon></span
+          >
+        }
+        <div>
+          <label mat-stroked-button class="upload">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="cdk-visually-hidden"
+              [disabled]="store.image.uploadProgress() !== null"
+              (change)="onFileSelected($event)"
+            />
+            <mat-icon>upload</mat-icon>
+            {{ 'exercises.form.image.upload' | transloco }}
+          </label>
+          @if (store.image.shown()) {
+            <button
+              mat-button
+              type="button"
+              [disabled]="store.image.uploadProgress() !== null"
+              (click)="store.image.remove()"
+            >
+              {{ 'exercises.form.image.remove' | transloco }}
+            </button>
+          }
+          @if (store.image.uploadProgress(); as percent) {
+            <mat-progress-bar mode="determinate" [value]="percent" />
+          }
+          <p class="hint">{{ 'exercises.form.image.hint' | transloco }}</p>
+        </div>
+      </section>
+
+      <app-translatable-field
+        labelKey="exercises.form.name"
+        mandatory
+        [formField]="exerciseForm.name"
+      />
+
+      <div class="form-grid">
+        <mat-form-field>
+          <mat-label>{{ 'admin.fields.slug' | transloco }}</mat-label>
+          <input matInput [formField]="exerciseForm.slug" (input)="onSlugInput()" />
+          <mat-hint>{{
+            (isNew() ? 'admin.fields.slugHint' : 'admin.fields.slugLocked') | transloco
+          }}</mat-hint>
+          <mat-error>{{ exerciseForm.slug().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.primaryMuscle' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.primaryMuscle">
+            @for (m of muscles; track m) {
+              <mat-option [value]="m">{{ 'exercises.muscles.' + m | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.primaryMuscle().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.secondaryMuscles' | transloco }}</mat-label>
+          <mat-select multiple [formField]="exerciseForm.secondaryMuscles">
+            @for (m of muscles; track m) {
+              <mat-option [value]="m">{{ 'exercises.muscles.' + m | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.secondaryMuscles().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.equipment' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.equipment">
+            @for (e of equipment; track e) {
+              <mat-option [value]="e">{{ 'exercises.equipment.' + e | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.equipment().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.mechanic' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.mechanic">
+            @for (m of mechanics; track m) {
+              <mat-option [value]="m">{{ 'exercises.mechanic.' + m | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.mechanic().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.category' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.category">
+            @for (c of categories; track c) {
+              <mat-option [value]="c">{{ 'exercises.category.' + c | transloco }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.tags' | transloco }}</mat-label>
+          <mat-select multiple [formField]="exerciseForm.tags">
+            @for (tag of store.tags(); track tag.id) {
+              <mat-option [value]="tag.slug">{{ tag.name | localized }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.tags().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{
+            'admin.exercises.tierFor'
+              | transloco: { goal: ('profile.goal.hypertrophy' | transloco) }
+          }}</mat-label>
+          <mat-select [formField]="exerciseForm.hypertrophy">
+            <mat-option [value]="null">—</mat-option>
+            @for (t of tiers; track t) {
+              <mat-option [value]="t">{{ t }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{
+            'admin.exercises.tierFor'
+              | transloco: { goal: ('profile.goal.powerlifting' | transloco) }
+          }}</mat-label>
+          <mat-select [formField]="exerciseForm.powerlifting">
+            <mat-option [value]="null">—</mat-option>
+            @for (t of tiers; track t) {
+              <mat-option [value]="t">{{ t }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <app-translatable-field
+        labelKey="exercises.form.description"
+        multiline
+        [formField]="exerciseForm.description"
+      />
+      <app-translatable-field
+        labelKey="exercises.form.instructions"
+        multiline
+        [rows]="6"
+        [formField]="exerciseForm.instructions"
+      />
+
+      <div class="row-actions">
+        <a mat-button routerLink="/admin/exercises">{{ 'common.cancel' | transloco }}</a>
+        <button
+          mat-flat-button
+          type="submit"
+          [disabled]="exerciseForm().submitting() || store.image.uploadProgress() !== null"
+        >
+          {{ 'common.save' | transloco }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+}

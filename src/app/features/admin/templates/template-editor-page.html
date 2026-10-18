@@ -1,0 +1,416 @@
+@let m = model();
+<div class="toolbar">
+  <a mat-button routerLink="/admin/templates">
+    <mat-icon>arrow_back</mat-icon>{{ 'admin.templates.back' | transloco }}
+  </a>
+</div>
+
+@if (notFound()) {
+  <p class="empty">{{ 'admin.notFound' | transloco }}</p>
+} @else if (loading()) {
+  <p class="empty">{{ 'common.loading' | transloco }}</p>
+} @else {
+  <!-- 1. General -->
+  <mat-card appearance="outlined" class="block">
+    <h1 class="page-title">
+      {{ (isNew() ? 'admin.templates.newTitle' : 'admin.templates.editTitle') | transloco }}
+    </h1>
+    <app-translatable-field
+      labelKey="admin.fields.name"
+      mandatory
+      [maxLength]="limits.name"
+      [value]="m.name"
+      (valueChange)="setName($event)"
+    />
+    <div class="form-grid">
+      <mat-form-field>
+        <mat-label>{{ 'admin.fields.slug' | transloco }}</mat-label>
+        <input
+          matInput
+          [value]="m.slug"
+          [readonly]="!isNew()"
+          (input)="setSlug($any($event.target).value)"
+        />
+        <mat-hint>{{
+          (isNew() ? 'admin.fields.slugHint' : 'admin.fields.slugLocked') | transloco
+        }}</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.goal' | transloco }}</mat-label>
+        <mat-select [value]="m.goal" (valueChange)="patch({ goal: $event })">
+          @for (g of goals; track g) {
+            <mat-option [value]="g">{{ 'profile.goal.' + g | transloco }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.level' | transloco }}</mat-label>
+        <mat-select [value]="m.level" (valueChange)="patch({ level: $event })">
+          @for (l of levels; track l) {
+            <mat-option [value]="l">{{ 'profile.level.' + l | transloco }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.weeks' | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [min]="limits.weeks.min"
+          [max]="limits.weeks.max"
+          [value]="m.durationWeeks"
+          (change)="setDuration(+$any($event.target).value)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.fields.sortOrder' | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [value]="m.sortOrder"
+          (change)="patch({ sortOrder: +$any($event.target).value || 0 })"
+        />
+      </mat-form-field>
+    </div>
+    <mat-checkbox [checked]="m.active" (change)="patch({ active: $event.checked })">
+      {{ 'admin.templates.active' | transloco }}
+    </mat-checkbox>
+    <app-translatable-field
+      labelKey="admin.fields.description"
+      multiline
+      [maxLength]="limits.description"
+      [value]="m.description"
+      (valueChange)="patch({ description: $event })"
+    />
+  </mat-card>
+
+  <!-- 2. Routines -->
+  <h2 class="section-title">{{ 'admin.templates.routines' | transloco }}</h2>
+  @for (routine of m.routines; track $index; let r = $index) {
+    <mat-card appearance="outlined" class="block">
+      <header class="routine-head">
+        <mat-form-field subscriptSizing="dynamic" class="key">
+          <mat-label>{{ 'admin.templates.key' | transloco }}</mat-label>
+          <input
+            matInput
+            [value]="routine.key"
+            [attr.maxlength]="limits.routineKey"
+            (change)="setRoutineKey(r, $any($event.target).value)"
+          />
+        </mat-form-field>
+        <span class="spacer"></span>
+        <button mat-button type="button" (click)="removeRoutine(r)">
+          <mat-icon>delete</mat-icon>{{ 'admin.templates.removeRoutine' | transloco }}
+        </button>
+      </header>
+      <app-translatable-field
+        labelKey="admin.templates.routineName"
+        mandatory
+        [maxLength]="limits.name"
+        [value]="routine.name"
+        (valueChange)="setRoutineName(r, $event)"
+      />
+
+      <ol class="exercises">
+        @for (
+          ex of routine.exercises;
+          track $index;
+          let e = $index;
+          let first = $first;
+          let last = $last
+        ) {
+          <li class="exercise">
+            <div class="exercise-head">
+              <strong>{{ ex.exerciseName || ex.exerciseSlug }}</strong>
+              <span class="sub">{{ ex.exerciseSlug }}</span>
+              <span class="spacer"></span>
+              <button
+                mat-icon-button
+                type="button"
+                [disabled]="first"
+                [attr.aria-label]="'admin.templates.moveUp' | transloco"
+                (click)="moveExercise(r, e, e - 1)"
+              >
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                type="button"
+                [disabled]="last"
+                [attr.aria-label]="'admin.templates.moveDown' | transloco"
+                (click)="moveExercise(r, e, e + 1)"
+              >
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                type="button"
+                [attr.aria-label]="
+                  'admin.deleteItem' | transloco: { name: ex.exerciseName || ex.exerciseSlug }
+                "
+                (click)="removeExercise(r, e)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <div class="scroll">
+              <table class="sg-table sets">
+                <caption class="cdk-visually-hidden">
+                  {{
+                    'admin.templates.setsOf'
+                      | transloco: { name: ex.exerciseName || ex.exerciseSlug }
+                  }}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{ 'admin.templates.setType' | transloco }}</th>
+                    <th scope="col">{{ 'admin.templates.repsMin' | transloco }}</th>
+                    <th scope="col">{{ 'admin.templates.repsMax' | transloco }}</th>
+                    <th scope="col">{{ 'admin.templates.percent' | transloco }}</th>
+                    <th scope="col">{{ 'admin.templates.rest' | transloco }}</th>
+                    <th scope="col">
+                      <span class="cdk-visually-hidden">{{ 'common.actions' | transloco }}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (set of ex.sets; track $index; let s = $index) {
+                    <tr>
+                      <td class="num">{{ s + 1 }}</td>
+                      <td>
+                        <select
+                          class="cell"
+                          [attr.aria-label]="'admin.templates.setType' | transloco"
+                          [value]="set.type"
+                          (change)="setSet(r, e, s, { type: $any($event.target).value })"
+                        >
+                          @for (t of setTypes; track t) {
+                            <option [value]="t" [selected]="t === set.type">
+                              {{ 'routines.setType.' + t | transloco }}
+                            </option>
+                          }
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          class="cell"
+                          type="number"
+                          min="1"
+                          [attr.aria-label]="'admin.templates.repsMin' | transloco"
+                          [value]="set.repsMin"
+                          (change)="
+                            setSet(r, e, s, { repsMin: num($any($event.target).value) ?? 1 })
+                          "
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="cell"
+                          type="number"
+                          min="1"
+                          [attr.aria-label]="'admin.templates.repsMax' | transloco"
+                          [value]="set.repsMax"
+                          (change)="
+                            setSet(r, e, s, { repsMax: num($any($event.target).value) ?? 1 })
+                          "
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="cell"
+                          type="number"
+                          min="1"
+                          max="100"
+                          [attr.aria-label]="'admin.templates.percent' | transloco"
+                          [value]="set.percent1RM ?? ''"
+                          (change)="
+                            setSet(r, e, s, { percent1RM: num($any($event.target).value) ?? null })
+                          "
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="cell"
+                          type="number"
+                          min="0"
+                          step="15"
+                          [attr.aria-label]="'admin.templates.rest' | transloco"
+                          [value]="set.restSeconds ?? ''"
+                          (change)="
+                            setSet(r, e, s, { restSeconds: num($any($event.target).value) })
+                          "
+                        />
+                      </td>
+                      <td>
+                        <button
+                          mat-icon-button
+                          type="button"
+                          [attr.aria-label]="'admin.templates.removeSet' | transloco: { n: s + 1 }"
+                          (click)="removeSet(r, e, s)"
+                        >
+                          <mat-icon>remove_circle_outline</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="exercise-foot">
+              <button
+                mat-button
+                type="button"
+                [disabled]="ex.sets.length >= limits.sets"
+                (click)="addSet(r, e)"
+              >
+                <mat-icon>add</mat-icon>{{ 'admin.templates.addSet' | transloco }}
+              </button>
+              <mat-form-field subscriptSizing="dynamic" class="notes">
+                <mat-label>{{ 'admin.templates.notes' | transloco }}</mat-label>
+                <input
+                  matInput
+                  maxlength="1000"
+                  [value]="ex.notes"
+                  (change)="setNotes(r, e, $any($event.target).value)"
+                />
+              </mat-form-field>
+            </div>
+            @if (ex.progression) {
+              <p class="hint">{{ 'admin.templates.keepsProgression' | transloco }}</p>
+            }
+          </li>
+        }
+      </ol>
+      @if (routine.exercises.length < limits.exercises) {
+        <app-global-exercise-picker (picked)="addExercise(r, $event)" />
+      }
+    </mat-card>
+  }
+  @if (m.routines.length < limits.routines) {
+    <button mat-stroked-button type="button" class="add-routine" (click)="addRoutine()">
+      <mat-icon>add</mat-icon>{{ 'admin.templates.addRoutine' | transloco }}
+    </button>
+  }
+
+  <!-- 3. Schedule -->
+  <mat-card appearance="outlined" class="block">
+    <header class="routine-head">
+      <h2 class="section-title">{{ 'admin.templates.schedule' | transloco }}</h2>
+      <span class="spacer"></span>
+      <button mat-button type="button" [disabled]="m.durationWeeks < 2" (click)="copyFirstWeek()">
+        <mat-icon>content_copy</mat-icon>{{ 'admin.templates.copyFirstWeek' | transloco }}
+      </button>
+    </header>
+    <div class="scroll">
+      <table class="sg-table grid">
+        <caption class="cdk-visually-hidden">
+          {{
+            'admin.templates.schedule' | transloco
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ 'stats.table.week' | transloco }}</th>
+            @for (d of weekdays; track d) {
+              <th scope="col">{{ 'profile.weekdaysShort.' + d | transloco }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (w of weekNumbers(); track w) {
+            <tr [class.deload]="m.deload.weeks.includes(w)">
+              <th scope="row">{{ w }}</th>
+              @for (d of weekdays; track d) {
+                @let key = m.weeks[w - 1][d - 1];
+                <td>
+                  <select
+                    class="cell"
+                    [attr.aria-label]="
+                      'admin.templates.dayLabel'
+                        | transloco: { week: w, day: ('profile.weekdays.' + d | transloco) }
+                    "
+                    (change)="setDay(w - 1, d, $any($event.target).value || null)"
+                  >
+                    <option value="" [selected]="!key">—</option>
+                    @for (routine of m.routines; track routine.key) {
+                      <option [value]="routine.key" [selected]="routine.key === key">
+                        {{ routineLabel(routine.key) }}
+                      </option>
+                    }
+                  </select>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
+
+  <!-- 4. Deload -->
+  <mat-card appearance="outlined" class="block">
+    <h2 class="section-title">{{ 'admin.templates.deload' | transloco }}</h2>
+    <div class="form-grid">
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.deloadWeeks' | transloco }}</mat-label>
+        <mat-select
+          multiple
+          [value]="m.deload.weeks"
+          (valueChange)="patch({ deload: { ...m.deload, weeks: $event } })"
+        >
+          @for (w of weekNumbers(); track w) {
+            <mat-option [value]="w">{{ 'stats.adherence.weekN' | transloco: { n: w } }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.deloadMode' | transloco }}</mat-label>
+        <mat-select
+          [value]="m.deload.mode"
+          (valueChange)="patch({ deload: { ...m.deload, mode: $event } })"
+        >
+          <mat-option value="weight">{{
+            'admin.templates.deloadModes.weight' | transloco
+          }}</mat-option>
+          <mat-option value="sets">{{ 'admin.templates.deloadModes.sets' | transloco }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'admin.templates.deloadPercent' | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          min="1"
+          max="90"
+          [value]="m.deload.percent"
+          (change)="patch({ deload: { ...m.deload, percent: +$any($event.target).value || 0 } })"
+        />
+        <span matTextSuffix>%</span>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- 5. Save -->
+  <div class="save-bar">
+    @if (problems().length) {
+      <ul class="problems" role="status">
+        @for (p of problems(); track $index) {
+          <li><mat-icon aria-hidden="true">error_outline</mat-icon>{{ problemText(p) }}</li>
+        }
+      </ul>
+    }
+    <div class="row-actions">
+      <a mat-button routerLink="/admin/templates">{{ 'common.cancel' | transloco }}</a>
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="problems().length > 0 || saving()"
+        (click)="save()"
+      >
+        {{ 'common.save' | transloco }}
+      </button>
+    </div>
+  </div>
+}

@@ -1,0 +1,81 @@
+// Shared by the nutrition tabs: one filter row, then the content it scopes.
+:host {
+  display: block;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-bottom: 16px;
+
+  mat-form-field {
+    flex: 0 1 220px;
+  }
+}
+
+.search {
+  flex: 1 1 260px !important;
+  max-width: 400px;
+}
+
+.cta {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity 150ms;
+}
+
+.pending {
+  opacity: 0.5;
+}
+
+.macros-inline {
+  margin-left: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.description {
+  margin: 12px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+th[scope='row'] {
+  position: static;
+  background: none;
+  font: var(--mat-sys-body-medium);
+}
+
+tfoot th,
+tfoot td {
+  font-weight: 600;
+}
+
+.empty {
+  margin: 24px 0;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.disclaimer {
+  margin: 16px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}

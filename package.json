@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "api:sync": "node scripts/sync-openapi.mjs",
-    "api:generate": "ng-openapi-gen -c ng-openapi-gen.json"
+    "api:generate": "ng-openapi-gen -c ng-openapi-gen.json",
+    "i18n:check": "node scripts/i18n-check.mjs"
   },
   "private": true,
   "packageManager": "npm@11.19.1",

@@ -97,7 +97,12 @@
     "futureDate": "The date can't be in the future.",
     "passwordMismatch": "Passwords don't match.",
     "confirmationMismatch": "The text doesn't match.",
-    "noMeasurement": "Fill in at least one measurement."
+    "noMeasurement": "Fill in at least one measurement.",
+    "maxItems": "At most {{max}} items.",
+    "mealNoItems": "Add at least one food.",
+    "pattern": "Invalid format.",
+    "slug": "Lowercase letters, numbers and dashes only (e.g. bench-press).",
+    "translatableDefault": "The Spanish text (default language) is missing."
   },
   "common": {
     "close": "Close",
@@ -172,7 +177,10 @@
     "lb": "lb",
     "cm": "cm",
     "in": "in",
-    "percent": "%"
+    "percent": "%",
+    "kcal": "kcal",
+    "g": "g",
+    "kcalPer100": "{{kcal}} kcal/100 g"
   },
   "errors": {
     "BAD_REQUEST": "The request is not valid.",
@@ -1018,6 +1026,317 @@
       "all": "See measurements",
       "empty": "Log your weight to see how it changes.",
       "add": "Log weight"
+    }
+  },
+  "translatable": {
+    "missing": "Not translated"
+  },
+  "nutrition": {
+    "disclaimer": "General guidance only, not medical or nutritional advice. Talk to a professional before changing your diet.",
+    "all": "All",
+    "tabs": {
+      "calculator": "Calculator",
+      "meals": "Meals",
+      "guidelines": "Guides",
+      "foods": "Foods"
+    },
+    "goals": {
+      "bulk": "Bulk",
+      "maintenance": "Maintenance",
+      "cut": "Cut"
+    },
+    "activity": {
+      "sedentary": "Sedentary",
+      "light": "Light",
+      "moderate": "Moderate",
+      "active": "Active",
+      "very_active": "Very active"
+    },
+    "activityHint": {
+      "sedentary": "Little or no exercise.",
+      "light": "Exercise 1-3 days a week.",
+      "moderate": "Exercise 3-5 days a week.",
+      "active": "Hard exercise 6-7 days a week.",
+      "very_active": "Very hard training or a physical job."
+    },
+    "mealTypes": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "snack": "Snack",
+      "pre_workout": "Pre-workout",
+      "post_workout": "Post-workout"
+    },
+    "categories": {
+      "meat": "Meat",
+      "fish": "Fish",
+      "eggs": "Eggs",
+      "dairy": "Dairy",
+      "legumes": "Legumes",
+      "grains": "Grains",
+      "tubers": "Tubers",
+      "fruits": "Fruits",
+      "vegetables": "Vegetables",
+      "nuts_seeds": "Nuts and seeds",
+      "fats_oils": "Fats and oils",
+      "supplements": "Supplements",
+      "other": "Other"
+    },
+    "tags": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "gluten-free": "Gluten-free",
+      "lactose-free": "Lactose-free",
+      "high-protein": "High protein",
+      "high-fiber": "High fiber",
+      "low-fat": "Low fat"
+    },
+    "macros": {
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fat": "Fat"
+    },
+    "calculator": {
+      "title": "Calorie calculator",
+      "hint": "Mifflin-St Jeor × activity factor, adjusted to your goal. Whatever you leave empty comes from your profile and your latest weigh-in.",
+      "goal": "Goal",
+      "activity": "Activity level",
+      "sex": "Sex",
+      "fromProfile": "From my profile",
+      "age": "Age",
+      "height": "Height",
+      "weight": "Weight",
+      "weightHint": "Empty = your latest weigh-in.",
+      "submit": "Calculate",
+      "target": "Approximate daily calories",
+      "bmr": "Basal metabolic rate",
+      "tdee": "Total expenditure",
+      "clamped": "The target was below your basal metabolic rate, so it was raised to that minimum.",
+      "macros": "Macronutrient split",
+      "macrosAria": "Share of protein, carbs and fat",
+      "usedStored": "Taken from your account:",
+      "fields": {
+        "sex": "sex",
+        "ageYears": "age",
+        "heightCm": "height",
+        "weightKg": "weight"
+      },
+      "sources": {
+        "profile": "profile",
+        "body_metrics": "latest weigh-in",
+        "request": "this form"
+      },
+      "empty": "Fill in your data and calculate to see your approximate calories and macros."
+    },
+    "meals": {
+      "goal": "Goal",
+      "type": "Meal type",
+      "tags": "Classification",
+      "itemsOf": "Foods in {{name}}",
+      "grams": "Amount",
+      "total": "Total",
+      "macrosShort": "P {{p}} g · C {{c}} g · F {{f}} g",
+      "empty": "No suggestions match these filters.",
+      "locked": "{{limit}} more suggestions are available with Premium."
+    },
+    "guidelines": {
+      "goal": "Filter by goal",
+      "empty": "No guides for this goal."
+    },
+    "foods": {
+      "search": "Search food",
+      "category": "Category",
+      "tags": "Tags",
+      "food": "Food",
+      "caption": "Foods and macronutrients per 100 g",
+      "per100": "Values per 100 g.",
+      "empty": "No foods match."
+    }
+  },
+  "admin": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleted": "Deleted.",
+    "editItem": "Edit {{name}}",
+    "deleteItem": "Delete {{name}}",
+    "empty": "Nothing here.",
+    "notFound": "It doesn't exist or you don't have access.",
+    "tabs": {
+      "users": "Users",
+      "plans": "Plans",
+      "exercises": "Exercises",
+      "tiers": "Tiers",
+      "tags": "Tags",
+      "templates": "Templates",
+      "foods": "Foods",
+      "meals": "Meals",
+      "guidelines": "Guides"
+    },
+    "roles": {
+      "user": "User",
+      "admin": "Admin",
+      "coach": "Coach"
+    },
+    "fields": {
+      "name": "Name",
+      "title": "Title",
+      "summary": "Summary",
+      "body": "Content",
+      "description": "Description",
+      "slug": "Identifier (slug)",
+      "slugHint": "Unique and permanent: it can't be changed later.",
+      "slugLocked": "The identifier can't be changed.",
+      "sortOrder": "Order"
+    },
+    "users": {
+      "search": "Search by email or name",
+      "role": "Role",
+      "user": "User",
+      "plan": "Plan",
+      "registered": "Joined",
+      "unverified": "Unverified",
+      "status": {
+        "active": "Active",
+        "canceled": "Canceled",
+        "expired": "Expired"
+      },
+      "untilDate": "until {{date}}",
+      "assign": "Assign plan",
+      "assignTitle": "Plan for {{email}}",
+      "until": "Valid until (optional)",
+      "untilHint": "Empty = no end date.",
+      "roleChanged": "Role updated.",
+      "planAssigned": "Plan assigned.",
+      "empty": "No users match."
+    },
+    "plans": {
+      "hint": "The API enforces each plan’s limits and features on every request.",
+      "new": "New plan",
+      "newTitle": "New plan",
+      "editTitle": "Edit plan",
+      "code": "Code",
+      "codeHint": "Lowercase, numbers, - or _. Can't be changed.",
+      "active": "Active",
+      "inactive": "Inactive",
+      "isDefault": "Default plan",
+      "limits": "Limits",
+      "features": "Features",
+      "statsDays": "Stats history (days)",
+      "unlimited": "Unlimited",
+      "included": "Included",
+      "notIncluded": "Not included",
+      "deleteTitle": "Delete this plan?",
+      "deleteMessage": "Users on this plan will move to the default plan."
+    },
+    "exercises": {
+      "search": "Search exercise",
+      "new": "New exercise",
+      "newTitle": "New global exercise",
+      "editTitle": "Edit global exercise",
+      "back": "Back to exercises",
+      "tiers": "Tiers",
+      "tierFor": "{{goal}} tier",
+      "deleteTitle": "Delete this exercise?",
+      "deleteMessage": "It will no longer appear in the catalog. Routines and sessions that already use it are not changed."
+    },
+    "tiers": {
+      "hint": "Pick a goal and a muscle group, set each exercise’s tier and save all the changes at once.",
+      "save": "Save {{count}} changes",
+      "discard": "Discard",
+      "saved": "{{count}} exercises updated.",
+      "rowLabel": "Tier for {{name}}",
+      "none": "No tier"
+    },
+    "tags": {
+      "new": "New tag",
+      "newTitle": "New tag",
+      "editTitle": "Edit tag",
+      "deleteTitle": "Delete this tag?",
+      "deleteMessage": "It will be removed from the exercises that have it."
+    },
+    "templates": {
+      "hint": "Programs users can copy into their account.",
+      "new": "New template",
+      "newTitle": "New program template",
+      "editTitle": "Edit program template",
+      "back": "Back to templates",
+      "goal": "Goal",
+      "level": "Level",
+      "weeks": "Weeks",
+      "state": "Status",
+      "active": "Visible to users",
+      "routines": "Routines",
+      "routineName": "Routine name",
+      "key": "Key",
+      "addRoutine": "Add routine",
+      "removeRoutine": "Remove routine",
+      "addExercise": "Add exercise",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "setsOf": "Sets of {{name}}",
+      "setType": "Type",
+      "repsMin": "Min reps",
+      "repsMax": "Max reps",
+      "percent": "% 1RM",
+      "rest": "Rest (s)",
+      "addSet": "Add set",
+      "removeSet": "Remove set {{n}}",
+      "notes": "Notes",
+      "keepsProgression": "It has a progression rule: kept as is.",
+      "schedule": "Schedule",
+      "copyFirstWeek": "Copy week 1 to all weeks",
+      "dayLabel": "Week {{week}}, {{day}}",
+      "deload": "Deload",
+      "deloadWeeks": "Deload weeks",
+      "deloadMode": "Deload type",
+      "deloadModes": {
+        "weight": "Reduce weight",
+        "sets": "Reduce sets"
+      },
+      "deloadPercent": "Reduction",
+      "deleteTitle": "Delete this template?",
+      "deleteMessage": "It will no longer be available. Programs already copied are not changed.",
+      "problems": {
+        "slug": "Invalid identifier.",
+        "name": "The Spanish name is missing.",
+        "noRoutines": "Add at least one routine.",
+        "routineKey": "Routine {{routine}}: invalid key (lowercase, numbers and dashes).",
+        "duplicateKey": "Duplicate key: {{key}}.",
+        "routineName": "Routine {{routine}}: the Spanish name is missing.",
+        "noExercises": "Routine {{routine}}: add at least one exercise.",
+        "noSets": "Routine {{routine}}, exercise {{exercise}}: add at least one set.",
+        "reps": "Routine {{routine}}, exercise {{exercise}}: min reps ≥ 1 and max ≥ min.",
+        "notScheduled": "Schedule the routines on some day of the calendar."
+      }
+    },
+    "foods": {
+      "new": "New food",
+      "newTitle": "New food",
+      "editTitle": "Edit food",
+      "deleteTitle": "Delete this food?",
+      "deleteMessage": "It can't be deleted while a meal uses it."
+    },
+    "meals": {
+      "new": "New meal",
+      "newTitle": "New meal suggestion",
+      "editTitle": "Edit meal suggestion",
+      "items": "Foods",
+      "addFood": "Search and add a food",
+      "gramsError": "Between 1 and 2000 g, whole numbers.",
+      "isSample": "Visible on the Free plan (sample)",
+      "isSampleHint": "Other suggestions are only shown to Premium users.",
+      "sample": "Sample",
+      "deleteTitle": "Delete this meal?",
+      "deleteMessage": "It will no longer appear in the suggestions."
+    },
+    "guidelines": {
+      "new": "New guide",
+      "newTitle": "New guide",
+      "editTitle": "Edit guide",
+      "goals": "Goals",
+      "bodyHint": "Plain text: each line is a paragraph.",
+      "deleteTitle": "Delete this guide?",
+      "deleteMessage": "It will no longer appear in Nutrition."
     }
   }
 }
