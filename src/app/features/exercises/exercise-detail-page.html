@@ -1,0 +1,276 @@
+<section class="page">
+  <a mat-button routerLink="/exercises" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'exercises.detail.back' | transloco }}
+  </a>
+
+  @if (store.isPending()) {
+    <div class="center" role="status">
+      <mat-spinner diameter="40" [attr.aria-label]="'common.loading' | transloco" />
+    </div>
+  } @else if (store.error()) {
+    <p class="center">{{ 'exercises.detail.notFound' | transloco }}</p>
+  } @else if (store.exercise(); as ex) {
+    <header class="head">
+      @if (ex.imageUrl) {
+        <img class="image" [src]="ex.imageUrl" [alt]="ex.name" width="160" height="160" />
+      } @else {
+        <span class="image placeholder" aria-hidden="true"
+          ><mat-icon>fitness_center</mat-icon></span
+        >
+      }
+      <div class="title">
+        <h1>{{ ex.name }}</h1>
+        <p class="sub">
+          <span>{{ 'exercises.equipment.' + ex.equipment | transloco }}</span>
+          <span>{{ 'exercises.mechanic.' + ex.mechanic | transloco }}</span>
+          <span>{{ 'exercises.category.' + ex.category | transloco }}</span>
+        </p>
+        <div class="actions">
+          <button
+            mat-stroked-button
+            type="button"
+            class="fav"
+            [class.on]="ex.isFavorite"
+            [attr.aria-pressed]="ex.isFavorite"
+            (click)="toggleFavorite()"
+          >
+            <mat-icon>{{ ex.isFavorite ? 'star' : 'star_outline' }}</mat-icon>
+            {{ (ex.isFavorite ? 'exercises.unfavorite' : 'exercises.favorite') | transloco }}
+          </button>
+          @if (ex.isCustom) {
+            <a mat-stroked-button [routerLink]="['/exercises', ex.id, 'edit']">
+              <mat-icon>edit</mat-icon>
+              {{ 'exercises.detail.edit' | transloco }}
+            </a>
+            <button mat-button type="button" class="delete" (click)="remove()">
+              <mat-icon>delete</mat-icon>
+              {{ 'exercises.detail.delete' | transloco }}
+            </button>
+          }
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ 'exercises.detail.muscles' | transloco }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="label">{{ 'exercises.detail.primary' | transloco }}</p>
+          <span class="pill primary">{{
+            'exercises.muscles.' + ex.primaryMuscle | transloco
+          }}</span>
+          @if (ex.secondaryMuscles.length) {
+            <p class="label">{{ 'exercises.detail.secondary' | transloco }}</p>
+            <div class="pills">
+              @for (m of ex.secondaryMuscles; track m) {
+                <span class="pill">{{ 'exercises.muscles.' + m | transloco }}</span>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ 'exercises.detail.tiers' | transloco }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="tiers">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <span class="cdk-visually-hidden">{{
+                    'exercises.filters.goal' | transloco
+                  }}</span>
+                </th>
+                <th scope="col">{{ 'exercises.tier.global' | transloco }}</th>
+                <th scope="col">{{ 'exercises.tier.personal' | transloco }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (goal of goals; track goal) {
+                <tr>
+                  <th scope="row">{{ 'profile.goal.' + goal | transloco }}</th>
+                  <td>
+                    @if (ex.tiers[goal]; as tier) {
+                      <app-tier-chip [tier]="tier" />
+                    } @else {
+                      <span class="muted">{{ 'exercises.detail.noTier' | transloco }}</span>
+                    }
+                  </td>
+                  <td>
+                    <mat-select
+                      class="personal-select"
+                      [value]="ex.personalTiers[goal]"
+                      (selectionChange)="store.setPersonalTier(goal, $event.value)"
+                      [attr.aria-label]="
+                        'exercises.detail.personalFor'
+                          | transloco: { goal: ('profile.goal.' + goal | transloco) }
+                      "
+                    >
+                      <mat-option [value]="null">{{
+                        'exercises.detail.useGlobal' | transloco
+                      }}</mat-option>
+                      @for (t of tiers; track t) {
+                        <mat-option [value]="t">{{ t }}</mat-option>
+                      }
+                    </mat-select>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      @if (ex.description || ex.instructions) {
+        <mat-card appearance="outlined" class="wide">
+          <mat-card-header>
+            <mat-card-title>{{ 'exercises.detail.howTo' | transloco }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (ex.description) {
+              <p class="prose">{{ ex.description }}</p>
+            }
+            @if (ex.instructions) {
+              <p class="prose">{{ ex.instructions }}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (store.records(); as records) {
+        @if (hasRecords()) {
+          <mat-card appearance="outlined" class="wide">
+            <mat-card-header>
+              <mat-card-title>{{ 'exercises.detail.records' | transloco }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <dl class="records">
+                @if (records.maxWeight; as r) {
+                  <div>
+                    <dt>{{ 'exercises.records.maxWeight' | transloco }}</dt>
+                    <dd>
+                      {{ r.value | weight }}
+                      <span class="muted">{{
+                        'exercises.records.reps' | transloco: { reps: r.reps }
+                      }}</span>
+                    </dd>
+                  </div>
+                }
+                @if (records.bestE1RM; as r) {
+                  <div>
+                    <dt>{{ 'exercises.records.bestE1RM' | transloco }}</dt>
+                    <dd>
+                      {{ r.value | weight }}
+                      <span class="muted">
+                        {{
+                          'exercises.records.from'
+                            | transloco: { weight: (r.weightKg | weight), reps: r.reps }
+                        }}
+                      </span>
+                    </dd>
+                  </div>
+                }
+                @if (records.maxVolume; as r) {
+                  <div>
+                    <dt>{{ 'exercises.records.maxVolume' | transloco }}</dt>
+                    <dd>
+                      {{ r.value | weight: { digits: 0 } }}
+                      <span class="muted">{{ r.achievedAt | localDate }}</span>
+                    </dd>
+                  </div>
+                }
+              </dl>
+              @if (records.repsAtWeight.length) {
+                <table class="reps-table">
+                  <caption>
+                    {{
+                      'exercises.records.repsAtWeight' | transloco
+                    }}
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">{{ 'exercises.records.weight' | transloco }}</th>
+                      <th scope="col">{{ 'exercises.records.bestReps' | transloco }}</th>
+                      <th scope="col">{{ 'exercises.records.date' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (r of records.repsAtWeight; track r.weightKg) {
+                      <tr>
+                        <td>{{ r.weightKg | weight }}</td>
+                        <td>{{ r.value }}</td>
+                        <td>{{ r.achievedAt | localDate }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      }
+
+      <mat-card appearance="outlined" class="wide">
+        <mat-card-header>
+          <mat-card-title>{{ 'exercises.detail.history' | transloco }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (store.history().length) {
+            <ol class="history">
+              @for (entry of store.history(); track entry.workoutId) {
+                <li>
+                  <div class="history-head">
+                    <strong>{{ entry.startedAt | localDate: 'long' }}</strong>
+                    <span class="muted">
+                      @if (entry.bestE1RM !== null) {
+                        {{
+                          'exercises.history.summary'
+                            | transloco
+                              : {
+                                  volume: (entry.volumeKg | weight: { digits: 0 }),
+                                  e1rm: (entry.bestE1RM | weight),
+                                }
+                        }}
+                      } @else {
+                        {{
+                          'exercises.history.volume'
+                            | transloco: { volume: (entry.volumeKg | weight: { digits: 0 }) }
+                        }}
+                      }
+                    </span>
+                  </div>
+                  <div class="sets">
+                    @for (set of workingSets(entry); track set.id) {
+                      <span class="set" [class]="'set-' + set.type">
+                        {{
+                          'exercises.history.set'
+                            | transloco: { weight: (set.weightKg | weight), reps: set.reps }
+                        }}
+                      </span>
+                    }
+                  </div>
+                </li>
+              }
+            </ol>
+            @if (store.historyTotal() > historyPageSize) {
+              <mat-paginator
+                [length]="store.historyTotal()"
+                [pageIndex]="store.historyPage() - 1"
+                [pageSize]="historyPageSize"
+                [hidePageSize]="true"
+                (page)="onHistoryPage($event)"
+              />
+            }
+          } @else if (!store.historyLoading()) {
+            <p class="muted">{{ 'exercises.history.empty' | transloco }}</p>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</section>

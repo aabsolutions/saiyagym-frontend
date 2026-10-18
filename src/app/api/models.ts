@@ -67,6 +67,7 @@ export type { MeDto } from './models/me-dto';
 export type { PageMetaDto } from './models/page-meta-dto';
 export type { Per100GDto } from './models/per-100-g-dto';
 export type { PercentOf1RmRuleDto } from './models/percent-of-1-rm-rule-dto';
+export type { PersonalTiersPatchDto } from './models/personal-tiers-patch-dto';
 export type { PlanEntitlementsDto } from './models/plan-entitlements-dto';
 export type { PlanFeaturesDto } from './models/plan-features-dto';
 export type { PlanLimitsDto } from './models/plan-limits-dto';

@@ -1,0 +1,92 @@
+.narrow {
+  max-width: 820px;
+}
+
+.back {
+  margin-bottom: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0 16px;
+}
+
+.image-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+
+  img,
+  .placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--mat-sys-corner-large);
+    object-fit: cover;
+  }
+
+  .placeholder {
+    display: grid;
+    place-items: center;
+    border: 2px dashed var(--mat-sys-outline-variant);
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.image-actions {
+  display: flex;
+  flex: 1 1 240px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  mat-progress-bar {
+    max-width: 240px;
+  }
+}
+
+// A <label> wrapping the file input, styled as a stroked button: keyboard and
+// screen readers reach the real input; no JS click() forwarding.
+.upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--mat-sys-outline);
+  border-radius: var(--mat-sys-corner-full);
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-label-large);
+  cursor: pointer;
+
+  &:focus-within {
+    outline: 2px solid var(--mat-sys-primary);
+    outline-offset: 2px;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.muted {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.small {
+  margin: 0;
+  font: var(--mat-sys-body-small);
+}
+
+.submit {
+  display: flex;
+  justify-content: flex-end;
+}

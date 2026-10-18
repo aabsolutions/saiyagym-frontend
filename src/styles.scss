@@ -71,6 +71,14 @@ body {
   width: 100%;
 }
 
+// CDK appends the drag preview to <body>, outside any component's style scope.
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: var(--mat-sys-corner-medium);
+  box-shadow: var(--mat-sys-level3);
+  list-style: none;
+}
+
 // Destructive actions (delete account…).
 .mat-mdc-unelevated-button.danger {
   @include mat.button-overrides(

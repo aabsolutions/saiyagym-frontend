@@ -18,7 +18,11 @@ export interface ExerciseDetailDto {
   isGlobal: boolean;
   mechanic: 'compound' | 'isolation';
   name: string;
-  personalTier: ('S' | 'A' | 'B' | 'C') | null;
+
+  /**
+   * The caller's own tier per goal; `null` = none (the global tier applies).
+   */
+  personalTiers: TiersDto;
   primaryMuscle: 'chest' | 'lats' | 'upper_back' | 'traps' | 'front_delts' | 'side_delts' | 'rear_delts' | 'biceps' | 'triceps' | 'forearms' | 'abs' | 'obliques' | 'lower_back' | 'glutes' | 'quads' | 'hamstrings' | 'adductors' | 'abductors' | 'calves';
   secondaryMuscles: Array<'chest' | 'lats' | 'upper_back' | 'traps' | 'front_delts' | 'side_delts' | 'rear_delts' | 'biceps' | 'triceps' | 'forearms' | 'abs' | 'obliques' | 'lower_back' | 'glutes' | 'quads' | 'hamstrings' | 'adductors' | 'abductors' | 'calves'>;
   slug: string | null;

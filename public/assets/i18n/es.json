@@ -337,5 +337,153 @@
       "limitGeneric": "Alcanzaste el límite de {{resource}} de tu plan.",
       "seePlans": "Ver planes"
     }
+  },
+  "paginator": {
+    "itemsPerPage": "Por página",
+    "next": "Página siguiente",
+    "previous": "Página anterior",
+    "first": "Primera página",
+    "last": "Última página",
+    "range": "{{from}}–{{to}} de {{length}}",
+    "rangeEmpty": "0 de 0"
+  },
+  "exercises": {
+    "tabs": {
+      "list": "Lista",
+      "tiers": "Tier list"
+    },
+    "search": "Buscar ejercicios",
+    "clearSearch": "Borrar búsqueda",
+    "create": "Crear ejercicio",
+    "customBadge": "Propio",
+    "customUsage": "Ejercicios personalizados: {{count}} de {{max}}",
+    "favorite": "Marcar como favorito",
+    "unfavorite": "Quitar de favoritos",
+    "empty": "No hay ejercicios con estos filtros.",
+    "loadError": "No pudimos cargar los ejercicios.",
+    "filters": {
+      "title": "Filtros",
+      "any": "Todos",
+      "muscle": "Músculo",
+      "equipment": "Equipo",
+      "mechanic": "Mecánica",
+      "tier": "Tier",
+      "goal": "Objetivo",
+      "tag": "Etiqueta",
+      "favorites": "Solo favoritos",
+      "custom": "Solo personalizados",
+      "clear": "Quitar filtros"
+    },
+    "tier": {
+      "global": "Tier global",
+      "personal": "Tu tier personal"
+    },
+    "board": {
+      "source": "Origen del tier",
+      "global": "Global",
+      "personal": "Personal",
+      "personalHint": "Arrastra los ejercicios entre columnas para fijar tu tier personal de {{goal}}. El otro objetivo no cambia.",
+      "column": "Tier {{tier}}",
+      "emptyColumn": "Sin ejercicios",
+      "unranked": "Sin tier para este objetivo",
+      "reset": "Volver al tier global en este objetivo"
+    },
+    "detail": {
+      "back": "Ejercicios",
+      "notFound": "Este ejercicio no existe o no tienes acceso.",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar este ejercicio?",
+      "deleteMessage": "Dejará de aparecer en el catálogo y liberará un hueco de tu plan. Tus entrenamientos pasados no cambian.",
+      "muscles": "Músculos",
+      "primary": "Principal",
+      "secondary": "Secundarios",
+      "tiers": "Tiers",
+      "noTier": "Sin tier",
+      "useGlobal": "Usar el tier global",
+      "howTo": "Cómo hacerlo",
+      "records": "Tus récords",
+      "history": "Historial",
+      "personalFor": "Tu tier personal en {{goal}}"
+    },
+    "records": {
+      "maxWeight": "Mayor peso",
+      "bestE1RM": "Mejor 1RM estimado",
+      "maxVolume": "Mayor volumen en una sesión",
+      "repsAtWeight": "Más repeticiones por peso",
+      "reps": "{{reps}} reps",
+      "from": "de {{weight}} × {{reps}}",
+      "weight": "Peso",
+      "bestReps": "Reps",
+      "date": "Fecha"
+    },
+    "history": {
+      "volume": "Volumen {{volume}}",
+      "summary": "Volumen {{volume}} · 1RM est. {{e1rm}}",
+      "set": "{{weight}} × {{reps}}",
+      "empty": "Todavía no registraste este ejercicio. Las sesiones se registran desde la app móvil."
+    },
+    "form": {
+      "createTitle": "Nuevo ejercicio",
+      "editTitle": "Editar ejercicio",
+      "name": "Nombre",
+      "primaryMuscle": "Músculo principal",
+      "secondaryMuscles": "Músculos secundarios",
+      "equipment": "Equipo",
+      "mechanic": "Mecánica",
+      "category": "Categoría",
+      "tags": "Etiquetas",
+      "description": "Descripción",
+      "instructions": "Instrucciones",
+      "image": {
+        "upload": "Subir imagen",
+        "remove": "Quitar imagen",
+        "hint": "JPG, PNG o WebP.",
+        "tooLarge": "La imagen es demasiado grande.",
+        "format": "Formato no permitido. Usa JPG, PNG o WebP.",
+        "failed": "No se pudo subir la imagen. Inténtalo de nuevo."
+      }
+    },
+    "muscles": {
+      "chest": "Pecho",
+      "lats": "Dorsales",
+      "upper_back": "Espalda alta",
+      "traps": "Trapecios",
+      "front_delts": "Deltoides anterior",
+      "side_delts": "Deltoides lateral",
+      "rear_delts": "Deltoides posterior",
+      "biceps": "Bíceps",
+      "triceps": "Tríceps",
+      "forearms": "Antebrazos",
+      "abs": "Abdominales",
+      "obliques": "Oblicuos",
+      "lower_back": "Zona lumbar",
+      "glutes": "Glúteos",
+      "quads": "Cuádriceps",
+      "hamstrings": "Isquiotibiales",
+      "adductors": "Aductores",
+      "abductors": "Abductores",
+      "calves": "Gemelos"
+    },
+    "equipment": {
+      "barbell": "Barra",
+      "dumbbell": "Mancuernas",
+      "machine": "Máquina",
+      "cable": "Polea",
+      "bodyweight": "Peso corporal",
+      "kettlebell": "Kettlebell",
+      "band": "Banda",
+      "smith": "Multipower",
+      "other": "Otro"
+    },
+    "mechanic": {
+      "compound": "Compuesto",
+      "isolation": "Aislamiento"
+    },
+    "category": {
+      "strength": "Fuerza",
+      "powerlifting_main": "Básico de powerlifting",
+      "accessory": "Accesorio"
+    }
   }
 }

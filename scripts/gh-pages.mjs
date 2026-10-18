@@ -16,7 +16,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https://res.cloudinary.com",
-  "connect-src 'self' https://saiyagym-api.onrender.com",
+  // api.cloudinary.com: signed direct image uploads (the API signs, the browser uploads).
+  "connect-src 'self' https://saiyagym-api.onrender.com https://api.cloudinary.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

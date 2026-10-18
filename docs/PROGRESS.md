@@ -1,5 +1,40 @@
 # Progress — gymapp-web
 
+## 2026-10-18 — Catálogo de ejercicios
+
+### Hecho
+
+- **Rutas** (`/exercises`): pestañas Lista (`''`) y Tier list (`tiers`) como rutas reales; `new`, `:id`, `:id/edit`. `ExercisesStore` y `TierBoardStore` provistos en la raíz del feature (los filtros sobreviven al ir y volver del detalle); detalle y formulario con su propio store.
+- **Lista**: búsqueda con debounce de 300 ms; filtros músculo, equipo, mecánica, tier + objetivo, etiqueta, favoritos, personalizados; paginación (20/50/100) con `MatPaginatorIntl` traducido. Filtros y página **en la URL** (`replaceUrl`): links compartibles y botón atrás; los valores inválidos de la URL se descartan. `rxMethod` + `switchMap`: una respuesta vieja nunca pisa a la nueva. `goal` solo se manda junto con `tier` (la API lo exige); `sort=relevance` solo con búsqueda. Favorito optimista con rollback.
+- **Chips de tier** (`app-tier-chip`): S dorado, A verde, B azul, C gris (claro/oscuro con `light-dark()`); el tier personal con borde punteado.
+- **Tier list**: columnas S/A/B/C + bandeja "sin tier para este objetivo"; selector de objetivo (por defecto el del perfil) y de músculo; conmutador global/personal. En modo personal, CDK drag & drop entre columnas (la bandeja es solo origen) → `PATCH /exercises/{id}/prefs { personalTiers: { <objetivo>: tier } }` optimista con rollback (solo cambia el objetivo del tablero); botón para volver al tier global en ese objetivo (`null` + recarga).
+- **Detalle**: imagen, músculos principal/secundarios, equipo/mecánica/categoría, tiers por objetivo + selector de tier personal, descripción e instrucciones, favorito, récords (mayor peso, mejor e1RM, mayor volumen, más reps por peso) e historial paginado (series de trabajo; los calentamientos no se muestran). Editar/eliminar si es propio (con confirmación).
+- **Crear/editar personalizados**: Signal Forms con los límites del DTO; secundarios sin repetir el principal; texto vacío → se omite al crear y se manda `null` al editar. Imagen: firma de `POST /media/upload-signature` (`custom_exercise_image`) → subida directa multipart a Cloudinary con progreso; tamaño y formato validados antes de subir; el secreto nunca llega al cliente. **Límite del plan**: contador "x de 10", botón crear oculto y `<app-upgrade-cta>` al llegar al límite (y la API responde `PLAN_LIMIT_REACHED` → diálogo).
+- `LocalDatePipe` (Intl, zona del usuario, idioma activo), `ImageUpload` reutilizable (servirá para fotos de progreso).
+
+### Verificación
+
+- `npm run lint` ✅ · `npm run format:check` ✅ · `npm run test:ci` 101/101 ✅ (+35) · `npm run build:gh` ✅ (inicial 542 kB raw / 139 kB; el catálogo es un chunk lazy de 238 kB).
+- Tests: filtros ↔ URL ↔ API, `moveToTier` (puro), mapeo/schema del formulario, `checkImage` + subida firmada (campos firmados, sin Bearer, nada se sube si el archivo no cumple), `ExercisesStore` (no carga sin filtros de la URL, respuesta vieja descartada, página 1 al filtrar, rollback de favorito, límite), `TierBoardStore` (objetivo del perfil, no mueve en modo global, guardado + rollback), detalle (récords con body, sin récords/historial), debounce de la búsqueda con timers falsos.
+- **Mutation test**: con `mergeMap` en vez de `switchMap`, el test de respuesta vieja falla.
+- **No verificado en navegador**: drag & drop real (mouse/touch), subida a Cloudinary (en producción hoy devuelve `MEDIA_NOT_CONFIGURED`).
+
+### Decisiones y gotchas
+
+- **Tier personal por objetivo** (cambio en el backend, mismo día): `personalTier` único → `personalTiers: { hypertrophy, powerlifting }`, como el global. Se hizo antes de que exista la app móvil para no tener que versionar el contrato de sync. Tarjetas y tablero muestran el personal del objetivo visible; el detalle tiene un selector por objetivo.
+- **Bug del spec del backend (récords y stats)**: `RecordsController` está en `records.module.ts` y el plugin de swagger solo infiere respuestas en `*.controller.ts` → `GET /exercises/{id}/records` (y `/records`, y los `stats/*`) sin schema; el cliente generado devuelve `void` **y descarta el body**. Se llama con `HttpClient` + `recordsControllerForExercise.PATH` y un tipo local (`exercise-records.ts`, temporal).
+- `withFetch()` está deprecado en Angular 22 (fetch ya es el default) y fetch **no informa progreso de subida** → `withXhr()` (solo se desaconseja en SSR, que no usamos).
+- `MatPaginatorIntl` en `app.config` metía el paginador entero en el bundle inicial (+220 kB): se provee por ruta con `providePaginatorI18n()`.
+- CSP: `connect-src` suma `https://api.cloudinary.com` (destino de `uploadUrl`).
+- No se bindea `[maxlength]` en inputs con `[formField]`: Signal Forms ya lo deriva de `maxLength()`.
+- El preview de drag del CDK se monta en `<body>`: sus estilos van en `styles.scss`.
+
+### Pendiente / próximo
+
+- Backend: mover `RecordsController`/`StatsController` a archivos `*.controller.ts` (o `@ApiOkResponse`) y regenerar; Cloudinary en Render; correr `db:migrate-personal-tiers` en producción tras el deploy.
+- Probar en navegador: drag & drop (incluido táctil), subida de imagen cuando Cloudinary esté configurado.
+- Siguiente feature: rutinas.
+
 ## 2026-10-18 — Auth, perfil, onboarding y planes
 
 ### Hecho

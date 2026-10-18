@@ -1,0 +1,126 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.board-wrap {
+  position: relative;
+  margin-top: 16px;
+}
+
+.progress {
+  position: absolute;
+  inset: -8px 0 auto 0;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+
+  @media (max-width: 959.98px) {
+    grid-template-columns: repeat(4, minmax(240px, 80vw));
+    scroll-snap-type: x mandatory;
+
+    .column {
+      scroll-snap-align: start;
+    }
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container);
+  border-top: 4px solid var(--sg-col);
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+  }
+}
+
+.tier-S {
+  --sg-col: #f5b400;
+}
+.tier-A {
+  --sg-col: light-dark(#2e7d32, #81c784);
+}
+.tier-B {
+  --sg-col: light-dark(#1e3a8a, #b6c4ff);
+}
+.tier-C {
+  --sg-col: light-dark(#757575, #bdbdbd);
+}
+
+.count {
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+ul {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0 8px 12px;
+  list-style: none;
+}
+
+.empty {
+  padding: 16px 8px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.editable .cdk-drag,
+.unranked .cdk-drag:not(.cdk-drag-disabled) {
+  cursor: grab;
+}
+
+.cdk-drag-preview {
+  box-shadow: var(--mat-sys-level3);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.35;
+}
+
+.cdk-drag-animating,
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.unranked {
+  margin-top: 16px;
+
+  h2 {
+    margin: 0 0 8px;
+    font: var(--mat-sys-title-medium);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    padding: 0;
+  }
+}

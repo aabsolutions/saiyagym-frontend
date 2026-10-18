@@ -1,0 +1,146 @@
+<section class="page narrow">
+  <a mat-button [routerLink]="isEdit() ? ['/exercises', id()] : '/exercises'" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'exercises.detail.back' | transloco }}
+  </a>
+
+  <h1 class="page-title">
+    {{ (isEdit() ? 'exercises.form.editTitle' : 'exercises.form.createTitle') | transloco }}
+  </h1>
+
+  @if (blocked()) {
+    <app-upgrade-cta limit="customExercises" [limitValue]="list.customLimit()" />
+  } @else if (isEdit() && store.error()) {
+    <p class="muted">{{ 'exercises.detail.notFound' | transloco }}</p>
+  } @else {
+    <form [formRoot]="exerciseForm" class="form">
+      <section class="image-field">
+        @if (store.imageUrl(); as url) {
+          <img [src]="url" alt="" width="120" height="120" />
+        } @else {
+          <span class="placeholder" aria-hidden="true"
+            ><mat-icon>add_photo_alternate</mat-icon></span
+          >
+        }
+        <div class="image-actions">
+          <label class="upload" [class.disabled]="store.uploadProgress() !== null">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="cdk-visually-hidden"
+              [disabled]="store.uploadProgress() !== null"
+              (change)="onFileSelected($event)"
+            />
+            <mat-icon>upload</mat-icon>
+            <span>{{ 'exercises.form.image.upload' | transloco }}</span>
+          </label>
+          @if (store.imageUrl()) {
+            <button mat-button type="button" (click)="store.removeImage()">
+              {{ 'exercises.form.image.remove' | transloco }}
+            </button>
+          }
+          @if (store.uploadProgress(); as percent) {
+            <mat-progress-bar mode="determinate" [value]="percent" />
+          } @else if (store.uploadProgress() === 0) {
+            <mat-progress-bar mode="indeterminate" />
+          }
+          <p class="muted small">{{ 'exercises.form.image.hint' | transloco }}</p>
+        </div>
+      </section>
+
+      <mat-form-field>
+        <mat-label>{{ 'exercises.form.name' | transloco }}</mat-label>
+        <input matInput [formField]="exerciseForm.name" />
+        <mat-error>{{ exerciseForm.name().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.primaryMuscle' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.primaryMuscle">
+            @for (m of muscles; track m) {
+              <mat-option [value]="m">{{ 'exercises.muscles.' + m | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.primaryMuscle().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.secondaryMuscles' | transloco }}</mat-label>
+          <mat-select multiple [formField]="exerciseForm.secondaryMuscles">
+            @for (m of muscles; track m) {
+              <mat-option [value]="m" [disabled]="m === exerciseForm.primaryMuscle().value()">
+                {{ 'exercises.muscles.' + m | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.secondaryMuscles().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.equipment' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.equipment">
+            @for (e of equipment; track e) {
+              <mat-option [value]="e">{{ 'exercises.equipment.' + e | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.equipment().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.mechanic' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.mechanic">
+            @for (m of mechanics; track m) {
+              <mat-option [value]="m">{{ 'exercises.mechanic.' + m | transloco }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ exerciseForm.mechanic().errors() | validationMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'exercises.form.category' | transloco }}</mat-label>
+          <mat-select [formField]="exerciseForm.category">
+            <mat-option [value]="null">{{ 'profile.notSet' | transloco }}</mat-option>
+            @for (c of categories; track c) {
+              <mat-option [value]="c">{{ 'exercises.category.' + c | transloco }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <mat-label>{{ 'exercises.form.tags' | transloco }}</mat-label>
+        <mat-select multiple [formField]="exerciseForm.tags">
+          @for (tag of store.tags(); track tag.slug) {
+            <mat-option [value]="tag.slug">{{ tag.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ exerciseForm.tags().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'exercises.form.description' | transloco }}</mat-label>
+        <textarea matInput rows="3" [formField]="exerciseForm.description"></textarea>
+        <mat-error>{{ exerciseForm.description().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'exercises.form.instructions' | transloco }}</mat-label>
+        <textarea matInput rows="6" [formField]="exerciseForm.instructions"></textarea>
+        <mat-error>{{ exerciseForm.instructions().errors() | validationMessage }}</mat-error>
+      </mat-form-field>
+
+      <div class="submit">
+        <button
+          mat-flat-button
+          type="submit"
+          [disabled]="exerciseForm().submitting() || store.uploadProgress() !== null"
+        >
+          {{ 'common.save' | transloco }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

@@ -1,4 +1,4 @@
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
@@ -24,7 +24,9 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
     ),
     provideHttpClient(
-      withFetch(),
+      // XHR instead of the default fetch backend: fetch can't report upload progress
+      // (image uploads). XHR is only discouraged for SSR, which this app doesn't use.
+      withXhr(),
       // Order matters (first = outermost): errors are reported only after the auth
       // interceptor has tried refresh-and-retry, and the cold-start retries wrap the
       // raw request so each attempt is re-sent as-is.

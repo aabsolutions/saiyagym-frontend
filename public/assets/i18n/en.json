@@ -337,5 +337,153 @@
       "limitGeneric": "You've reached your plan's limit for {{resource}}.",
       "seePlans": "See plans"
     }
+  },
+  "paginator": {
+    "itemsPerPage": "Per page",
+    "next": "Next page",
+    "previous": "Previous page",
+    "first": "First page",
+    "last": "Last page",
+    "range": "{{from}}–{{to}} of {{length}}",
+    "rangeEmpty": "0 of 0"
+  },
+  "exercises": {
+    "tabs": {
+      "list": "List",
+      "tiers": "Tier list"
+    },
+    "search": "Search exercises",
+    "clearSearch": "Clear search",
+    "create": "Create exercise",
+    "customBadge": "Custom",
+    "customUsage": "Custom exercises: {{count}} of {{max}}",
+    "favorite": "Add to favorites",
+    "unfavorite": "Remove from favorites",
+    "empty": "No exercises match these filters.",
+    "loadError": "We couldn't load the exercises.",
+    "filters": {
+      "title": "Filters",
+      "any": "All",
+      "muscle": "Muscle",
+      "equipment": "Equipment",
+      "mechanic": "Mechanic",
+      "tier": "Tier",
+      "goal": "Goal",
+      "tag": "Tag",
+      "favorites": "Favorites only",
+      "custom": "Custom only",
+      "clear": "Clear filters"
+    },
+    "tier": {
+      "global": "Global tier",
+      "personal": "Your personal tier"
+    },
+    "board": {
+      "source": "Tier source",
+      "global": "Global",
+      "personal": "Personal",
+      "personalHint": "Drag exercises between columns to set your personal {{goal}} tier. The other goal does not change.",
+      "column": "Tier {{tier}}",
+      "emptyColumn": "No exercises",
+      "unranked": "No tier for this goal",
+      "reset": "Back to the global tier for this goal"
+    },
+    "detail": {
+      "back": "Exercises",
+      "notFound": "This exercise doesn't exist or you can't access it.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteTitle": "Delete this exercise?",
+      "deleteMessage": "It will leave the catalog and free a slot in your plan. Your past workouts don't change.",
+      "muscles": "Muscles",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "tiers": "Tiers",
+      "noTier": "No tier",
+      "useGlobal": "Use the global tier",
+      "howTo": "How to do it",
+      "records": "Your records",
+      "history": "History",
+      "personalFor": "Your personal tier for {{goal}}"
+    },
+    "records": {
+      "maxWeight": "Heaviest weight",
+      "bestE1RM": "Best estimated 1RM",
+      "maxVolume": "Highest session volume",
+      "repsAtWeight": "Most reps per weight",
+      "reps": "{{reps}} reps",
+      "from": "from {{weight}} × {{reps}}",
+      "weight": "Weight",
+      "bestReps": "Reps",
+      "date": "Date"
+    },
+    "history": {
+      "volume": "Volume {{volume}}",
+      "summary": "Volume {{volume}} · est. 1RM {{e1rm}}",
+      "set": "{{weight}} × {{reps}}",
+      "empty": "You haven't logged this exercise yet. Sessions are logged from the mobile app."
+    },
+    "form": {
+      "createTitle": "New exercise",
+      "editTitle": "Edit exercise",
+      "name": "Name",
+      "primaryMuscle": "Primary muscle",
+      "secondaryMuscles": "Secondary muscles",
+      "equipment": "Equipment",
+      "mechanic": "Mechanic",
+      "category": "Category",
+      "tags": "Tags",
+      "description": "Description",
+      "instructions": "Instructions",
+      "image": {
+        "upload": "Upload image",
+        "remove": "Remove image",
+        "hint": "JPG, PNG or WebP.",
+        "tooLarge": "The image is too large.",
+        "format": "Format not allowed. Use JPG, PNG or WebP.",
+        "failed": "The image couldn't be uploaded. Please try again."
+      }
+    },
+    "muscles": {
+      "chest": "Chest",
+      "lats": "Lats",
+      "upper_back": "Upper back",
+      "traps": "Traps",
+      "front_delts": "Front delts",
+      "side_delts": "Side delts",
+      "rear_delts": "Rear delts",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Forearms",
+      "abs": "Abs",
+      "obliques": "Obliques",
+      "lower_back": "Lower back",
+      "glutes": "Glutes",
+      "quads": "Quads",
+      "hamstrings": "Hamstrings",
+      "adductors": "Adductors",
+      "abductors": "Abductors",
+      "calves": "Calves"
+    },
+    "equipment": {
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbell",
+      "machine": "Machine",
+      "cable": "Cable",
+      "bodyweight": "Bodyweight",
+      "kettlebell": "Kettlebell",
+      "band": "Band",
+      "smith": "Smith machine",
+      "other": "Other"
+    },
+    "mechanic": {
+      "compound": "Compound",
+      "isolation": "Isolation"
+    },
+    "category": {
+      "strength": "Strength",
+      "powerlifting_main": "Powerlifting main lift",
+      "accessory": "Accessory"
+    }
   }
 }

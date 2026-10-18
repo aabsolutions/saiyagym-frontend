@@ -1,0 +1,177 @@
+@let f = filters();
+
+<div class="toolbar">
+  <mat-form-field class="search" subscriptSizing="dynamic">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>{{ 'exercises.search' | transloco }}</mat-label>
+    <input
+      matInput
+      type="search"
+      maxlength="100"
+      [value]="searchText()"
+      (input)="searchText.set($any($event.target).value)"
+    />
+    @if (searchText()) {
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        [attr.aria-label]="'exercises.clearSearch' | transloco"
+        (click)="clearSearch()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <button
+    mat-stroked-button
+    type="button"
+    [attr.aria-expanded]="showFilters()"
+    aria-controls="exercise-filters"
+    (click)="showFilters.set(!showFilters())"
+  >
+    <mat-icon>tune</mat-icon>
+    {{ 'exercises.filters.title' | transloco }}
+    @if (store.activeFilters()) {
+      <span class="count">{{ store.activeFilters() }}</span>
+    }
+  </button>
+
+  @if (store.canCreateCustom()) {
+    <a mat-flat-button routerLink="/exercises/new">
+      <mat-icon>add</mat-icon>
+      {{ 'exercises.create' | transloco }}
+    </a>
+  }
+</div>
+
+@if (customUsage(); as usage) {
+  <p class="usage">
+    {{ 'exercises.customUsage' | transloco: { count: usage.count, max: usage.max } }}
+  </p>
+}
+@if (!store.canCreateCustom()) {
+  <app-upgrade-cta
+    class="limit"
+    limit="customExercises"
+    [limitValue]="store.customLimit()"
+    [compact]="true"
+  />
+}
+
+@if (showFilters()) {
+  <section
+    id="exercise-filters"
+    class="filters"
+    [attr.aria-label]="'exercises.filters.title' | transloco"
+  >
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.muscle' | transloco }}</mat-label>
+      <mat-select [value]="f.muscle" (selectionChange)="set('muscle', $event.value)">
+        <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+        @for (m of muscles; track m) {
+          <mat-option [value]="m">{{ 'exercises.muscles.' + m | transloco }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.equipment' | transloco }}</mat-label>
+      <mat-select [value]="f.equipment" (selectionChange)="set('equipment', $event.value)">
+        <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+        @for (e of equipment; track e) {
+          <mat-option [value]="e">{{ 'exercises.equipment.' + e | transloco }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.mechanic' | transloco }}</mat-label>
+      <mat-select [value]="f.mechanic" (selectionChange)="set('mechanic', $event.value)">
+        <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+        @for (m of mechanics; track m) {
+          <mat-option [value]="m">{{ 'exercises.mechanic.' + m | transloco }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.goal' | transloco }}</mat-label>
+      <mat-select [value]="f.goal" (selectionChange)="set('goal', $event.value)">
+        @for (g of goals; track g) {
+          <mat-option [value]="g">{{ 'profile.goal.' + g | transloco }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.tier' | transloco }}</mat-label>
+      <mat-select [value]="f.tier" (selectionChange)="set('tier', $event.value)">
+        <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+        @for (t of tiers; track t) {
+          <mat-option [value]="t">{{ t }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'exercises.filters.tag' | transloco }}</mat-label>
+      <mat-select [value]="f.tag" (selectionChange)="set('tag', $event.value)">
+        <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+        @for (tag of store.tags(); track tag.slug) {
+          <mat-option [value]="tag.slug">{{ tag.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="toggles">
+      <mat-slide-toggle [checked]="f.favorites" (change)="set('favorites', $event.checked)">
+        {{ 'exercises.filters.favorites' | transloco }}
+      </mat-slide-toggle>
+      <mat-slide-toggle [checked]="f.custom" (change)="set('custom', $event.checked)">
+        {{ 'exercises.filters.custom' | transloco }}
+      </mat-slide-toggle>
+    </div>
+
+    @if (store.activeFilters()) {
+      <button mat-button type="button" (click)="store.clearFilters()">
+        {{ 'exercises.filters.clear' | transloco }}
+      </button>
+    }
+  </section>
+}
+
+<div class="results" [attr.aria-busy]="store.isPending()">
+  @if (store.isPending()) {
+    <mat-progress-bar mode="indeterminate" class="progress" />
+  }
+
+  @if (store.error() && !store.items().length) {
+    <p class="empty">{{ 'exercises.loadError' | transloco }}</p>
+  } @else if (store.isFulfilled() && !store.items().length) {
+    <p class="empty">{{ 'exercises.empty' | transloco }}</p>
+  }
+
+  <ul class="list">
+    @for (exercise of store.items(); track exercise.id) {
+      <li>
+        <app-exercise-card
+          [exercise]="exercise"
+          [goal]="f.goal"
+          (favoriteToggled)="store.toggleFavorite($event)"
+        />
+      </li>
+    }
+  </ul>
+
+  @if (store.total() > 0) {
+    <mat-paginator
+      [length]="store.total()"
+      [pageIndex]="store.page() - 1"
+      [pageSize]="store.limit()"
+      [pageSizeOptions]="pageSizes"
+      (page)="onPage($event)"
+    />
+  }
+</div>

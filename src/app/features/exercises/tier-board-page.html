@@ -1,0 +1,118 @@
+@let board = store.board();
+@let editable = store.editable();
+
+<div class="controls">
+  <mat-button-toggle-group
+    [value]="store.source()"
+    (change)="store.setSource($event.value)"
+    [attr.aria-label]="'exercises.board.source' | transloco"
+  >
+    <mat-button-toggle value="global">{{ 'exercises.board.global' | transloco }}</mat-button-toggle>
+    <mat-button-toggle value="personal">
+      {{ 'exercises.board.personal' | transloco }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>{{ 'exercises.filters.goal' | transloco }}</mat-label>
+    <mat-select [value]="store.effectiveGoal()" (selectionChange)="store.setGoal($event.value)">
+      @for (g of goals; track g) {
+        <mat-option [value]="g">{{ 'profile.goal.' + g | transloco }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>{{ 'exercises.filters.muscle' | transloco }}</mat-label>
+    <mat-select [value]="store.muscle()" (selectionChange)="store.setMuscle($event.value)">
+      <mat-option [value]="null">{{ 'exercises.filters.any' | transloco }}</mat-option>
+      @for (m of muscles; track m) {
+        <mat-option [value]="m">{{ 'exercises.muscles.' + m | transloco }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if (editable) {
+  <p class="hint">
+    <mat-icon aria-hidden="true">drag_indicator</mat-icon>
+    {{
+      'exercises.board.personalHint'
+        | transloco: { goal: ('profile.goal.' + store.effectiveGoal() | transloco) }
+    }}
+  </p>
+}
+
+<!-- One group: columns and the unranked tray are all connected. -->
+<div class="board-wrap" cdkDropListGroup [attr.aria-busy]="store.isPending()">
+  @if (store.isPending()) {
+    <mat-progress-bar mode="indeterminate" class="progress" />
+  }
+
+  <div class="board" [class.editable]="editable">
+    @for (tier of tiers; track tier) {
+      <section class="column" [class]="'tier-' + tier">
+        <header>
+          <app-tier-chip [tier]="tier" />
+          <span class="count">{{ board.columns[tier].length }}</span>
+        </header>
+        <ul
+          cdkDropList
+          [cdkDropListData]="tier"
+          [cdkDropListDisabled]="!editable"
+          [cdkDropListEnterPredicate]="canEnter"
+          (cdkDropListDropped)="onDrop($event)"
+          [attr.aria-label]="'exercises.board.column' | transloco: { tier }"
+        >
+          @for (exercise of board.columns[tier]; track exercise.id) {
+            <li cdkDrag [cdkDragData]="exercise" [cdkDragDisabled]="!editable">
+              <app-exercise-card
+                [exercise]="exercise"
+                [compact]="true"
+                [showFavorite]="false"
+                [showPersonal]="false"
+              >
+                @if (editable && exercise.personalTiers[store.effectiveGoal()]) {
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'exercises.board.reset' | transloco"
+                    (click)="store.resetPersonalTier(exercise.id)"
+                  >
+                    <mat-icon>restart_alt</mat-icon>
+                  </button>
+                }
+              </app-exercise-card>
+            </li>
+          } @empty {
+            <li class="empty">{{ 'exercises.board.emptyColumn' | transloco }}</li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+
+  @if (board.unranked.length) {
+    <section class="unranked">
+      <h2>{{ 'exercises.board.unranked' | transloco }}</h2>
+      <ul
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        [cdkDropListData]="unranked"
+        [cdkDropListDisabled]="!editable"
+        [cdkDropListEnterPredicate]="canEnter"
+      >
+        @for (exercise of board.unranked; track exercise.id) {
+          <li cdkDrag [cdkDragData]="exercise" [cdkDragDisabled]="!editable">
+            <app-exercise-card
+              [exercise]="exercise"
+              [compact]="true"
+              [showFavorite]="false"
+              [showPersonal]="false"
+            />
+          </li>
+        }
+      </ul>
+    </section>
+  }
+</div>
