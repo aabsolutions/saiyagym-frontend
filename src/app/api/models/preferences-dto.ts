@@ -11,5 +11,15 @@ export interface PreferencesDto {
    */
   restSoundId: string | null;
   theme: 'system' | 'light' | 'dark';
+
+  /**
+   * Effective training-reminder sound (same rules as `restSoundId`).
+   */
+  trainingReminderSoundId: string | null;
   units: 'metric' | 'imperial';
+
+  /**
+   * Effective weigh-in-reminder sound (same rules as `restSoundId`).
+   */
+  weighInSoundId: string | null;
 }

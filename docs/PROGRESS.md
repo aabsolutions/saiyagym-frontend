@@ -1,5 +1,10 @@
 # Progress — gymapp-web
 
+## 2026-10-22 — Sonidos de recordatorios + limpieza de assets
+
+- **Cliente API** regenerado: `preferences.trainingReminderSoundId` y `preferences.weighInSoundId` (la web no los edita; los elige el móvil).
+- Sin cambios de UI. Borrar un sonido o reemplazar su audio en **Admin → Sonidos** ahora también borra el archivo anterior en Cloudinary (lo hace la API, best-effort).
+
 ## 2026-10-22 — Sonidos de descanso (admin)
 
 ### Hecho
