@@ -1,5 +1,32 @@
 # Progress — gymapp-web
 
+## 2026-10-22 — Sonidos de descanso (admin)
+
+### Hecho
+
+- **Cliente API** regenerado desde el `openapi.json` del backend (`api:sync` + `api:generate`): `/sounds`, `/admin/sounds`, propósito `rest_sound`, `transformation` opcional en la firma, `premiumSounds` en las features y `preferences.restSoundId`.
+- **Admin → Sonidos** (`/admin/sounds`, pestaña nueva): lista paginada con vista previa (`mp3Url`), crear/editar (nombre traducible, slug inmutable, acceso gratis/premium, orden, reemplazar audio) y borrado lógico con confirmación (el slug sigue reservado).
+- **Subida de audio** (`shared/media/audio-upload.ts`): valida en el navegador la duración (< 30 s, por metadatos de `HTMLAudioElement`; iOS ignora sonidos de 30 s o más), y con la firma (`rest_sound`) el tamaño y el formato; recién entonces sube a Cloudinary (`postSigned`, compartido con `ImageUpload`, que sigue igual) y se crea el sonido con el `publicId`. El audio se sube al **guardar**; si el guardado falla, el `publicId` ya subido se reutiliza al reintentar, salvo que la API lo rechace (`INVALID_SOUND_ASSET` con `details.reason` → mensaje propio bajo el selector; el asset ya fue destruido por la API).
+- **Planes**: `premiumSounds` en `FEATURE_KEYS` → aparece en el editor de planes y en la comparación de planes.
+- CSP de Pages: `media-src 'self' blob: https://res.cloudinary.com` (reproducir la vista previa).
+- i18n es/en: `admin.sounds.*`, `admin.tabs.sounds`, `plans.features.premiumSounds`, errores `SOUND_NOT_FOUND` / `INVALID_SOUND_ASSET` / `SOUND_SLUG_TAKEN`.
+
+### Verificación
+
+- `npm run i18n:check` ✅ (1080 claves es/en). **No se ejecutaron** lint, format, tests ni build (pendiente de correr).
+- Specs nuevos (escritos primero, sin ejecutar): `audio-upload.spec.ts` (tamaño, formato, duración < 30 s, lectura de metadatos, firma `rest_sound` sin `transformation`, no pide firma si el audio es largo), `sound-forms.spec.ts` (DTOs, slug no se reenvía, `publicId` solo al reemplazar, motivo de rechazo). Se ampliaron `admin-forms.spec.ts` (toggle `premiumSounds`) y `plan-comparison.spec.ts` (fila nueva).
+- **No verificado en navegador** (subida real a Cloudinary ni reproducción).
+
+### Decisiones y gotchas
+
+- La vista previa usa `<audio>` nativo con `mp3Url`; no hay reproductor propio.
+- `INVALID_SOUND_ASSET` ya lo muestra el `errorInterceptor` (texto genérico); el motivo concreto se muestra además dentro del diálogo.
+- No hay spec del diálogo/página (sin componentes testeados en admin de sonidos): la lógica testeable vive en `sound-forms.ts` y `audio-upload.ts`.
+
+### Pendiente / próximo
+
+- Correr lint, `format:check`, `test:ci` y `build:gh`; probar en navegador con Cloudinary configurado.
+
 ## 2026-10-18 — Nutrición y panel de administración
 
 ### Hecho

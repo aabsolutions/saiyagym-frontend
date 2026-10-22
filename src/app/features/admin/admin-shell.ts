@@ -47,5 +47,6 @@ export class AdminShell {
     { path: '/admin/foods', labelKey: 'admin.tabs.foods' },
     { path: '/admin/meals', labelKey: 'admin.tabs.meals' },
     { path: '/admin/guidelines', labelKey: 'admin.tabs.guidelines' },
+    { path: '/admin/sounds', labelKey: 'admin.tabs.sounds' },
   ];
 }

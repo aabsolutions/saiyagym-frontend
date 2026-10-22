@@ -28,6 +28,7 @@ const plan = (): PlanResponseDto => ({
       progressPhotos: true,
       fullNutrition: true,
       dataExport: false,
+      premiumSounds: true,
     },
     statsHistoryDays: null,
   },
@@ -48,6 +49,13 @@ describe('plan form', () => {
     });
     expect(dto.entitlements?.statsHistoryDays).toBe(365);
     expect(dto).not.toHaveProperty('code');
+  });
+
+  it('the premiumSounds toggle round-trips through the plan DTO', () => {
+    const model = toPlanForm(plan());
+    expect(model.features.premiumSounds).toBe(true);
+    model.features.premiumSounds = false;
+    expect(toUpdatePlanDto(model).entitlements?.features.premiumSounds).toBe(false);
   });
 
   it('a new plan starts closed (limits 0, no features) and sends its code', () => {

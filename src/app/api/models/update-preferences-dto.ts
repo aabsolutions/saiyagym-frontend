@@ -9,6 +9,11 @@ export interface UpdatePreferencesDto {
    */
   firstDayOfWeek?: number;
   language?: string;
+
+  /**
+   * Rest-alarm sound id; `null` goes back to the default sound.
+   */
+  restSoundId?: string | null;
   theme?: 'system' | 'light' | 'dark';
   units?: 'metric' | 'imperial';
 }

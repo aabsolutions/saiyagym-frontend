@@ -12,6 +12,7 @@ export const FEATURE_KEYS: readonly FeatureKey[] = [
   'progressPhotos',
   'fullNutrition',
   'dataExport',
+  'premiumSounds',
 ];
 export const LIMIT_KEYS: readonly LimitKey[] = ['routines', 'activePrograms', 'customExercises'];
 

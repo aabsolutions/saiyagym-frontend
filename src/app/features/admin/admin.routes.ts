@@ -7,6 +7,7 @@ import { AdminFoodsPage } from './nutrition/admin-foods-page';
 import { AdminGuidelinesPage } from './nutrition/admin-guidelines-page';
 import { AdminMealsPage } from './nutrition/admin-meals-page';
 import { AdminPlansPage } from './plans/admin-plans-page';
+import { AdminSoundsPage } from './sounds/admin-sounds-page';
 import { AdminTagsPage } from './tags/admin-tags-page';
 import { AdminTemplatesPage } from './templates/admin-templates-page';
 import { TemplateEditorPage } from './templates/template-editor-page';
@@ -33,6 +34,7 @@ const adminRoutes: Routes = [
           { path: 'foods', component: AdminFoodsPage },
           { path: 'meals', component: AdminMealsPage },
           { path: 'guidelines', component: AdminGuidelinesPage },
+          { path: 'sounds', component: AdminSoundsPage },
         ],
       },
       // Editors are full pages (outside the tabs) so long forms get the whole width.

@@ -239,5 +239,17 @@ export type { AdminGuidelinesControllerRemove$Params as AdminGuidelinesControlle
 export { adminGuidelinesControllerRemove as adminGuidelinesControllerRemove } from './fn/admin-nutrition/admin-guidelines-controller-remove';
 export type { AdminGuidelinesControllerUpdate$Params as AdminGuidelinesControllerUpdate$Params } from './fn/admin-nutrition/admin-guidelines-controller-update';
 export { adminGuidelinesControllerUpdate as adminGuidelinesControllerUpdate } from './fn/admin-nutrition/admin-guidelines-controller-update';
+export type { SoundsControllerList$Params as SoundsControllerList$Params } from './fn/sounds/sounds-controller-list';
+export { soundsControllerList as soundsControllerList } from './fn/sounds/sounds-controller-list';
+export type { AdminSoundsControllerList$Params as AdminSoundsControllerList$Params } from './fn/admin-sounds/admin-sounds-controller-list';
+export { adminSoundsControllerList as adminSoundsControllerList } from './fn/admin-sounds/admin-sounds-controller-list';
+export type { AdminSoundsControllerCreate$Params as AdminSoundsControllerCreate$Params } from './fn/admin-sounds/admin-sounds-controller-create';
+export { adminSoundsControllerCreate as adminSoundsControllerCreate } from './fn/admin-sounds/admin-sounds-controller-create';
+export type { AdminSoundsControllerGet$Params as AdminSoundsControllerGet$Params } from './fn/admin-sounds/admin-sounds-controller-get';
+export { adminSoundsControllerGet as adminSoundsControllerGet } from './fn/admin-sounds/admin-sounds-controller-get';
+export type { AdminSoundsControllerRemove$Params as AdminSoundsControllerRemove$Params } from './fn/admin-sounds/admin-sounds-controller-remove';
+export { adminSoundsControllerRemove as adminSoundsControllerRemove } from './fn/admin-sounds/admin-sounds-controller-remove';
+export type { AdminSoundsControllerUpdate$Params as AdminSoundsControllerUpdate$Params } from './fn/admin-sounds/admin-sounds-controller-update';
+export { adminSoundsControllerUpdate as adminSoundsControllerUpdate } from './fn/admin-sounds/admin-sounds-controller-update';
 export type { HealthControllerCheck$Params as HealthControllerCheck$Params } from './fn/health/health-controller-check';
 export { healthControllerCheck as healthControllerCheck } from './fn/health/health-controller-check';

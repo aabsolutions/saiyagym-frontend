@@ -228,6 +228,9 @@
     "MEAL_SUGGESTION_NOT_FOUND": "La sugerencia de comida no existe.",
     "NUTRITION_GUIDELINE_NOT_FOUND": "La guía de nutrición no existe.",
     "NUTRITION_SLUG_TAKEN": "Ya existe (o existió) un elemento con ese identificador.",
+    "SOUND_NOT_FOUND": "El sonido no existe.",
+    "INVALID_SOUND_ASSET": "El archivo de sonido no es válido (máximo 1 MB y menos de 30 segundos). Súbelo de nuevo.",
+    "SOUND_SLUG_TAKEN": "Ya existe (o existió) un sonido con ese identificador.",
     "NUTRITION_PROFILE_INCOMPLETE": "Faltan datos para el cálculo o no son válidos. Complétalos en tu perfil o envíalos en la solicitud.",
     "NETWORK_ERROR": "No hay conexión con el servidor. Revisa tu conexión a internet.",
     "SESSION_EXPIRED": "Tu sesión ha caducado. Inicia sesión de nuevo.",
@@ -358,7 +361,8 @@
       "autoProgression": "Progresión automática",
       "progressPhotos": "Fotos de progreso",
       "fullNutrition": "Todas las sugerencias de comidas",
-      "dataExport": "Exportación CSV/JSON"
+      "dataExport": "Exportación CSV/JSON",
+      "premiumSounds": "Sonidos de descanso premium"
     },
     "cta": {
       "dialogTitle": "Mejora tu plan",
@@ -1170,7 +1174,8 @@
       "templates": "Plantillas",
       "foods": "Alimentos",
       "meals": "Comidas",
-      "guidelines": "Guías"
+      "guidelines": "Guías",
+      "sounds": "Sonidos"
     },
     "roles": {
       "user": "Usuario",
@@ -1315,6 +1320,41 @@
       "editTitle": "Editar alimento",
       "deleteTitle": "¿Eliminar este alimento?",
       "deleteMessage": "No se puede eliminar mientras alguna comida lo use."
+    },
+    "sounds": {
+      "new": "Nuevo sonido",
+      "newTitle": "Nuevo sonido",
+      "editTitle": "Editar sonido",
+      "access": "Acceso",
+      "accessValues": {
+        "free": "Gratis",
+        "premium": "Premium"
+      },
+      "duration": "Duración",
+      "size": "Tamaño",
+      "audio": "Audio",
+      "audioHint": "Máximo 1 MB y menos de 30 s (mp3, wav, m4a, ogg o aac). iOS ignora sonidos de 30 s o más.",
+      "preview": "Vista previa",
+      "previewOf": "Vista previa de {{name}}",
+      "chooseAudio": "Elegir audio",
+      "replaceAudio": "Reemplazar audio",
+      "audioRequired": "Elige un archivo de audio.",
+      "deleteTitle": "¿Eliminar este sonido?",
+      "deleteMessage": "Dejará de mostrarse a los usuarios. El identificador sigue reservado.",
+      "rejected": {
+        "tooLarge": "El archivo supera el tamaño máximo permitido.",
+        "format": "Formato no permitido. Usa mp3, wav, m4a, ogg o aac.",
+        "tooLong": "El audio dura 30 segundos o más.",
+        "unreadable": "No se pudo leer el audio. Prueba con otro archivo.",
+        "failed": "No se pudo subir el audio. Inténtalo de nuevo."
+      },
+      "reasons": {
+        "folder": "El archivo no está en la carpeta de sonidos.",
+        "not_found": "No se encontró el archivo subido. Súbelo de nuevo.",
+        "format": "El archivo no es un audio válido.",
+        "size": "El archivo supera el tamaño máximo permitido.",
+        "duration": "El audio dura 30 segundos o más."
+      }
     },
     "meals": {
       "new": "Nueva comida",

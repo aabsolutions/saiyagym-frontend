@@ -20,4 +20,6 @@ export { ProgressPhotosService } from './services/progress-photos.service';
 export { ExportService } from './services/export.service';
 export { NutritionService } from './services/nutrition.service';
 export { AdminNutritionService } from './services/admin-nutrition.service';
+export { SoundsService } from './services/sounds.service';
+export { AdminSoundsService } from './services/admin-sounds.service';
 export { HealthService } from './services/health.service';

@@ -12,9 +12,9 @@ export interface SignedUploadParamsDto {
   timestamp: number;
 
   /**
-   * Incoming transformation: caps dimensions before Cloudinary stores the image.
+   * Incoming transformation: caps dimensions before Cloudinary stores the image. Absent for sounds.
    */
-  transformation: string;
+  transformation?: string;
 
   /**
    * Only for progress photos: private delivery. Must be sent as-is (it is signed).

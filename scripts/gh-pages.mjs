@@ -17,6 +17,8 @@ const csp = [
   "font-src 'self' https://fonts.gstatic.com",
   // blob:: local preview of a progress photo before it is uploaded.
   "img-src 'self' data: blob: https://res.cloudinary.com",
+  // Admin sound preview: the stored mp3 (Cloudinary) or the local file before upload (blob:).
+  "media-src 'self' blob: https://res.cloudinary.com",
   // api.cloudinary.com: signed direct image uploads (the API signs, the browser uploads).
   "connect-src 'self' https://saiyagym-api.onrender.com https://api.cloudinary.com",
   "object-src 'none'",

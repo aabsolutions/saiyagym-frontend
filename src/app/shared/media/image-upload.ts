@@ -2,6 +2,7 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, filter, from, map, switchMap } from 'rxjs';
 import { UploadSignatureRequestDto } from '../../api/models/upload-signature-request-dto';
+import { UploadSignatureDto } from '../../api/models/upload-signature-dto';
 import { MediaService } from '../../api/services/media.service';
 
 export type UploadPurpose = UploadSignatureRequestDto['purpose'];
@@ -44,6 +45,27 @@ interface CloudinaryUploadResponse {
   format: string;
 }
 
+export type { CloudinaryUploadResponse };
+
+/**
+ * Multipart POST of `file` to the signed Cloudinary target (shared by image and audio uploads).
+ * Every signed param is sent unchanged, or Cloudinary rejects the signature; params the API
+ * did not sign (e.g. `transformation` for sounds) are simply absent.
+ */
+export function postSigned(http: HttpClient, signed: UploadSignatureDto, file: File) {
+  const body = new FormData();
+  body.append('file', file);
+  body.append('api_key', signed.apiKey);
+  body.append('signature', signed.signature);
+  for (const [key, value] of Object.entries(signed.params)) {
+    if (value !== undefined && value !== null) body.append(key, String(value));
+  }
+  return http.post<CloudinaryUploadResponse>(signed.uploadUrl, body, {
+    reportProgress: true,
+    observe: 'events',
+  });
+}
+
 /**
  * Signed direct upload to Cloudinary: the API signs (it holds the secret), the browser
  * sends the file straight to Cloudinary. Nothing secret ever reaches the client.
@@ -58,18 +80,7 @@ export class ImageUpload {
     return from(this.media.mediaControllerCreateSignature({ body: { purpose } })).pipe(
       switchMap((signed) => {
         checkImage(file, signed.maxFileSizeBytes, signed.params.allowed_formats);
-        const body = new FormData();
-        body.append('file', file);
-        body.append('api_key', signed.apiKey);
-        body.append('signature', signed.signature);
-        // Every signed param must be sent unchanged, or Cloudinary rejects the signature.
-        for (const [key, value] of Object.entries(signed.params)) {
-          if (value !== undefined && value !== null) body.append(key, String(value));
-        }
-        return this.http.post<CloudinaryUploadResponse>(signed.uploadUrl, body, {
-          reportProgress: true,
-          observe: 'events',
-        });
+        return postSigned(this.http, signed, file);
       }),
       map((event): UploadEvent | null => {
         if (event.type === HttpEventType.UploadProgress) {

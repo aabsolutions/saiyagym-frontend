@@ -5,6 +5,11 @@ export interface PreferencesDto {
   defaultRestSeconds: number;
   firstDayOfWeek: number;
   language: string;
+
+  /**
+   * Effective sound: null when none is chosen, it was deleted, or the plan no longer allows it.
+   */
+  restSoundId: string | null;
   theme: 'system' | 'light' | 'dark';
   units: 'metric' | 'imperial';
 }

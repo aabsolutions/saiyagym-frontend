@@ -10,6 +10,7 @@ const free: PlanEntitlementsDto = {
     progressPhotos: false,
     fullNutrition: false,
     dataExport: false,
+    premiumSounds: false,
   },
 };
 const premium: PlanEntitlementsDto = {
@@ -21,6 +22,7 @@ const premium: PlanEntitlementsDto = {
     progressPhotos: true,
     fullNutrition: true,
     dataExport: true,
+    premiumSounds: true,
   },
 };
 
@@ -29,13 +31,20 @@ describe('buildComparison', () => {
   const row = (labelKey: string) => rows.find((r) => r.labelKey === labelKey)?.cells;
 
   it('has one row per limit, the stats window and every feature', () => {
-    expect(rows).toHaveLength(3 + 1 + 5);
+    expect(rows).toHaveLength(3 + 1 + 6);
   });
 
   it('reads limits from the entitlements (null = unlimited)', () => {
     expect(row('plans.limits.routines')).toEqual([
       { type: 'limit', value: 3 },
       { type: 'limit', value: null },
+    ]);
+  });
+
+  it('has a row for the premium sounds feature', () => {
+    expect(row('plans.features.premiumSounds')).toEqual([
+      { type: 'included', value: false },
+      { type: 'included', value: true },
     ]);
   });
 

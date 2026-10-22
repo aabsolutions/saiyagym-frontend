@@ -6,5 +6,6 @@ export interface PlanFeaturesDto {
   dataExport: boolean;
   fullNutrition: boolean;
   fullStats: boolean;
+  premiumSounds: boolean;
   progressPhotos: boolean;
 }
