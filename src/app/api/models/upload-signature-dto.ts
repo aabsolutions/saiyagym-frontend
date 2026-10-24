@@ -11,7 +11,8 @@ export interface UploadSignatureDto {
   expiresAt: string;
 
   /**
-   * Client-side check only; the hard cap lives in the Cloudinary upload preset/account.
+   * Client-side check only. Images: the hard cap lives in the Cloudinary upload preset/account;
+   * sounds and exercise guides are re-checked by the API after the upload.
    */
   maxFileSizeBytes: number;
   params: SignedUploadParamsDto;

@@ -32,6 +32,7 @@ import { ValidationMessagePipe } from '../../../shared/forms/validation-message.
 import { LocalizedPipe } from '../../../shared/i18n/localized.pipe';
 import { TranslatableField } from '../../../shared/i18n/translatable-field';
 import { AdminExerciseEditorStore } from './admin-exercise-editor.store';
+import { GUIDE_ACCEPT, GUIDE_LIMITS } from './guide-drafts';
 import { adminExerciseSchema, toAdminExerciseForm } from './admin-exercise-form';
 
 /** `/admin/exercises/new` and `/admin/exercises/:id` (the id comes as a route input). */
@@ -82,6 +83,37 @@ import { adminExerciseSchema, toAdminExerciseForm } from './admin-exercise-form'
     .card {
       padding: 16px;
     }
+    .guide {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--mat-sys-outline-variant);
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        border-radius: var(--mat-sys-corner-medium);
+        background: var(--mat-sys-surface-container-high);
+      }
+    }
+    .guide.invalid img {
+      outline: 2px solid var(--mat-sys-error);
+    }
+    .guide-body {
+      flex: 1 1 280px;
+      min-width: 0;
+    }
+    .guide-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .error {
+      margin: 8px 0;
+      color: var(--mat-sys-error);
+      font: var(--mat-sys-body-small);
+    }
   `,
 })
 export class AdminExerciseEditorPage implements OnInit {
@@ -97,9 +129,18 @@ export class AdminExerciseEditorPage implements OnInit {
   protected readonly mechanics = MECHANICS;
   protected readonly categories = CATEGORIES;
   protected readonly tiers = TIERS;
+  protected readonly guideLimits = GUIDE_LIMITS;
+  protected readonly guideAccept = GUIDE_ACCEPT;
 
   private readonly model = signal(toAdminExerciseForm(null));
   private slugTouched = false;
+  /** Saving or a file going to Cloudinary: actions that would change the list wait. */
+  protected readonly busy = computed(
+    () =>
+      this.exerciseForm().submitting() ||
+      this.store.image.uploadProgress() !== null ||
+      this.store.guides.uploading() !== null,
+  );
   protected readonly exerciseForm = form(this.model, adminExerciseSchema(this.isNew), {
     submission: {
       action: async (field) => {
@@ -141,5 +182,12 @@ export class AdminExerciseEditorPage implements OnInit {
     const file = input.files?.[0];
     input.value = '';
     if (file) this.store.image.pick(file);
+  }
+
+  protected onGuidesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = [...(input.files ?? [])];
+    input.value = '';
+    if (files.length) this.store.guides.add(files);
   }
 }

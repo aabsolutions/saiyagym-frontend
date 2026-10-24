@@ -64,15 +64,7 @@ export class PendingImage {
       this.storedUrl.set(done.image.secureUrl);
       return done.image.secureUrl;
     } catch (error) {
-      // Errors from our API (e.g. MEDIA_NOT_CONFIGURED on the signature) were already
-      // reported by errorInterceptor; Cloudinary's are not an API request, so say it here.
-      const reportedByApi =
-        error instanceof HttpErrorResponse && (error.url ?? '').includes(API_PREFIX);
-      if (error instanceof ImageRejectedError) {
-        this.notifier.info(`${this.messagesPrefix}.${error.reason}`);
-      } else if (!reportedByApi) {
-        this.notifier.info(`${this.messagesPrefix}.failed`);
-      }
+      reportUploadError(error, this.notifier, this.messagesPrefix);
       return undefined;
     } finally {
       this.uploadProgress.set(null);
@@ -88,5 +80,24 @@ export class PendingImage {
     if (preview) URL.revokeObjectURL(preview);
     this.pendingFile.set(null);
     this.previewUrl.set(null);
+  }
+}
+
+/**
+ * Reports a failed signed upload. Errors from our API (e.g. MEDIA_NOT_CONFIGURED on the
+ * signature) were already reported by errorInterceptor; Cloudinary's are not an API request,
+ * so they are said here. `messagesPrefix` holds `tooLarge`, `format` and `failed` keys.
+ */
+export function reportUploadError(
+  error: unknown,
+  notifier: Notifier,
+  messagesPrefix: string,
+): void {
+  const reportedByApi =
+    error instanceof HttpErrorResponse && (error.url ?? '').includes(API_PREFIX);
+  if (error instanceof ImageRejectedError) {
+    notifier.info(`${messagesPrefix}.${error.reason}`);
+  } else if (!reportedByApi) {
+    notifier.info(`${messagesPrefix}.failed`);
   }
 }

@@ -106,6 +106,13 @@ export interface PlanEditorData {
             label: 'admin.plans.statsDays',
           }"
         />
+        <ng-container
+          [ngTemplateOutlet]="quotaRow"
+          [ngTemplateOutletContext]="{
+            field: planForm.guides,
+            label: 'plans.guidesPerRoutine',
+          }"
+        />
 
         <h3 class="section-title">{{ 'admin.plans.features' | transloco }}</h3>
         <div class="features">
@@ -177,7 +184,11 @@ export class PlanEditorDialog {
       readonly(path.code, () => !!this.data.plan);
       translatable(path.name, { required: true, maxLength: 60 });
       translatable(path.description, { maxLength: 500 });
-      for (const quota of [...LIMIT_KEYS.map((k) => path.limits[k]), path.statsHistory]) {
+      for (const quota of [
+        ...LIMIT_KEYS.map((k) => path.limits[k]),
+        path.statsHistory,
+        path.guides,
+      ]) {
         min(quota.value, 0);
         required(quota.value, { when: ({ valueOf }) => !valueOf(quota.unlimited) });
         disabled(quota.value, ({ valueOf }) => valueOf(quota.unlimited));

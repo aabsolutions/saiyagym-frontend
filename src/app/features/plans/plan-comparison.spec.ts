@@ -4,6 +4,7 @@ import { buildComparison } from './plan-comparison';
 const free: PlanEntitlementsDto = {
   limits: { routines: 3, activePrograms: 1, customExercises: 10 },
   statsHistoryDays: 90,
+  guidesPerRoutine: 5,
   features: {
     fullStats: false,
     autoProgression: false,
@@ -16,6 +17,7 @@ const free: PlanEntitlementsDto = {
 const premium: PlanEntitlementsDto = {
   limits: { routines: null, activePrograms: null, customExercises: null },
   statsHistoryDays: null,
+  guidesPerRoutine: null,
   features: {
     fullStats: true,
     autoProgression: true,
@@ -30,8 +32,15 @@ describe('buildComparison', () => {
   const rows = buildComparison([{ entitlements: free }, { entitlements: premium }]);
   const row = (labelKey: string) => rows.find((r) => r.labelKey === labelKey)?.cells;
 
-  it('has one row per limit, the stats window and every feature', () => {
-    expect(rows).toHaveLength(3 + 1 + 6);
+  it('has one row per limit, the stats window, guides per routine and every feature', () => {
+    expect(rows).toHaveLength(3 + 1 + 1 + 6);
+  });
+
+  it('guides per routine reads as a limit (null = unlimited)', () => {
+    expect(row('plans.guidesPerRoutine')).toEqual([
+      { type: 'limit', value: 5 },
+      { type: 'limit', value: null },
+    ]);
   });
 
   it('reads limits from the entitlements (null = unlimited)', () => {

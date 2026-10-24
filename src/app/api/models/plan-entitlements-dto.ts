@@ -5,6 +5,11 @@ import { PlanFeaturesDto } from '../models/plan-features-dto';
 import { PlanLimitsDto } from '../models/plan-limits-dto';
 export interface PlanEntitlementsDto {
   features: PlanFeaturesDto;
+
+  /**
+   * Exercises per routine with visible guides. null = unlimited
+   */
+  guidesPerRoutine?: number | null;
   limits: PlanLimitsDto;
 
   /**

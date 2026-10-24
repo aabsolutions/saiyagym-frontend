@@ -24,6 +24,8 @@ import {
   toCreateGlobalExerciseDto,
   toUpdateGlobalExerciseDto,
 } from './admin-exercise-form';
+import { toReplaceGuidesDto } from './guide-drafts';
+import { PendingGuides } from './pending-guides';
 
 interface EditorState {
   /** null = creating. */
@@ -46,6 +48,8 @@ export const AdminExerciseEditorStore = signalStore(
         'exercise_image',
         'exercises.form.image',
       ),
+      /** Execution guides (images / GIFs); edited only once the exercise exists. */
+      guides: new PendingGuides(inject(ImageUpload), notifier),
     };
   }),
   withMethods((store) => ({
@@ -62,6 +66,7 @@ export const AdminExerciseEditorStore = signalStore(
       try {
         const exercise = await store._api.adminExercisesControllerFindOne({ id });
         store.image.storedUrl.set(exercise.imageUrl);
+        store.guides.load(exercise.guides);
         patchState(store, { editing: exercise }, setFulfilled());
         return exercise;
       } catch (error) {
@@ -70,13 +75,23 @@ export const AdminExerciseEditorStore = signalStore(
       }
     },
 
-    /** Image first (a failed upload saves nothing), then the exercise. */
+    /**
+     * Files first (a failed upload saves nothing), then the exercise, then its guides (only
+     * when they changed). If the API rejects the guides the exercise stays saved and the
+     * editor keeps the pending list to fix and retry.
+     */
     async save(model: AdminExerciseFormModel): Promise<AdminExerciseDto | null> {
+      const editing = store.editing();
+      const withGuides = editing !== null && store.guides.dirty();
+      if (withGuides && store.guides.invalidCaptions().length) {
+        store._notifier.info('admin.exercises.guides.captionInvalid');
+        return null;
+      }
       const imageUrl = await store.image.uploadIfPending();
       if (imageUrl === undefined) return null;
-      const editing = store.editing();
+      if (withGuides && !(await store.guides.uploadPending())) return null;
       try {
-        const saved = editing
+        let saved = editing
           ? await store._api.adminExercisesControllerUpdate({
               id: editing.id,
               body: toUpdateGlobalExerciseDto(model, imageUrl),
@@ -85,6 +100,20 @@ export const AdminExerciseEditorStore = signalStore(
               body: toCreateGlobalExerciseDto(model, imageUrl),
             });
         patchState(store, { editing: saved });
+        if (withGuides) {
+          try {
+            saved = await store._api.adminExercisesControllerReplaceGuides({
+              id: saved.id,
+              body: toReplaceGuidesDto(store.guides.items()),
+            });
+          } catch (error) {
+            // errorInterceptor already said why; the section shows the precise reason.
+            store.guides.rejected(error);
+            return saved;
+          }
+          patchState(store, { editing: saved });
+          store.guides.load(saved.guides);
+        }
         store._notifier.info('common.saved');
         return saved;
       } catch {
@@ -98,6 +127,7 @@ export const AdminExerciseEditorStore = signalStore(
     },
     onDestroy(store) {
       store.image.dispose();
+      store.guides.dispose();
     },
   }),
 );

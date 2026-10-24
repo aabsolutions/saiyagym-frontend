@@ -234,7 +234,8 @@
     "NUTRITION_PROFILE_INCOMPLETE": "Faltan datos para el cálculo o no son válidos. Complétalos en tu perfil o envíalos en la solicitud.",
     "NETWORK_ERROR": "No hay conexión con el servidor. Revisa tu conexión a internet.",
     "SESSION_EXPIRED": "Tu sesión ha caducado. Inicia sesión de nuevo.",
-    "UNKNOWN_ERROR": "Se produjo un error inesperado."
+    "UNKNOWN_ERROR": "Se produjo un error inesperado.",
+    "INVALID_GUIDE_ASSET": "El archivo de la guía no es válido (imagen o GIF, máximo 4 MB). Súbelo de nuevo."
   },
   "onboarding": {
     "title": "¡Bienvenido, {{name}}!",
@@ -346,6 +347,7 @@
     "unlimited": "Ilimitado",
     "upTo": "Hasta {{count}}",
     "statsHistory": "Historial de estadísticas",
+    "guidesPerRoutine": "Guías de ejecución por rutina",
     "fullHistory": "Completo",
     "lastDays": "Últimos {{days}} días",
     "yourPlan": "Tu plan",
@@ -1242,7 +1244,33 @@
       "tiers": "Tiers",
       "tierFor": "Tier en {{goal}}",
       "deleteTitle": "¿Eliminar este ejercicio?",
-      "deleteMessage": "Dejará de aparecer en el catálogo. Las rutinas y sesiones que ya lo usan no se modifican."
+      "deleteMessage": "Dejará de aparecer en el catálogo. Las rutinas y sesiones que ya lo usan no se modifican.",
+      "guides": {
+        "title": "Guías de ejecución",
+        "hint": "Imágenes o GIF animados (JPG, PNG, WebP o GIF, máx. 4 MB), hasta {{max}} por ejercicio, en el orden en que se muestran. Se suben al guardar el ejercicio.",
+        "afterCreate": "Guarda el ejercicio para agregarle guías de ejecución.",
+        "empty": "Este ejercicio no tiene guías.",
+        "add": "Agregar imágenes o GIF",
+        "caption": "Texto (opcional)",
+        "preview": "Guía {{n}}",
+        "unsaved": "Sin guardar",
+        "moveUp": "Subir",
+        "moveDown": "Bajar",
+        "remove": "Quitar guía",
+        "uploading": "Subiendo archivo {{index}} de {{total}}…",
+        "tooMany": "Máximo {{max}} guías por ejercicio: se ignoraron los archivos de más.",
+        "captionInvalid": "Si escribes un texto, completa el idioma por defecto (máx. 200 caracteres).",
+        "tooLarge": "El archivo es demasiado grande (máx. 4 MB).",
+        "format": "Formato no permitido. Usa JPG, PNG, WebP o GIF.",
+        "failed": "No se pudo subir el archivo. Inténtalo de nuevo.",
+        "reasons": {
+          "folder": "El archivo no está en la carpeta de guías.",
+          "not_found": "No se encontró un archivo subido. Vuelve a guardar para subirlo de nuevo.",
+          "format": "Un archivo no es una imagen o GIF válido. Quítalo o reemplázalo.",
+          "size": "Un archivo supera el tamaño máximo permitido. Quítalo o reemplázalo."
+        },
+        "animated": "GIF animado"
+      }
     },
     "tiers": {
       "hint": "Elige objetivo y grupo muscular, marca el tier de cada ejercicio y guarda todos los cambios juntos.",

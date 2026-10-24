@@ -163,13 +163,107 @@
         [formField]="exerciseForm.instructions"
       />
 
+      <h2 class="section-title">{{ 'admin.exercises.guides.title' | transloco }}</h2>
+      @if (isNew()) {
+        <p class="hint">{{ 'admin.exercises.guides.afterCreate' | transloco }}</p>
+      } @else {
+        <section class="guides" [attr.aria-label]="'admin.exercises.guides.title' | transloco">
+          <p class="hint">
+            {{ 'admin.exercises.guides.hint' | transloco: { max: guideLimits.files } }}
+          </p>
+          @for (
+            guide of store.guides.items();
+            track guide.key;
+            let i = $index, first = $first, last = $last
+          ) {
+            <div class="guide" [class.invalid]="store.guides.invalidCaptions().includes(guide.key)">
+              <img
+                [src]="guide.previewUrl"
+                [alt]="'admin.exercises.guides.preview' | transloco: { n: i + 1 }"
+              />
+              <div class="guide-body">
+                <div class="guide-head">
+                  <span>{{ i + 1 }}.</span>
+                  @if (guide.kind === 'animation') {
+                    <span class="badge">{{ 'admin.exercises.guides.animated' | transloco }}</span>
+                  }
+                  @if (guide.file) {
+                    <span class="badge off">{{
+                      'admin.exercises.guides.unsaved' | transloco
+                    }}</span>
+                  }
+                  <span class="spacer"></span>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="first || busy()"
+                    [attr.aria-label]="'admin.exercises.guides.moveUp' | transloco"
+                    (click)="store.guides.move(guide.key, -1)"
+                  >
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="last || busy()"
+                    [attr.aria-label]="'admin.exercises.guides.moveDown' | transloco"
+                    (click)="store.guides.move(guide.key, 1)"
+                  >
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="busy()"
+                    [attr.aria-label]="'admin.exercises.guides.remove' | transloco"
+                    (click)="store.guides.remove(guide.key)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <app-translatable-field
+                  labelKey="admin.exercises.guides.caption"
+                  [maxLength]="guideLimits.caption"
+                  [value]="guide.caption"
+                  (valueChange)="store.guides.setCaption(guide.key, $event)"
+                />
+              </div>
+            </div>
+          } @empty {
+            <p class="hint">{{ 'admin.exercises.guides.empty' | transloco }}</p>
+          }
+          @if (store.guides.invalidCaptions().length) {
+            <p class="error" role="alert">
+              {{ 'admin.exercises.guides.captionInvalid' | transloco }}
+            </p>
+          }
+          @if (store.guides.rejection(); as reason) {
+            <p class="error" role="alert">{{ reason | transloco }}</p>
+          }
+          <label mat-stroked-button class="upload">
+            <input
+              type="file"
+              multiple
+              class="cdk-visually-hidden"
+              [accept]="guideAccept"
+              [disabled]="store.guides.full() || busy()"
+              (change)="onGuidesSelected($event)"
+            />
+            <mat-icon>add_photo_alternate</mat-icon>
+            {{ 'admin.exercises.guides.add' | transloco }}
+          </label>
+          @if (store.guides.uploading(); as upload) {
+            <p class="hint" aria-live="polite">
+              {{ 'admin.exercises.guides.uploading' | transloco: upload }}
+            </p>
+            <mat-progress-bar mode="determinate" [value]="upload.percent" />
+          }
+        </section>
+      }
+
       <div class="row-actions">
         <a mat-button routerLink="/admin/exercises">{{ 'common.cancel' | transloco }}</a>
-        <button
-          mat-flat-button
-          type="submit"
-          [disabled]="exerciseForm().submitting() || store.image.uploadProgress() !== null"
-        >
+        <button mat-flat-button type="submit" [disabled]="busy()">
           {{ 'common.save' | transloco }}
         </button>
       </div>

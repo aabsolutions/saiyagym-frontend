@@ -6,6 +6,11 @@ export interface ExerciseDetailDto {
   category: 'strength' | 'powerlifting_main' | 'accessory';
   description: string;
   equipment: 'barbell' | 'dumbbell' | 'machine' | 'cable' | 'bodyweight' | 'kettlebell' | 'band' | 'smith' | 'other';
+
+  /**
+   * The exercise has execution guides. Whether the caller may see them: `GET /guides`.
+   */
+  hasGuide: boolean;
   id: string;
   imageUrl: string | null;
   instructions: string;

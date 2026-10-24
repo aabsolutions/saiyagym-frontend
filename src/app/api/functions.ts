@@ -83,6 +83,8 @@ export type { AdminExercisesControllerRemove$Params as AdminExercisesControllerR
 export { adminExercisesControllerRemove as adminExercisesControllerRemove } from './fn/admin-exercises/admin-exercises-controller-remove';
 export type { AdminExercisesControllerUpdate$Params as AdminExercisesControllerUpdate$Params } from './fn/admin-exercises/admin-exercises-controller-update';
 export { adminExercisesControllerUpdate as adminExercisesControllerUpdate } from './fn/admin-exercises/admin-exercises-controller-update';
+export type { AdminExercisesControllerReplaceGuides$Params as AdminExercisesControllerReplaceGuides$Params } from './fn/admin-exercises/admin-exercises-controller-replace-guides';
+export { adminExercisesControllerReplaceGuides as adminExercisesControllerReplaceGuides } from './fn/admin-exercises/admin-exercises-controller-replace-guides';
 export type { AdminExerciseTagsControllerList$Params as AdminExerciseTagsControllerList$Params } from './fn/admin-exercises/admin-exercise-tags-controller-list';
 export { adminExerciseTagsControllerList as adminExerciseTagsControllerList } from './fn/admin-exercises/admin-exercise-tags-controller-list';
 export type { AdminExerciseTagsControllerCreate$Params as AdminExerciseTagsControllerCreate$Params } from './fn/admin-exercises/admin-exercise-tags-controller-create';
@@ -251,5 +253,9 @@ export type { AdminSoundsControllerRemove$Params as AdminSoundsControllerRemove$
 export { adminSoundsControllerRemove as adminSoundsControllerRemove } from './fn/admin-sounds/admin-sounds-controller-remove';
 export type { AdminSoundsControllerUpdate$Params as AdminSoundsControllerUpdate$Params } from './fn/admin-sounds/admin-sounds-controller-update';
 export { adminSoundsControllerUpdate as adminSoundsControllerUpdate } from './fn/admin-sounds/admin-sounds-controller-update';
+export type { GuidesControllerList$Params as GuidesControllerList$Params } from './fn/guides/guides-controller-list';
+export { guidesControllerList as guidesControllerList } from './fn/guides/guides-controller-list';
+export type { GuidesControllerResolve$Params as GuidesControllerResolve$Params } from './fn/guides/guides-controller-resolve';
+export { guidesControllerResolve as guidesControllerResolve } from './fn/guides/guides-controller-resolve';
 export type { HealthControllerCheck$Params as HealthControllerCheck$Params } from './fn/health/health-controller-check';
 export { healthControllerCheck as healthControllerCheck } from './fn/health/health-controller-check';

@@ -5,6 +5,11 @@ import { TiersDto } from '../models/tiers-dto';
 export interface ExerciseSummaryDto {
   category: 'strength' | 'powerlifting_main' | 'accessory';
   equipment: 'barbell' | 'dumbbell' | 'machine' | 'cable' | 'bodyweight' | 'kettlebell' | 'band' | 'smith' | 'other';
+
+  /**
+   * The exercise has execution guides. Whether the caller may see them: `GET /guides`.
+   */
+  hasGuide: boolean;
   id: string;
   imageUrl: string | null;
 

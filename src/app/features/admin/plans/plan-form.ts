@@ -28,6 +28,8 @@ export interface PlanFormModel {
   limits: Record<LimitKey, Quota>;
   features: Record<FeatureKey, boolean>;
   statsHistory: Quota;
+  /** Exercises per routine whose execution guides the plan unlocks. */
+  guides: Quota;
 }
 
 const quota = (value: number | null | undefined, fallback: number): Quota =>
@@ -53,6 +55,7 @@ export function toPlanForm(plan: PlanResponseDto | null): PlanFormModel {
       FEATURE_KEYS.map((key) => [key, e?.features[key] ?? false]),
     ) as Record<FeatureKey, boolean>,
     statsHistory: quota(plan ? e?.statsHistoryDays : 90, 90),
+    guides: quota(plan ? e?.guidesPerRoutine : 5, 5),
   };
 }
 
@@ -63,6 +66,7 @@ function entitlementsOf(model: PlanFormModel) {
     ) as Record<LimitKey, number | null>,
     features: { ...model.features },
     statsHistoryDays: fromQuota(model.statsHistory),
+    guidesPerRoutine: fromQuota(model.guides),
   };
 }
 

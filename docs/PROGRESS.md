@@ -1,5 +1,29 @@
 # Progress — gymapp-web
 
+## 2026-10-23 — Guías de ejecución (admin)
+
+### Hecho
+
+- **Cliente API** regenerado: `PUT /admin/exercises/{id}/guides`, `GET /guides`, `POST /guides/resolve`, propósito `exercise_guide`, `AdminExerciseDto.guides`, `ExerciseSummaryDto.hasGuide` y `entitlements.guidesPerRoutine`.
+- **Admin → Ejercicios → editar**, sección **Guías de ejecución**: hasta 6 imágenes o GIF (jpg/png/webp/gif), vista previa local, texto traducible opcional por guía, subir/bajar y quitar. Solo al editar: un ejercicio nuevo se guarda primero (el `PUT` necesita su id).
+  - Igual que la imagen del ejercicio, los archivos se suben **al guardar** (`PendingGuides`, uno por uno con progreso). Orden: archivos → ejercicio → `PUT` de guías, solo si la lista cambió (`sameGuides`).
+  - Si la API rechaza la lista (`INVALID_GUIDE_ASSET`), el ejercicio queda guardado, la sección muestra el motivo (`admin.exercises.guides.reasons.*`) y en el próximo guardado se vuelven a subir los archivos nuevos (la API destruyó el malo y no dice cuál). Con otros errores se conservan los `publicId` ya subidos.
+  - El texto es opcional, pero si se escribe necesita el idioma por defecto (la API lo exige): se valida antes de subir nada.
+- **Planes**: "Guías de ejecución por rutina" en el editor (número o ilimitado → `null`) y en la comparación de planes. Plan nuevo: 5 (el valor de Free).
+- `reportUploadError` (en `pending-image.ts`) es compartido por `PendingImage` y `PendingGuides`.
+- i18n es/en: `admin.exercises.guides.*`, `plans.guidesPerRoutine`, `errors.INVALID_GUIDE_ASSET`.
+
+### Verificación
+
+- `npm run lint` ✅ · `format:check` ✅ · `i18n:check` ✅ (1104 claves) · `test:ci` 258/258 ✅ (nuevos: `guide-drafts.spec.ts`, `pending-guides.spec.ts`, guías en `admin-forms` y `plan-comparison`).
+- **No ejecutado**: `build:gh` (regla: no compilar) ni prueba en navegador con Cloudinary.
+
+### Decisiones y gotchas
+
+- La comparación de planes usa `value === undefined ? 0 : value`, no `?? 0`: `??` también convertía el `null` (ilimitado) en 0. Lo detectó el test.
+- La web no muestra guías a usuarios (solo planifica y analiza); el consumo está en el móvil.
+- La CSP ya permite `blob:` y `res.cloudinary.com` en `img-src` (vista previa y GIF).
+
 ## 2026-10-22 — Sonidos de recordatorios + limpieza de assets
 
 - **Cliente API** regenerado: `preferences.trainingReminderSoundId` y `preferences.weighInSoundId` (la web no los edita; los elige el móvil).

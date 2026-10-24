@@ -13,7 +13,10 @@ export interface ComparisonRow {
   cells: ComparisonCell[];
 }
 
-/** Rows: limits, stats history, then features — straight from each plan's entitlements. */
+/**
+ * Rows: limits, stats history, guides per routine, then features — straight from each plan's
+ * entitlements.
+ */
 export function buildComparison(
   plans: readonly { entitlements: PlanEntitlementsDto }[],
 ): ComparisonRow[] {
@@ -30,6 +33,15 @@ export function buildComparison(
     {
       labelKey: 'plans.statsHistory',
       cells: plans.map((p) => ({ type: 'history', days: p.entitlements.statsHistoryDays })),
+    },
+    {
+      labelKey: 'plans.guidesPerRoutine',
+      // `null` = unlimited. Absent only on an API older than the field: nothing unlocked, like
+      // the API's default (`??` would turn the unlimited `null` into 0 too).
+      cells: plans.map((p) => {
+        const value = p.entitlements.guidesPerRoutine;
+        return { type: 'limit', value: value === undefined ? 0 : value };
+      }),
     },
     ...FEATURE_KEYS.map(featureRow),
   ];

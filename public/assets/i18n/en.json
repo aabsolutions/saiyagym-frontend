@@ -234,7 +234,8 @@
     "NUTRITION_PROFILE_INCOMPLETE": "Some data for the calculation is missing or out of range. Complete your profile or send it in the request.",
     "NETWORK_ERROR": "Can't reach the server. Check your internet connection.",
     "SESSION_EXPIRED": "Your session has expired. Please sign in again.",
-    "UNKNOWN_ERROR": "An unexpected error occurred."
+    "UNKNOWN_ERROR": "An unexpected error occurred.",
+    "INVALID_GUIDE_ASSET": "The guide file is not valid (image or GIF, maximum 4 MB). Upload it again."
   },
   "onboarding": {
     "title": "Welcome, {{name}}!",
@@ -346,6 +347,7 @@
     "unlimited": "Unlimited",
     "upTo": "Up to {{count}}",
     "statsHistory": "Stats history",
+    "guidesPerRoutine": "Execution guides per routine",
     "fullHistory": "Full",
     "lastDays": "Last {{days}} days",
     "yourPlan": "Your plan",
@@ -1242,7 +1244,33 @@
       "tiers": "Tiers",
       "tierFor": "{{goal}} tier",
       "deleteTitle": "Delete this exercise?",
-      "deleteMessage": "It will no longer appear in the catalog. Routines and sessions that already use it are not changed."
+      "deleteMessage": "It will no longer appear in the catalog. Routines and sessions that already use it are not changed.",
+      "guides": {
+        "title": "Execution guides",
+        "hint": "Images or animated GIFs (JPG, PNG, WebP or GIF, max 4 MB), up to {{max}} per exercise, in display order. They are uploaded when the exercise is saved.",
+        "afterCreate": "Save the exercise to add execution guides.",
+        "empty": "This exercise has no guides.",
+        "add": "Add images or GIFs",
+        "caption": "Text (optional)",
+        "preview": "Guide {{n}}",
+        "unsaved": "Unsaved",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "remove": "Remove guide",
+        "uploading": "Uploading file {{index}} of {{total}}…",
+        "tooMany": "Up to {{max}} guides per exercise: the extra files were ignored.",
+        "captionInvalid": "If you write a text, fill in the default language (max 200 characters).",
+        "tooLarge": "The file is too large (max 4 MB).",
+        "format": "Format not allowed. Use JPG, PNG, WebP or GIF.",
+        "failed": "The file could not be uploaded. Please try again.",
+        "reasons": {
+          "folder": "The file is not in the guides folder.",
+          "not_found": "An uploaded file was not found. Save again to upload it again.",
+          "format": "A file is not a valid image or GIF. Remove or replace it.",
+          "size": "A file exceeds the maximum size. Remove or replace it."
+        },
+        "animated": "Animated GIF"
+      }
     },
     "tiers": {
       "hint": "Pick a goal and a muscle group, set each exercise’s tier and save all the changes at once.",

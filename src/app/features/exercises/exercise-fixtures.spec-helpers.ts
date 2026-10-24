@@ -20,6 +20,7 @@ export function exercise(overrides: Partial<ExerciseSummaryDto> = {}): ExerciseS
     isGlobal: true,
     isCustom: false,
     isFavorite: false,
+    hasGuide: false,
     ...overrides,
   };
 }

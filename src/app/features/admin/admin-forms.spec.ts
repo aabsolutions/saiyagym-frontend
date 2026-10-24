@@ -31,6 +31,7 @@ const plan = (): PlanResponseDto => ({
       premiumSounds: true,
     },
     statsHistoryDays: null,
+    guidesPerRoutine: null,
   },
 });
 
@@ -56,6 +57,15 @@ describe('plan form', () => {
     expect(model.features.premiumSounds).toBe(true);
     model.features.premiumSounds = false;
     expect(toUpdatePlanDto(model).entitlements?.features.premiumSounds).toBe(false);
+  });
+
+  it('guides per routine: null = unlimited, a number round-trips', () => {
+    const model = toPlanForm(plan());
+    expect(model.guides).toEqual({ unlimited: true, value: 5 });
+    model.guides = { unlimited: false, value: 3 };
+    expect(toUpdatePlanDto(model).entitlements?.guidesPerRoutine).toBe(3);
+    // A new plan suggests Free's value.
+    expect(toCreatePlanDto(toPlanForm(null)).entitlements.guidesPerRoutine).toBe(5);
   });
 
   it('a new plan starts closed (limits 0, no features) and sends its code', () => {

@@ -22,4 +22,5 @@ export { NutritionService } from './services/nutrition.service';
 export { AdminNutritionService } from './services/admin-nutrition.service';
 export { SoundsService } from './services/sounds.service';
 export { AdminSoundsService } from './services/admin-sounds.service';
+export { GuidesService } from './services/guides.service';
 export { HealthService } from './services/health.service';

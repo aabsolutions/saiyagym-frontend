@@ -21,6 +21,8 @@ import { adminExercisesControllerList } from '../fn/admin-exercises/admin-exerci
 import { AdminExercisesControllerList$Params } from '../fn/admin-exercises/admin-exercises-controller-list';
 import { adminExercisesControllerRemove } from '../fn/admin-exercises/admin-exercises-controller-remove';
 import { AdminExercisesControllerRemove$Params } from '../fn/admin-exercises/admin-exercises-controller-remove';
+import { adminExercisesControllerReplaceGuides } from '../fn/admin-exercises/admin-exercises-controller-replace-guides';
+import { AdminExercisesControllerReplaceGuides$Params } from '../fn/admin-exercises/admin-exercises-controller-replace-guides';
 import { adminExercisesControllerUpdate } from '../fn/admin-exercises/admin-exercises-controller-update';
 import { AdminExercisesControllerUpdate$Params } from '../fn/admin-exercises/admin-exercises-controller-update';
 import { AdminExerciseTagDto } from '../models/admin-exercise-tag-dto';
@@ -211,6 +213,39 @@ export class AdminExercisesService extends BaseService {
    */
   adminExercisesControllerUpdate(params: AdminExercisesControllerUpdate$Params, context?: HttpContext): Promise<AdminExerciseDto> {
     const resp = this.adminExercisesControllerUpdate$Response(params, context);
+    return resp.then((r: StrictHttpResponse<AdminExerciseDto>): AdminExerciseDto => r.body);
+  }
+
+  /** Path part for operation `adminExercisesControllerReplaceGuides()` */
+  static readonly AdminExercisesControllerReplaceGuidesPath = '/api/v1/admin/exercises/{id}/guides';
+
+  /**
+   * Replace the execution guides (images / GIFs) of a global exercise.
+   *
+   * Upload each file with an `exercise_guide` signature first, then send its `public_id`. Array order = display order; `[]` removes all. New files are verified with Cloudinary (400 INVALID_GUIDE_ASSET destroys them); removed files are destroyed after saving.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `adminExercisesControllerReplaceGuides()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  adminExercisesControllerReplaceGuides$Response(params: AdminExercisesControllerReplaceGuides$Params, context?: HttpContext): Promise<StrictHttpResponse<AdminExerciseDto>> {
+    const obs = adminExercisesControllerReplaceGuides(this.http, this.rootUrl, params, context);
+    return firstValueFrom(obs);
+  }
+
+  /**
+   * Replace the execution guides (images / GIFs) of a global exercise.
+   *
+   * Upload each file with an `exercise_guide` signature first, then send its `public_id`. Array order = display order; `[]` removes all. New files are verified with Cloudinary (400 INVALID_GUIDE_ASSET destroys them); removed files are destroyed after saving.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `adminExercisesControllerReplaceGuides$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  adminExercisesControllerReplaceGuides(params: AdminExercisesControllerReplaceGuides$Params, context?: HttpContext): Promise<AdminExerciseDto> {
+    const resp = this.adminExercisesControllerReplaceGuides$Response(params, context);
     return resp.then((r: StrictHttpResponse<AdminExerciseDto>): AdminExerciseDto => r.body);
   }
 
