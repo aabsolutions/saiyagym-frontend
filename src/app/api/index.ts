@@ -62,6 +62,7 @@ export type { ExerciseDetailDto } from './models/exercise-detail-dto';
 export type { ExerciseGuideDto } from './models/exercise-guide-dto';
 export type { ExerciseGuideSetDto } from './models/exercise-guide-set-dto';
 export type { ExerciseHistoryPageDto } from './models/exercise-history-page-dto';
+export type { ExerciseListItemDto } from './models/exercise-list-item-dto';
 export type { ExercisePageDto } from './models/exercise-page-dto';
 export type { ExercisePerformanceDto } from './models/exercise-performance-dto';
 export type { ExercisePrefsDto } from './models/exercise-prefs-dto';

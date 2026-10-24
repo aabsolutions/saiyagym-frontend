@@ -444,7 +444,10 @@
       "howTo": "Cómo hacerlo",
       "records": "Tus récords",
       "history": "Historial",
-      "personalFor": "Tu tier personal en {{goal}}"
+      "personalFor": "Tu tier personal en {{goal}}",
+      "guide": "Guía de ejecución",
+      "guideImage": "Guía {{n}} de {{total}}",
+      "guideLocked": "Tu plan muestra las guías de los primeros ejercicios de cada rutina. Con Premium ves todas."
     },
     "records": {
       "maxWeight": "Mayor peso",

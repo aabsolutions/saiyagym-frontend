@@ -44,6 +44,36 @@ describe('ExerciseDetailStore', () => {
     expect(store.records()?.maxWeight?.value).toBe(180);
   });
 
+  it('asks for the guide only when the exercise has one (the API decides what is visible)', async () => {
+    const loading = store.load('ex-1');
+    httpMock.expectOne('/api/v1/exercises/ex-1').flush(exerciseDetail({ hasGuide: true }));
+    await settle();
+    httpMock.expectOne('/api/v1/exercises/ex-1/records').flush(null);
+    httpMock
+      .expectOne((r) => r.url === '/api/v1/exercises/ex-1/history')
+      .flush({ items: [], meta: { page: 1, limit: 10, total: 0 } });
+    httpMock
+      .expectOne('/api/v1/guides')
+      .flush({ guidesPerRoutine: 5, items: [], lockedExerciseIds: ['ex-1'] });
+    await loading;
+
+    expect(store.guide()).toEqual({ kind: 'locked' });
+  });
+
+  it('a failing guide request just shows no guide', async () => {
+    const loading = store.load('ex-1');
+    httpMock.expectOne('/api/v1/exercises/ex-1').flush(exerciseDetail({ hasGuide: true }));
+    await settle();
+    httpMock.expectOne('/api/v1/exercises/ex-1/records').flush(null);
+    httpMock
+      .expectOne((r) => r.url === '/api/v1/exercises/ex-1/history')
+      .flush({ items: [], meta: { page: 1, limit: 10, total: 0 } });
+    httpMock.expectOne('/api/v1/guides').flush(null, { status: 500, statusText: 'x' });
+    await loading;
+
+    expect(store.guide()).toEqual({ kind: 'none' });
+  });
+
   it('shows the exercise even when it has no records or history yet', async () => {
     const loading = store.load('ex-1');
     httpMock.expectOne('/api/v1/exercises/ex-1').flush(exerciseDetail());

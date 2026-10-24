@@ -4,6 +4,8 @@ import { ExerciseDetailDto } from '../../api/models/exercise-detail-dto';
 import { ExercisePerformanceDto } from '../../api/models/exercise-performance-dto';
 import { UpdateExercisePrefsDto } from '../../api/models/update-exercise-prefs-dto';
 import { ExercisesService } from '../../api/services/exercises.service';
+import { GuidesService } from '../../api/services/guides.service';
+import { GuideStatus, NO_GUIDE, guideStatusOf } from '../../shared/exercises/exercise-guide';
 import { StatsService } from '../../api/services/stats.service';
 import { Tier, TierGoal } from '../../shared/exercises/exercise-taxonomy';
 import {
@@ -23,6 +25,8 @@ interface ExerciseDetailState {
   historyTotal: number;
   historyPage: number;
   historyLoading: boolean;
+  /** Execution guide (images / GIFs): what the plan lets the user see. */
+  guide: GuideStatus;
 }
 
 export const ExerciseDetailStore = signalStore(
@@ -33,15 +37,29 @@ export const ExerciseDetailStore = signalStore(
     historyTotal: 0,
     historyPage: 1,
     historyLoading: false,
+    guide: NO_GUIDE,
   }),
   withRequestStatus(),
-  withProps(() => ({ _api: inject(ExercisesService), _records: inject(StatsService) })),
+  withProps(() => ({
+    _api: inject(ExercisesService),
+    _records: inject(StatsService),
+    _guides: inject(GuidesService),
+  })),
   withMethods((store) => {
     const loadRecords = async (id: string) => {
       try {
         patchState(store, { records: await store._records.recordsControllerForExercise({ id }) });
       } catch {
         patchState(store, { records: null });
+      }
+    };
+
+    /** "If it exists", like records: a failure just shows no guide. */
+    const loadGuide = async (id: string) => {
+      try {
+        patchState(store, { guide: guideStatusOf(await store._guides.guidesControllerList(), id) });
+      } catch {
+        patchState(store, { guide: NO_GUIDE });
       }
     };
 
@@ -89,7 +107,12 @@ export const ExerciseDetailStore = signalStore(
 
     return {
       async load(id: string): Promise<void> {
-        patchState(store, setPending(), { exercise: null, records: null, history: [] });
+        patchState(store, setPending(), {
+          exercise: null,
+          records: null,
+          history: [],
+          guide: NO_GUIDE,
+        });
         try {
           const exercise = await store._api.exercisesControllerDetail({ id });
           patchState(store, { exercise }, setFulfilled());
@@ -98,7 +121,11 @@ export const ExerciseDetailStore = signalStore(
           return;
         }
         // History and records are "if they exist": failures just leave them empty.
-        await Promise.all([loadRecords(id), loadHistory(id, 1)]);
+        await Promise.all([
+          loadRecords(id),
+          loadHistory(id, 1),
+          store.exercise()?.hasGuide ? loadGuide(id) : Promise.resolve(),
+        ]);
       },
 
       historyPageChange(page: number): Promise<void> {

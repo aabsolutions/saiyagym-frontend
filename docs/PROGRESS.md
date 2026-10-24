@@ -1,5 +1,19 @@
 # Progress — gymapp-web
 
+## 2026-10-24 — Guías e instrucciones en el detalle de ejercicio
+
+### Hecho
+
+- **Detalle de ejercicio (usuarios)**: sección **Guía de ejecución** con las imágenes/GIF (grilla, se ven enteros, los GIF animan solos, texto debajo). Solo se pide `GET /guides` si el ejercicio tiene guía (`hasGuide`); bloqueada → `UpgradeCta` con mensaje propio; un error de la API solo oculta la sección.
+- **Cómo hacerlo**: descripción + **pasos numerados** (`instructionSteps`: un paso por línea, sin numeración/viñetas escritas a mano).
+- Helpers puros en `shared/exercises/exercise-guide.ts` (`guideStatusOf`, `instructionSteps`).
+- Cliente API regenerado (`withText`, `ExerciseListItemDto`).
+
+### Verificación
+
+- `npm run lint` ✅ · `i18n:check` ✅ (1107 claves) · `test:ci` 264/264 ✅.
+- **No ejecutado**: `build:gh` ni prueba en navegador.
+
 ## 2026-10-23 — Guías de ejecución (admin)
 
 ### Hecho

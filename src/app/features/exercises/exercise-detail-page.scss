@@ -155,6 +155,42 @@ mat-card-content {
   line-height: 1.6;
 }
 
+.steps {
+  margin: 0;
+  padding-left: 1.5em;
+  line-height: 1.6;
+
+  li + li {
+    margin-top: 8px;
+  }
+}
+
+// Execution guide files: shown whole (contain), GIFs animate natively.
+.guides {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+
+  figure {
+    margin: 0;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    border-radius: var(--mat-sys-corner-medium);
+    background: var(--mat-sys-surface-container-high);
+  }
+
+  figcaption {
+    margin-top: 8px;
+    font: var(--mat-sys-body-medium);
+  }
+}
+
 .records {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

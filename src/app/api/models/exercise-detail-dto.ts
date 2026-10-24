@@ -13,6 +13,10 @@ export interface ExerciseDetailDto {
   hasGuide: boolean;
   id: string;
   imageUrl: string | null;
+
+  /**
+   * Execution steps, one per line ('' when there are none).
+   */
   instructions: string;
 
   /**

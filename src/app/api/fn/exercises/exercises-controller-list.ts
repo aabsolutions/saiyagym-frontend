@@ -46,6 +46,12 @@ export interface ExercisesControllerList$Params {
   custom?: boolean;
 
 /**
+ * Also return the localized `description` and `instructions` of each item (the mobile app
+ * downloads the whole catalog with them to work offline). Ignored by the admin listing.
+ */
+  withText?: boolean;
+
+/**
  * `relevance` only applies with `q`; otherwise behaves like `name`.
  */
   sort: 'name' | '-name' | 'createdAt' | '-createdAt' | 'relevance';
@@ -66,6 +72,7 @@ export function exercisesControllerList(http: HttpClient, rootUrl: string, param
     rb.query('tag', params.tag, {});
     rb.query('favorites', params.favorites, {});
     rb.query('custom', params.custom, {});
+    rb.query('withText', params.withText, {});
     rb.query('sort', params.sort, {});
     rb.query('page', params.page, {});
     rb.query('limit', params.limit, {});

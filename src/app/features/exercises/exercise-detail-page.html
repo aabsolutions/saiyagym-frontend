@@ -126,7 +126,42 @@
         </mat-card-content>
       </mat-card>
 
-      @if (ex.description || ex.instructions) {
+      @let guide = store.guide();
+      @if (guide.kind === 'unlocked') {
+        <mat-card appearance="outlined" class="wide">
+          <mat-card-header>
+            <mat-card-title>{{ 'exercises.detail.guide' | transloco }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="guides">
+              @for (g of guide.guides; track g.id; let i = $index) {
+                <figure>
+                  <img
+                    [src]="g.url"
+                    [alt]="
+                      g.caption ||
+                      ('exercises.detail.guideImage'
+                        | transloco: { n: i + 1, total: guide.guides.length })
+                    "
+                    [attr.width]="g.width || null"
+                    [attr.height]="g.height || null"
+                    loading="lazy"
+                  />
+                  @if (g.caption) {
+                    <figcaption>{{ g.caption }}</figcaption>
+                  }
+                </figure>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      } @else if (guide.kind === 'locked') {
+        <div class="wide">
+          <app-upgrade-cta customMessageKey="exercises.detail.guideLocked" />
+        </div>
+      }
+
+      @if (ex.description || steps().length) {
         <mat-card appearance="outlined" class="wide">
           <mat-card-header>
             <mat-card-title>{{ 'exercises.detail.howTo' | transloco }}</mat-card-title>
@@ -135,8 +170,12 @@
             @if (ex.description) {
               <p class="prose">{{ ex.description }}</p>
             }
-            @if (ex.instructions) {
-              <p class="prose">{{ ex.instructions }}</p>
+            @if (steps().length) {
+              <ol class="steps">
+                @for (step of steps(); track $index) {
+                  <li>{{ step }}</li>
+                }
+              </ol>
             }
           </mat-card-content>
         </mat-card>

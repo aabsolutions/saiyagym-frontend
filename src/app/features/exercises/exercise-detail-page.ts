@@ -10,7 +10,9 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ExercisePerformanceDto } from '../../api/models/exercise-performance-dto';
+import { instructionSteps } from '../../shared/exercises/exercise-guide';
 import { TIERS, TIER_GOALS } from '../../shared/exercises/exercise-taxonomy';
+import { UpgradeCta } from '../../shared/plans/upgrade-cta';
 import { TierChip } from '../../shared/exercises/tier-chip';
 import { LocalDatePipe } from '../../shared/format/local-date.pipe';
 import { ConfirmDialog, ConfirmDialogData } from '../../shared/ui/confirm-dialog';
@@ -32,6 +34,7 @@ import { ExercisesStore } from './exercises.store';
     RouterLink,
     TierChip,
     TranslocoPipe,
+    UpgradeCta,
     WeightPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,6 +54,7 @@ export class ExerciseDetailPage {
   protected readonly goals = TIER_GOALS;
   protected readonly historyPageSize = HISTORY_PAGE_SIZE;
   protected readonly hasRecords = computed(() => hasRecords(this.store.records()));
+  protected readonly steps = computed(() => instructionSteps(this.store.exercise()?.instructions));
 
   constructor() {
     effect(() => void this.store.load(this.id()));
